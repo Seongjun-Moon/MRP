@@ -12,6 +12,12 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.use("distributor", require('./routers/distributorRouter'));
+app.use("hospital", require('./routers/hospitalRouter'));
+app.use("manufacture", require('./routers/manufacturerRouter'));
+app.use("oversee", require('./routers/overseeRouter'));
+
 app.listen(env.PORT, () => {
   console.log(`MRP Node Server${env.PORT} listen...`);
+
 });

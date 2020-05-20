@@ -1,0 +1,20 @@
+[
+  {
+    "mediCode": "8806920000104",
+    "companyCode": "1",
+    "mediName": "간포트점안액",
+    "mediType": "전문의약품",
+    "count": "1",
+    "permissionDate": "2020-05-20",
+    "cancelDate": "2020-05-20"
+  },
+  {
+    "mediCode": "8806587000202",
+    "companyCode": "2",
+    "mediName": "레야타즈캅셀100밀리그람(아타자나비어)",
+    "mediType": "전문의약품",
+    "count": "1",
+    "permissionDate": "2020-05-20",
+    "cancelDate": "2020-05-20"
+  }
+]

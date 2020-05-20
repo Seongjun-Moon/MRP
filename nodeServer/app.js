@@ -1,14 +1,17 @@
 const express = require("express");
-const app = express();
+const dotenv = require("dotenv");
 const path = require("path");
-const sequelize = require("./models").sequelize;
+const automationDB = require("./middlewares/automationDB");
 
-sequelize.sync();
+const app = express();
+const env = process.env;
 
+dotenv.config();
+automationDB;
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.listen(9090, () => {
-  console.log("MRP Node Server(9090) listen...");
+app.listen(env.PORT, () => {
+  console.log(`MRP Node Server${env.PORT} listen...`);
 });

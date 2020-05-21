@@ -21,10 +21,24 @@ MRP/blockchain-network/basic-2org/
 ### register(barCode, companyID, targetID, state)
 
 - 전문의약품 정보를 입력
-- barCode : 바코드 정보
+- barCode : 바코드 정보 (key)
 - companyID : 로그인한 사용자가 속한 업체코드 (로그인 시 자동입력)
 - targetID : 대상 업체코드 (수동입력)
 - state : 유통상태 (수동입력, 출고/입고)
   
 - [example]
 - peer chaincode invoke -n [체인코드명] -c '{"Args":["register","MEDI1","업체코드","업체코드","유통상태"]}' -C mychannel
+
+### changeMediStatus(barCode, companyID, targetID, state)
+
+- 기존 블록체인에 등록된 전문의약품에 새로운 유통이력을 추가
+- barCode : 바코드 정보 (key)
+- companyID : 로그인한 사용자가 속한 업체코드 (로그인 시 자동입력)
+- targetID : 대상 업체코드 (수동입력)
+- state : 유통상태 (수동입력, 출고/입고)
+
+### queryOneMedicine(barCode)
+- 특정 전문의약품에 대한 의약품 유통정보를 조회 (최신 상태값)
+- barCode : 바코드 정보 (key)
+- (추가 검토) 모든 전문의약품 정보 조회는 getHistoryForKey 메소드 활용
+

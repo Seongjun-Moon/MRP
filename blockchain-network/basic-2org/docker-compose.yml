@@ -72,7 +72,9 @@ services:
       - CORE_PEER_PROFILE_ENABLED=true
       - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
       - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
-      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt            
+      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt 
+      - CORE_PEER_TLS_ENABLED=false      
+      - ORDERER_GENERAL_TLS_ENABLED=false     
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric
     #command: peer node start
     command: peer node start --peer-chaincodedev=true

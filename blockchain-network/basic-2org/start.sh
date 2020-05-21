@@ -9,7 +9,7 @@ CC_SRC_VERSION=${1}
 CC_SRC_NAME=mrpChainCode_$CC_SRC_VERSION
 
 CC_RUNTIME_LANGUAGE=node
-CC_SRC_PATH=/opt/gopath/src/github.com/chaincode/mrp
+CC_SRC_PATH=/opt/gopath/src/github.com/mrp
 
 ./bybn.sh
 
@@ -30,7 +30,7 @@ docker exec \
   -e CORE_PEER_TLS_ROOTCERT_FILE=${ORG1_TLS_ROOTCERT_FILE} \
   cli \
   peer chaincode install \
-    -n CC_SRC_NAME\
+    -n "$CC_SRC_NAME"\
     -v 1.0 \
     -p "$CC_SRC_PATH" \
     -l "$CC_RUNTIME_LANGUAGE"
@@ -39,16 +39,17 @@ docker exec \
 echo "Installing smart contract on peer0.org2.example.com"
 docker exec \
   -e CORE_PEER_LOCALMSPID=Org2MSP \
-  -e CORE_PEER_ADDRESS=peer0.org2.example.com:8051 \
+  -e CORE_PEER_ADDRESS=peer0.org2.example.com:7051 \
   -e CORE_PEER_MSPCONFIGPATH=${ORG2_MSPCONFIGPATH} \
   -e CORE_PEER_TLS_ROOTCERT_FILE=${ORG2_TLS_ROOTCERT_FILE} \
   cli \
   peer chaincode install \
-    -n fabcar_history \
+    -n "$CC_SRC_NAME" \
     -v 1.0 \
     -p "$CC_SRC_PATH" \
     -l "$CC_RUNTIME_LANGUAGE"
 
+:<<'END'
 echo "Instantiating smart contract on mychannel"
 docker exec \
   -e CORE_PEER_LOCALMSPID=Org1MSP \
@@ -57,7 +58,7 @@ docker exec \
   peer chaincode instantiate \
     -o orderer.example.com:7050 \
     -C mychannel \
-    -n fabcar_history \
+    -n "$CC_SRC_NAME" \
     -l "$CC_RUNTIME_LANGUAGE" \
     -v 1.0 \
     -c '{"Args":[]}' \
@@ -71,6 +72,28 @@ echo "Waiting for instantiation request to be committed ..."
 sleep 10
 
 set +x
+
+END
+
+echo "Instantiating smart contract on mychannel"
+docker exec \
+  -e CORE_PEER_LOCALMSPID=Org1MSP \
+  -e CORE_PEER_MSPCONFIGPATH=${ORG1_MSPCONFIGPATH} \
+  cli \
+  peer chaincode instantiate \
+    -C mychannel \
+    -n "$CC_SRC_NAME" \
+    -l "$CC_RUNTIME_LANGUAGE" \
+    -v 1.0 \
+    -c '{"Args":[]}' \
+    -P "OR('Org1MSP.member','Org2MSP.member')" 
+
+
+echo "Waiting for instantiation request to be committed ..."
+sleep 10
+
+set +x
+
 
 
 

@@ -9,11 +9,10 @@ const shim = require('fabric-shim');
 const util = require('util');
 
 let Chaincode = class {
-
   // The Init method is called when the Smart Contract 'fabcar' is instantiated by the blockchain network
   // Best practice is to have any Ledger initialization in separate function -- see initLedger()
   async Init(stub) {
-    console.info('=========== Instantiated fabcar chaincode ===========');
+    console.info('=========== Instantiated test chaincode ===========');
     return shim.success();
   }
 
@@ -38,114 +37,51 @@ let Chaincode = class {
     }
   }
 
-  async queryCar(stub, args) {
-    if (args.length != 1) {
-      throw new Error('Incorrect number of arguments. Expecting CarNumber ex: CAR01');
-    }
-    let carNumber = args[0];
-
-    let carAsBytes = await stub.getState(carNumber); //get the car from chaincode state
-    if (!carAsBytes || carAsBytes.toString().length <= 0) {
-      throw new Error(carNumber + ' does not exist: ');
-    }
-    console.log(carAsBytes.toString());
-    return carAsBytes;
-  }
-
+  // 블록 초기화
   async initLedger(stub, args) {
     console.info('============= START : Initialize Ledger ===========');
-    let cars = [];
-    cars.push({
-      make: 'Toyota',
-      model: 'Prius',
-      color: 'blue',
-      owner: 'Tomoko'
-    });
-    cars.push({
-      make: 'Ford',
-      model: 'Mustang',
-      color: 'red',
-      owner: 'Brad'
-    });
-    cars.push({
-      make: 'Hyundai',
-      model: 'Tucson',
-      color: 'green',
-      owner: 'Jin Soo'
-    });
-    cars.push({
-      make: 'Volkswagen',
-      model: 'Passat',
-      color: 'yellow',
-      owner: 'Max'
-    });
-    cars.push({
-      make: 'Tesla',
-      model: 'S',
-      color: 'black',
-      owner: 'Adriana'
-    });
-    cars.push({
-      make: 'Peugeot',
-      model: '205',
-      color: 'purple',
-      owner: 'Michel'
-    });
-    cars.push({
-      make: 'Chery',
-      model: 'S22L',
-      color: 'white',
-      owner: 'Aarav'
-    });
-    cars.push({
-      make: 'Fiat',
-      model: 'Punto',
-      color: 'violet',
-      owner: 'Pari'
-    });
-    cars.push({
-      make: 'Tata',
-      model: 'Nano',
-      color: 'indigo',
-      owner: 'Valeria'
-    });
-    cars.push({
-      make: 'Holden',
-      model: 'Barina',
-      color: 'brown',
-      owner: 'Shotaro'
+    let medicines = [];
+    medicines.push({
+      companyID: '1',
+      targetID: '2',
+      time: Date.now(),
+      state: '4',
     });
 
-    for (let i = 0; i < cars.length; i++) {
-      cars[i].docType = 'car';
-      await stub.putState('CAR' + i, Buffer.from(JSON.stringify(cars[i])));
-      console.info('Added <--> ', cars[i]);
+    for (let i = 0; i < medicines.length; i++) {
+      // cars[i].docType = 'car';
+      await stub.putState(
+        'MEDI' + i,
+        Buffer.from(JSON.stringify(medicines[i]))
+      );
+      console.info('Added <--> ', medicines[i]);
     }
     console.info('============= END : Initialize Ledger ===========');
   }
 
-  async createCar(stub, args) {
-    console.info('============= START : Create Car ===========');
+  // 전문의약품 유통내역 등록 (출고, 입고)
+  async registerMedi(stub, args) {
+    console.info('============= START : Register Medicine Info ===========');
     if (args.length != 5) {
       throw new Error('Incorrect number of arguments. Expecting 5');
     }
-
-    var car = {
-      docType: 'car',
-      make: args[1],
-      model: args[2],
-      color: args[3],
-      owner: args[4]
+    // Value 등록
+    var Medicine = {
+      companyID: args[1],
+      targetID: args[2],
+      time: args[3],
+      state: args[4],
     };
-
-    await stub.putState(args[0], Buffer.from(JSON.stringify(car)));
-    console.info('============= END : Create Car ===========');
+    // Key 등록
+    console.info(JSON.stringify(Medicine));
+    await stub.putState(args[0], Buffer.from(JSON.stringify(Medicine)));
+    console.info('============= END : Register Medicine Info ===========');
   }
 
-  async queryAllCars(stub, args) {
-
-    let startKey = 'CAR0';
-    let endKey = 'CAR999';
+  // 모든 전문의약품 유통내역 조회
+  async showAll(stub, args) {
+    let startKey = 'MEDI0';
+    let endKey = 'MEDI999';
 
     let iterator = await stub.getStateByRange(startKey, endKey);
 
@@ -174,78 +110,7 @@ let Chaincode = class {
       }
     }
   }
-
-  async changeCarOwner(stub, args) {
-    console.info('============= START : changeCarOwner ===========');
-    if (args.length != 2) {
-      throw new Error('Incorrect number of arguments. Expecting 2');
-    }
-
-    let carAsBytes = await stub.getState(args[0]);
-    let car = JSON.parse(carAsBytes);
-    car.owner = args[1];
-
-    await stub.putState(args[0], Buffer.from(JSON.stringify(car)));
-    console.info('============= END : changeCarOwner ===========');
-  }
-
-
- 
-  async getHistoryForCar(stub, args, thisClass) {
-
-    if (args.length < 1) {
-      throw new Error('Incorrect number of arguments. Expecting 1')
-    }
-    let key = args[0];
-    console.info('- start getHistoryForKey: %s\n', key);
-
-    let resultsIterator = await stub.getHistoryForKey(key);
-    let method = thisClass['getAllResults'];
-    let results = await method(resultsIterator, true);
-
-
-    return Buffer.from(JSON.stringify(results));
-  }
-
-  async getAllResults(iterator, isHistory) {
-    let allResults = [];
-    while (true) {
-      let res = await iterator.next();
-
-      if (res.value && res.value.value.toString()) {
-        let jsonRes = {};
-        console.log(res.value.value.toString('utf8'));
-
-        if (isHistory && isHistory === true) {
-          jsonRes.TxId = res.value.tx_id;
-          jsonRes.Timestamp = res.value.timestamp;
-          jsonRes.IsDelete = res.value.is_delete.toString();
-          try {
-            jsonRes.Value = JSON.parse(res.value.value.toString('utf8'));
-          } catch (err) {
-            console.log(err);
-            jsonRes.Value = res.value.value.toString('utf8');
-          }
-        } else {
-          jsonRes.Key = res.value.key;
-          try {
-            jsonRes.Record = JSON.parse(res.value.value.toString('utf8'));
-          } catch (err) {
-            console.log(err);
-            jsonRes.Record = res.value.value.toString('utf8');
-          }
-        }
-        allResults.push(jsonRes);
-      }
-      if (res.done) {
-        console.log('end of data');
-        await iterator.close();
-        console.info(allResults);
-        return allResults;
-      }
-    }
-  }
-  
 };
 
 shim.start(new Chaincode());
+

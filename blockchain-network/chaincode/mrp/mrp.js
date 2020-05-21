@@ -37,40 +37,19 @@ let Chaincode = class {
     }
   }
 
-  // 블록 초기화
-  async initLedger(stub, args) {
-    console.info('============= START : Initialize Ledger ===========');
-    let medicines = [];
-    medicines.push({
-      companyID: '1',
-      targetID: '2',
-      time: Date.now(),
-      state: '4',
-    });
-
-    for (let i = 0; i < medicines.length; i++) {
-      // cars[i].docType = 'car';
-      await stub.putState(
-        'MEDI' + i,
-        Buffer.from(JSON.stringify(medicines[i]))
-      );
-      console.info('Added <--> ', medicines[i]);
-    }
-    console.info('============= END : Initialize Ledger ===========');
-  }
-
   // 전문의약품 유통내역 등록 (출고, 입고)
-  async registerMedi(stub, args) {
+  async register(stub, args) {
+    let time = new Date().toLocaleString();
     console.info('============= START : Register Medicine Info ===========');
-    if (args.length != 5) {
-      throw new Error('Incorrect number of arguments. Expecting 5');
+    if (args.length != 4) {
+      throw new Error('Incorrect number of arguments. Expecting 4');
     }
     // Value 등록
     var Medicine = {
       companyID: args[1],
       targetID: args[2],
-      time: args[3],
-      state: args[4],
+      time: time,
+      state: args[3],
     };
     // Key 등록
     console.info(JSON.stringify(Medicine));

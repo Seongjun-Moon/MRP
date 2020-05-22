@@ -8,11 +8,19 @@ const getMedicineInfo = () => {
   return axios.post(`http://${url}/oversee/mediInfo`, {});
 };
 
+const createCompanyInfo = (companyCode, companyName, companyType) => {
+  return axios.post(`http://${url}/manufacture/companyEnroll`, {
+    companyCode,
+    companyName,
+    companyType,
+  });
 const getCompanyInfo = () => {
   return axios.post(`http://${url}/manufacture/companyInfo`, {});
+>>>>>>> master
 };
 
 export default {
   getMedicineInfo,
+  createCompanyInfo,
   getCompanyInfo,
 };

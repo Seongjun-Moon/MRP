@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 
 function SidebarContainer(props) {
   return (
-    <div>
+    <div className="sidebar">
       <h1>여기는 사이드바</h1>
       <ul>
         <li>

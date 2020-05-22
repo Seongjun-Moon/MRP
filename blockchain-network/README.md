@@ -6,7 +6,7 @@ MRP/blockchain-network/basic-2org/
 
 #### 실행 명령어
 
-./start.sh 1
+./start.sh [chaincode version]
 
 - 1은 아규먼트로 체인코드 수정시 적용하려고 할 때 체인코드 이름을 간편하게 바꾸기 위해서 아규먼트를 받아 체인코드 이름을 수정한다.
 - 1은 임의의 값으로 스크립트를 실행할 때 마다 다른 값으로 바꿔 준다

@@ -8,6 +8,11 @@ const getMedicineInfo = () => {
   return axios.post(`http://${url}/oversee/mediInfo`, {});
 };
 
+const getCompanyInfo = () => {
+  return axios.post(`http://${url}/manufacture/companyInfo`, {});
+};
+
 export default {
   getMedicineInfo,
+  getCompanyInfo,
 };

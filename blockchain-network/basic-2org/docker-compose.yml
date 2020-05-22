@@ -120,7 +120,7 @@ services:
       - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.org2.example.com:7051
       - CORE_PEER_ADDRESS=peer0.org2.example.com:7051
     ports:
-      - 8051:7051
+      - 8051:8051
       - 8053:7053
     volumes:
         - ./crypto-config/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/msp:/etc/hyperledger/msp/peer
@@ -167,6 +167,8 @@ services:
         - ./crypto-config:/etc/hyperledger/crypto-config
         - ./crypto-config:/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/
         - ./../chaincode/:/opt/gopath/src/github.com/
+        - ./scripts:/etc/hyperledger/configtx/scripts/
+        - ./channel-artifacts:/opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts
     networks:
         - basic
 

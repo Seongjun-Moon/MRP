@@ -16,9 +16,15 @@ updatedAt:"2020-05-22T04:23:20.000Z"
 
 function MedicinePage(props) {
   const [mediData, setMediData] = React.useState([]);
-  React.useEffect(async () => {
-    setMediData(await API.getMedicineInfo().then((data) => data.data));
-  }, {});
+
+  React.useEffect(() => {
+    getMedicineInfo();
+  }, []);
+
+  const getMedicineInfo = async () => {
+    const data = await API.getMedicineInfo().then((data) => data.data);
+    setMediData(data);
+  };
 
   return (
     <div>

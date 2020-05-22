@@ -1,22 +1,41 @@
 //심평원 라우터
 const express=require('express');
 const router=express.Router();
-const MediInfo=require('../models').MediInfo;
+const medicine=require('../models').Medicine;
+const company=require('../models').Company;
 
 // 의약품 유통이력 조회
-router.post('search', (res,req)=>{
+router.post('/search', (res,req)=>{
 
 })
 
 // 의약품 정보 조회
-router.post("mediInfo", async(req, res)=>{
+router.post("/mediInfo", async(req, res)=>{
     try{
-        const mediInfoAll=await MediInfo.findAll({
+        const mediInfo=await medicine.findAll({
+            
+            
+            order: [['permissionDate', 'DESC']]
+        });
 
+        console.log(mediInfo);
+        res.json(mediInfo);
+    }catch(err){
+        console.log(err);
+        res.json({message:false})
+    }
+})
+
+// 업체 정보 조회
+router.post("/companyInfo", async(req, res)=>{
+    try{
+        const companyInfo=await company.findAll({
+            
+            order: [['companyCode', 'ASC']]
         })
 
-        console.log(mediInfoAll);
-        res.json(mediInfoAll);
+        console.log(companyInfo);
+        res.json(companyInfo);
     }catch(err){
         console.log(err);
         res.json({message:false})

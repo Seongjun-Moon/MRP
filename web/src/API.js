@@ -14,9 +14,10 @@ const createCompanyInfo = (companyCode, companyName, companyType) => {
     companyName,
     companyType,
   });
+};
+
 const getCompanyInfo = () => {
   return axios.post(`http://${url}/manufacture/companyInfo`, {});
->>>>>>> master
 };
 
 export default {

@@ -1,12 +1,23 @@
 import React from "react";
 import API from "../API";
 
-let inputCompanyName = React.createRef();
+function CompanyPage(props) {
+  const [companyData, setCompanyData] = React.useState([]);
+
+  React.useEffect(() => {
+    getCompanyInfo();
+  }, []);
+
+  const getCompanyInfo = async () => {
+    const data = await API.getCompanyInfo().then((data) => data.data);
+    setCompanyData(data);
+  };
+  
+  let inputCompanyName = React.createRef();
 let inputCompanyType = React.createRef();
 let inputCompanyCode = React.createRef();
-
-function CompanyPage(props) {
-  const handleSubmit = async (e) => {
+  
+   const handleSubmit = async (e) => {
     e.preventDefault();
     let companyCode = inputCompanyCode.current.value;
     let companyName = inputCompanyName.current.value;
@@ -22,21 +33,33 @@ function CompanyPage(props) {
       }
     );
   };
+  
   return (
-    <>
-      <div>
-        <h3>여기는 업체 페이지</h3>
-        <table>
-          {/* <tr>
-          <td>순번</td>
-          <td>업체 코드</td>
-          <td>업체 이름</td>
-          <td>업체 종류</td>
-        </tr> */}
-        </table>
-      </div>
-      <div>
-        <form onSubmit={(e) => handleSubmit(e)} action="">
+    <div>
+      <h3>여기는 업체 페이지</h3>
+      <table>
+        <thead>
+          <tr>
+            <td>순번</td>
+            <td>업체 코드</td>
+            <td>업체 이름</td>
+            <td>업체 종류</td>
+          </tr>
+        </thead>
+        <tbody>
+          {companyData.map((company, index) => {
+            return (
+              <tr key={company.companyCode}>
+                <td>{index}</td>
+                <td>{company.companyCode}</td>
+                <td>{company.companyName}</td>
+                <td>{company.companyType}</td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+              <form onSubmit={(e) => handleSubmit(e)} action="">
           업체 코드
           <input id="company-code" required ref={inputCompanyCode} />
           업체 이름
@@ -52,8 +75,8 @@ function CompanyPage(props) {
           <br />
           <button type="submit">업체 등록</button>
         </form>
-      </div>
-    </>
+      
+    </div>
   );
 }
 

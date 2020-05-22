@@ -1,0 +1,14 @@
+@import "variables.scss";
+
+.mainpage-header {
+  background-color: pink;
+
+  h1 {
+    margin: 0;
+  }
+}
+
+.mainpage-container {
+  display: grid;
+  grid-template-columns: 20rem 1fr;
+}

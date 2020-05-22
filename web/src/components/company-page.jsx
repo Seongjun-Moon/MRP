@@ -5,12 +5,12 @@ function CompanyPage(props) {
     <div>
       <h3>여기는 업체 페이지</h3>
       <table>
-        <tr>
+        {/* <tr>
           <td>순번</td>
           <td>업체 코드</td>
           <td>업체 이름</td>
           <td>업체 종류</td>
-        </tr>
+        </tr> */}
       </table>
     </div>
   );

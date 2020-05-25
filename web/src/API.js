@@ -8,10 +8,10 @@ const url = "70.12.113.182:9090";
  *  업체 CRUD
  */
 
-/* 유저 정보 */
-/* const getUerInfo = () => {
+/* 유저 페이지 조회 (링크는 아직 안맞춤)*/
+const getUserInfo = () => {
   return axios.post(`http://${url}/oversee/userInfo`, {});
-}; */
+};
 
 const createCompanyInfo = (companyCode, companyName, companyType) => {
   return axios.post(`http://${url}/manufacture/companyEnroll`, {
@@ -26,20 +26,19 @@ const getCompanyInfo = () => {
 };
 
 /* 로그인 */
-const getCustomer = (email, password, section) => {
-  return axios.post(`http://${url}/`, {
-    email,
-    password,
-    section,
+const getCustomer = (id, pw) => {
+  return axios.post(`http://${url}/user/signIn`, {
+    id,
+    pw,
   });
 };
 
 /* 회원가입 */
-const addCustomer = (email, password, section) => {
-  return axios.post(`http://${url}/`, {
-    email,
-    password,
-    section,
+const addCustomer = (id, pw, companyCode) => {
+  return axios.post(`http://${url}/user/signUp`, {
+    id,
+    pw,
+    companyCode,
   });
 };
 
@@ -76,7 +75,7 @@ export default {
   getCompanyInfo,
   getCustomer,
   addCustomer,
-  /* getUerInfo, */
+  getUserInfo,
   createMedicineInfo,
   getMedicineInfo,
 };

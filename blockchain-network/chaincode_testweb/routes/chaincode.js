@@ -138,10 +138,9 @@ router.get('/queryAll', async (req, res) => {
 });
 
 // ==================  POST Method ==================
-// 3. 전문의약품 유통정보 신규등록
+// 3. 전문의약품 유통정보 신규등록 (제조)
 router.post('/register', async (req, res) => {
   try {
-    console.log(req.body);
     const userExists = await wallet.exists('user1');
     if (!userExists) {
       console.log(
@@ -172,8 +171,7 @@ router.post('/register', async (req, res) => {
       `${req.body.targetId}`,
       `${req.body.state}`
     );
-    console.log(`Transaction has been evaluated, result is: OK`);
-    console.log('End : Insert Medicine Info');
+    console.log(`Transaction has been submit, result is: OK`);
     res.json({
       code: '1',
       msg: `${req.body.barcode}의 유통정보가 정상적으로 입력되었습니다`,
@@ -184,7 +182,51 @@ router.post('/register', async (req, res) => {
   }
 });
 
-// 4. 특정 전문의약품의 유통 히스토리를 조회
+// 4. 전문의약품 유통정보 등록 (도매, 병원 및 약국)
+router.post('/update', async (req, res) => {
+  try {
+    const userExists = await wallet.exists('user1');
+    if (!userExists) {
+      console.log(
+        'An identity for the user "user1" does not exist in the wallet'
+      );
+      await res.json({ msg: '연결부터 해주세요' });
+      return;
+    }
+    console.log('Start : Update Medicine Info');
+    // Create a new gateway for connecting to our peer node.
+    const gateway = new Gateway();
+    await gateway.connect(ccp, {
+      wallet,
+      identity: 'user1',
+      discovery: { enabled: false },
+    });
+    // Get the network (channel) our contract is deployed to.
+    const network = await gateway.getNetwork(channel);
+
+    // Get the contract from the network.
+    const contract = network.getContract(chainCode);
+
+    // Evaluate the specified transaction
+    await contract.submitTransaction(
+      'changeMediStatus',
+      `${req.body.barcode}`,
+      `${req.body.companyId}`,
+      `${req.body.targetId}`,
+      `${req.body.state}`
+    );
+    console.log(`Transaction has been evaluated, result is ok`);
+    res.json({
+      code: '1',
+      msg: `${req.body.barcode}가 정상적으로 변경되었습니다`,
+    });
+  } catch (err) {
+    console.log(err);
+    res.json({ code: '0', msg: `${req.body.barcode} 입력 오류` });
+  }
+});
+
+// 5. 특정 전문의약품의 유통 히스토리를 조회
 router.post('/history', async (req, res) => {
   try {
     const userExists = await wallet.exists('user1');

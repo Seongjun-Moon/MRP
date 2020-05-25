@@ -52,8 +52,24 @@ class Main extends Component {
     const flag = confirm(
       `아래 정보로 입력하시겠습니까?\n(기존 유통되지 않은 전문의약품은 등록불가)\n표준코드 : ${this.barcodeUpdate.value}\n회사코드: ${this.companyIdUpdate.value}\n대상업체코드: ${this.targetIdUpdate.value}\n유통상태: ${this.productStateUpdate.value}`
     );
-
-    // axios.post('/update', this.barcodeUpdate.value).then()
+    if (flag) {
+      const sendParam = {
+        barcode: this.barcodeUpdate.value,
+        companyId: this.companyIdUpdate.value,
+        targetId: this.targetIdUpdate.value,
+        state: this.productStateUpdate.value,
+      };
+      axios
+        .post('/update', sendParam)
+        .then((response) => {
+          alert(response.data.msg);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      return;
+    }
   };
 
   // 모든 전문의약품의 최신 유통정보 조회요청
@@ -74,7 +90,7 @@ class Main extends Component {
               <div key={element.Key}>
                 <table>
                   <tr>
-                    <td>{element.Record.companeyID}</td>
+                    <td>{element.Record.companyID}</td>
                     <td>{element.Record.targetID}</td>
                     <td>{element.Record.state}</td>
                     <td>{element.Record.time}</td>

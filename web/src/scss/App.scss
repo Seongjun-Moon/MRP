@@ -8,7 +8,7 @@ html {
 }
 
 body {
-  margin: 0 auto;
+  margin: 1rem 1rem;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
     "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
@@ -21,4 +21,23 @@ table {
   td {
     padding: 0.3rem;
   }
+}
+
+input {
+  display: block;
+}
+
+select {
+  display: block;
+}
+
+ul,
+li {
+  all: unset;
+  display: block;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
 }

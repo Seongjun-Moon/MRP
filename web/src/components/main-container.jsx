@@ -7,12 +7,12 @@ import CirculationPage from "../components/circulation-page";
 
 function MainContainer(props) {
   return (
-    <div className="main">
+    <section className="main">
       <Route exact path="/" component={UserPage}></Route>
       <Route exact path="/company" component={CompanyPage}></Route>
       <Route exact path="/medicine" component={MedicinePage}></Route>
       <Route exact path="/circulation" component={CirculationPage}></Route>
-    </div>
+    </section>
   );
 }
 

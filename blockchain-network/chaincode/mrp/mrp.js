@@ -81,33 +81,9 @@ let Chaincode = class {
     console.info('============= END : update Medicine Status ===========');
   }
 
-  // 특정 전문의약품의 유통내역 조회 (최신상태)
-  async queryOneMedicine(stub, args) {
-    if (args.length != 1) {
-      throw new Error(
-        'Incorrect number of arguments. Expecting CarNumber ex: MEDI0'
-      );
-    }
-    let mediCode = args[0];
-    let allResults = [];
-    let result = {};
-    let mediAsBytes = await stub.getState(mediCode); //get the Medicine from chaincode state
-    if (!mediAsBytes || mediAsBytes.toString().length <= 0) {
-      throw new Error(mediCode + ' does not exist: ');
-    }
-    result.Key = mediCode;
-    result.Record = JSON.parse(mediAsBytes.toString());
-    allResults.push(result);
-    // console.log(mediAsBytes.toString());
-    // return mediAsBytes;
-
-    console.info(allResults);
-    return Buffer.from(JSON.stringify(allResults));
-  }
-
   // 모든 전문의약품 유통내역 조회 (최신상태)
   async showAll(stub, args) {
-    let startKey = 'MEDI0';
+    let startKey = 'MEDI1';
     let endKey = 'MEDI999';
 
     let iterator = await stub.getStateByRange(startKey, endKey);
@@ -134,6 +110,60 @@ let Chaincode = class {
         await iterator.close();
         console.info(allResults);
         return Buffer.from(JSON.stringify(allResults));
+      }
+    }
+  }
+
+  // 유통이력 히스토리 조회
+  async getHistoryForMedicine(stub, args, thisClass) {
+    if (args.length < 1) {
+      throw new Error('Incorrect number of arguments. Expecting 1');
+    }
+    let key = args[0];
+    console.info('- start getHistoryForMedicine: %s\n', key);
+
+    let resultsIterator = await stub.getHistoryForKey(key);
+    let method = thisClass['getAllResults'];
+    let results = await method(resultsIterator, true);
+
+    return Buffer.from(JSON.stringify(results));
+  }
+
+  async getAllResults(iterator, isHistory) {
+    let allResults = [];
+    while (true) {
+      let res = await iterator.next();
+
+      if (res.value && res.value.value.toString()) {
+        let jsonRes = {};
+        console.log(res.value.value.toString('utf8'));
+
+        if (isHistory && isHistory === true) {
+          jsonRes.TxId = res.value.tx_id;
+          jsonRes.Timestamp = res.value.timestamp;
+          jsonRes.IsDelete = res.value.is_delete.toString();
+          try {
+            jsonRes.Value = JSON.parse(res.value.value.toString('utf8'));
+          } catch (err) {
+            console.log(err);
+            jsonRes.Value = res.value.value.toString('utf8');
+          }
+        } else {
+          jsonRes.Key = res.value.key;
+          try {
+            jsonRes.Record = JSON.parse(res.value.value.toString('utf8'));
+          } catch (err) {
+            console.log(err);
+            jsonRes.Record = res.value.value.toString('utf8');
+          }
+        }
+        allResults.push(jsonRes);
+      }
+      if (res.done) {
+        console.log('end of data');
+        await iterator.close();
+        console.info(allResults);
+        return allResults;
       }
     }
   }

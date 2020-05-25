@@ -38,6 +38,10 @@ class Main extends Component {
         .post('/register', sendParam)
         .then((response) => {
           alert(response.data.msg);
+          this.barcodeInput.value = '';
+          this.companyIdInput.value = '';
+          this.targetIdInput.value = '';
+          this.productStateInput.value = '입고';
         })
         .catch((err) => {
           console.log(err);
@@ -63,6 +67,10 @@ class Main extends Component {
         .post('/update', sendParam)
         .then((response) => {
           alert(response.data.msg);
+          this.barcodeUpdate.value = '';
+          this.companyIdUpdate.value = '';
+          this.targetIdUpdate.value = '';
+          this.productStateUpdate.value = '입고';
         })
         .catch((err) => {
           console.log(err);
@@ -90,6 +98,7 @@ class Main extends Component {
               <div key={element.Key}>
                 <table>
                   <tr>
+                    <td>{element.Key}</td>
                     <td>{element.Record.companyID}</td>
                     <td>{element.Record.targetID}</td>
                     <td>{element.Record.state}</td>
@@ -116,7 +125,7 @@ class Main extends Component {
     axios
       .post('/history', barcode)
       .then((response) => {
-        console.log(response.data.msg);
+        console.log(response.data.history);
       })
       .catch((err) => {
         console.log(err);

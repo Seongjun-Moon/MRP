@@ -27,7 +27,7 @@ const walletPath = path.join(process.cwd(), 'wallet');
 const wallet = new FileSystemWallet(walletPath);
 
 // 체인코드
-const chainCode = 'mrpChainCode_js';
+const chainCode = 'history';
 
 // 채널
 const channel = 'mychannel';
@@ -257,10 +257,11 @@ router.post('/history', async (req, res) => {
       `${req.body.barcode}`
     );
 
+    const history = String(result);
     //const barcode = req.body.barcode;
-    console.log(result);
+    console.log(history);
 
-    res.json({ msg: result });
+    res.json({ history });
   } catch (err) {
     console.log(err);
   }

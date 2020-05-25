@@ -20,6 +20,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(cors(corsOptions));
+app.use("/user", require('./routers/userRouter'));
 app.use("/distributor", require('./routers/distributorRouter'));
 app.use("/hospital", require('./routers/hospitalRouter'));
 app.use("/manufacture", require('./routers/manufacturerRouter'));

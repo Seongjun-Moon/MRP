@@ -38,4 +38,13 @@ db.Medicine.belongsTo(db.Company, {
   sourceKey: "companyCode",
 });
 
+db.Company.hasMany(db.User, {
+  foreignKey: "companyCode",
+  sourceKey: "companyCode",
+});
+db.User.belongsTo(db.Company, {
+  foreignKey: "companyCode",
+  sourceKey: "companyCode",
+});
+
 module.exports = db;

@@ -167,6 +167,8 @@ services:
         - ./crypto-config:/etc/hyperledger/crypto-config
         - ./crypto-config:/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/
         - ./../chaincode/:/opt/gopath/src/github.com/
+        - ./scripts:/etc/hyperledger/configtx/scripts/
+        - ./channel-artifacts:/opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts
     networks:
         - basic
 

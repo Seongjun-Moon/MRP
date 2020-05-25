@@ -1,109 +1,34 @@
 #!/bin/bash
 
-set -e
+set -ev
 
 starttime=$(date +%s)
 
+CC_SRC_NAME=${1}
 
-CC_SRC_VERSION=${1}
-CC_SRC_NAME=mrpChainCode_$CC_SRC_VERSION
-
-CC_RUNTIME_LANGUAGE=node
-CC_SRC_PATH=/opt/gopath/src/github.com/mrp
-
-./bybn.sh
+#./bybn.sh $CC_SRC_NAME
 
 
-CONFIG_ROOT=/opt/gopath/src/github.com/hyperledger/fabric/peer
-ORG1_MSPCONFIGPATH=${CONFIG_ROOT}/crypto/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp
-ORG1_TLS_ROOTCERT_FILE=${CONFIG_ROOT}/crypto/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt
-ORG2_MSPCONFIGPATH=${CONFIG_ROOT}/crypto/peerOrganizations/org2.example.com/users/Admin@org2.example.com/msp
-ORG2_TLS_ROOTCERT_FILE=${CONFIG_ROOT}/crypto/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/ca.crt
-ORDERER_TLS_ROOTCERT_FILE=${CONFIG_ROOT}/crypto/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem
-set -x
+# don't rewrite paths for Windows Git Bash users
+export MSYS_NO_PATHCONV=1
 
-echo "Installing smart contract on peer0.org1.example.com"
-docker exec \
-  -e CORE_PEER_LOCALMSPID=Org1MSP \
-  -e CORE_PEER_ADDRESS=peer0.org1.example.com:7051 \
-  -e CORE_PEER_MSPCONFIGPATH=${ORG1_MSPCONFIGPATH} \
-  -e CORE_PEER_TLS_ROOTCERT_FILE=${ORG1_TLS_ROOTCERT_FILE} \
-  cli \
-  peer chaincode install \
-    -n "$CC_SRC_NAME"\
-    -v 1.0 \
-    -p "$CC_SRC_PATH" \
-    -l "$CC_RUNTIME_LANGUAGE"
+docker-compose -f docker-compose.yml down
 
+docker-compose -f docker-compose.yml up -d orderer.example.com ca.example.com  peer0.org1.example.com couchdb cli peer0.org2.example.com cli2
+docker ps
 
-echo "Installing smart contract on peer0.org2.example.com"
-docker exec \
-  -e CORE_PEER_LOCALMSPID=Org2MSP \
-  -e CORE_PEER_ADDRESS=peer0.org2.example.com:7051 \
-  -e CORE_PEER_MSPCONFIGPATH=${ORG2_MSPCONFIGPATH} \
-  -e CORE_PEER_TLS_ROOTCERT_FILE=${ORG2_TLS_ROOTCERT_FILE} \
-  cli \
-  peer chaincode install \
-    -n "$CC_SRC_NAME" \
-    -v 1.0 \
-    -p "$CC_SRC_PATH" \
-    -l "$CC_RUNTIME_LANGUAGE"
+# wait for Hyperledger Fabric to start
+# incase of errors when running later commands, issue export FABRIC_START_TIMEOUT=<larger number>
+export FABRIC_START_TIMEOUT=10
+#echo ${FABRIC_START_TIMEOUT}
+sleep $FABRIC_START_TIMEOUT
 
-:<<'END'
-echo "Instantiating smart contract on mychannel"
-docker exec \
-  -e CORE_PEER_LOCALMSPID=Org1MSP \
-  -e CORE_PEER_MSPCONFIGPATH=${ORG1_MSPCONFIGPATH} \
-  cli \
-  peer chaincode instantiate \
-    -o orderer.example.com:7050 \
-    -C mychannel \
-    -n "$CC_SRC_NAME" \
-    -l "$CC_RUNTIME_LANGUAGE" \
-    -v 1.0 \
-    -c '{"Args":[]}' \
-    -P "OR('Org1MSP.member','Org2MSP.member')" \
-    --tls \
-    --cafile ${ORDERER_TLS_ROOTCERT_FILE} \
-    --peerAddresses peer0.org1.example.com:7051 \
-    --tlsRootCertFiles ${ORG1_TLS_ROOTCERT_FILE}
+# Create the channel
+#docker exec cli peer channel create -o orderer.example.com:7050 -c mychannel -f ./channel.tx
+docker exec cli peer channel create -o orderer.example.com:7050 -c mychannel -f ./channel.tx
+#--tls --cafile /etc/hyperledger/crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem
 
-echo "Waiting for instantiation request to be committed ..."
-sleep 10
-
-set +x
-
-END
-
-echo "Instantiating smart contract on mychannel"
-docker exec \
-  -e CORE_PEER_LOCALMSPID=Org1MSP \
-  -e CORE_PEER_MSPCONFIGPATH=${ORG1_MSPCONFIGPATH} \
-  cli \
-  peer chaincode instantiate \
-    -C mychannel \
-    -n "$CC_SRC_NAME" \
-    -l "$CC_RUNTIME_LANGUAGE" \
-    -v 1.0 \
-    -c '{"Args":[]}' \
-    -P "OR('Org1MSP.member','Org2MSP.member')" 
-
-
-echo "Waiting for instantiation request to be committed ..."
-sleep 10
-
-set +x
-
-
-
-
-
-
-
-
-
-
-
-
+#docker exec cli scripts/script.sh 
+docker exec cli scripts/script.sh $CC_SRC_NAME
 
 

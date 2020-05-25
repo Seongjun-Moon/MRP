@@ -1,49 +1,53 @@
 const express = require("express");
 const router = express.Router();
-
-/// 아직 userDB 있긴한데 아직 미완....
+const company=require("../models").Company;
 const user = require("../models").User;
 
 // 로그인
 router.post("/signIn", async (req, res) => {
-  const id = req.body.id;
-  const pw = req.body.pw;
-  const companyType = req.body.companyType;
+  const id = req.body.email;
+  const password = req.body.password;
 
   try {
-    const signIn = await user.findOne({
+    const signIn = await company.findOne({
+      
       // join => user table + company table
-      where: { id, pw, companyType },
+      attributes:['companyType'],
+      include:{
+        model:user,
+        attributes:['companyCode'],
+        where:{id, password}
+      }
     });
+    console.log("/////////////////////////////////////////////////////");
 
-    res.json({ companyType: signIn.companyType });
+    console.log(signIn.companyType);
+    console.log("/////////////////////////////////////////////////////");
+
+    res.json({ message:true, companyType: signIn.companyType });
   } catch (err) {
     console.log(err);
-    res.json({ message: "false" });
+    res.json({ message: false });
   }
 });
 
 // 회원가입
 router.post("/signUp", async (req, res) => {
-  const id = req.body.id;
-  const pw = req.body.pw;
-  const companyCode = req.body.companyCode;
-  const companyName = req.body.companyName;
-  const companyType = req.body.companyType;
+  const id = req.body.email;
+  const password = req.body.password;
+  const companyCode = req.body.section;
 
   try {
     const signUp = await user.create({
       id,
-      pw,
-      companyCode,
-      companyName,
-      companyType,
+      password,
+      companyCode
     });
     console.log(signUp);
-    res.json({ message: companyName });
+    res.json({ message: id });
   } catch (err) {
     console.log(err);
-    res.json({ message: "false" });
+    res.json({ message: false });
   }
 });
 

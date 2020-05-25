@@ -7,7 +7,7 @@ import CirculationPage from "../components/circulation-page";
 
 function MainContainer(props) {
   return (
-    <section className="main">
+    <section>
       <Route exact path="/" component={UserPage}></Route>
       <Route exact path="/company" component={CompanyPage}></Route>
       <Route exact path="/medicine" component={MedicinePage}></Route>

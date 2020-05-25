@@ -8,7 +8,7 @@ const url = "70.12.113.182:9090";
  *  업체 CRUD
  */
 
-/* 유저 정보 */
+/* 유저 페이지 조회 (링크는 아직 안맞춤)*/
 const getUserInfo = () => {
   return axios.post(`http://${url}/oversee/userInfo`, {});
 };
@@ -32,6 +32,7 @@ const getCustomer = (id, pw) => {
     pw,
   });
 };
+
 /* 회원가입 */
 const addCustomer = (id, pw, companyCode) => {
   return axios.post(`http://${url}/user/signUp`, {
@@ -40,6 +41,7 @@ const addCustomer = (id, pw, companyCode) => {
     companyCode,
   });
 };
+
 /*
  * 의약품 CRUD
  */

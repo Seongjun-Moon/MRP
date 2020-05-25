@@ -29,24 +29,8 @@ function MedicinePage(props) {
     getMedicineInfo();
   }, []);
 
-  const getMedicineInfo = async (
-    mediCode,
-    companyCode,
-    mediName,
-    mediType,
-    count,
-    permissionDate,
-    cancelDate
-  ) => {
-    const data = await API.getMedicineInfo(
-      mediCode,
-      companyCode,
-      mediName,
-      mediType,
-      count,
-      permissionDate,
-      cancelDate
-    ).then((data) => data.data);
+  const getMedicineInfo = async () => {
+    const data = await API.getMedicineInfo().then((data) => data.data);
     setMediData(data);
   };
 
@@ -62,9 +46,12 @@ function MedicinePage(props) {
       cancelDate.value
     ).then((data) => data.data);
     console.log(result);
+
     result
       ? alert("의약품 정보가 등록되었습니다.")
       : alert("의약품 정보 등록에 실패했습니다.");
+
+    getMedicineInfo();
   };
 
   return (
@@ -128,24 +115,35 @@ function MedicinePage(props) {
             type="text"
             name=""
             id="companyCode"
-            ref={companyCode}
+            ref={(ref) => (companyCode = ref)}
             required
           />
 
           <label htmlFor="mediType">의약품 유형</label>
-          <select name="" id="mediType" ref={mediType} required>
+          <select
+            name=""
+            id="mediType"
+            ref={(ref) => (mediType = ref)}
+            required
+          >
             <option value="의약품">전문 의약품</option>
           </select>
 
           <label htmlFor="count">제품 수량</label>
-          <input type="number" name="" id="count" ref={count} required />
+          <input
+            type="number"
+            name=""
+            id="count"
+            ref={(ref) => (count = ref)}
+            required
+          />
 
           <label htmlFor="permissionDate">품목 허가일자</label>
           <input
             type="date"
             name=""
             id="permissionDate"
-            ref={permissionDate}
+            ref={(ref) => (permissionDate = ref)}
             required
           />
 
@@ -154,7 +152,7 @@ function MedicinePage(props) {
             type="date"
             name=""
             id="cancelDate"
-            ref={cancelDate}
+            ref={(ref) => (cancelDate = ref)}
             required
           />
           <button type="submit">등록</button>

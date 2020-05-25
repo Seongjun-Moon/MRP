@@ -3,9 +3,8 @@ import { NavLink } from "react-router-dom";
 
 function SidebarContainer(props) {
   return (
-    <div className="sidebar">
-      <h1>여기는 사이드바</h1>
-      <ul>
+    <aside className="sidebar">
+      <ul className="sidebar-menu">
         <li>
           <NavLink exact to="/">
             사용자 페이지
@@ -21,7 +20,7 @@ function SidebarContainer(props) {
           <NavLink to="/circulation">유통 페이지</NavLink>
         </li>
       </ul>
-    </div>
+    </aside>
   );
 }
 

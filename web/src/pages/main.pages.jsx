@@ -10,20 +10,20 @@ import "../scss/styles.scss";
 class Main extends React.Component {
   render() {
     return (
-      <>
-        <div className="mainpage-header">
-          <h1>
-            <Medicine />
-            MRP
-          </h1>
+      <div className="main">
+        <div className="main-header">
+          <header>
+            {/* <Medicine /> */}
+            <h1>MRP System</h1>
+          </header>
         </div>
         <HashRouter>
-          <div className="mainpage-container">
+          <section className="main-container">
             <SidebarContainer />
             <MainContainer />
-          </div>
+          </section>
         </HashRouter>
-      </>
+      </div>
     );
   }
 }

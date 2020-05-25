@@ -256,11 +256,7 @@ router.post('/history', async (req, res) => {
       'getHistoryForMedicine',
       `${req.body.barcode}`
     );
-
-    const history = String(result);
-    //const barcode = req.body.barcode;
-    console.log(history);
-
+    const history = JSON.parse(result);
     res.json({ history });
   } catch (err) {
     console.log(err);

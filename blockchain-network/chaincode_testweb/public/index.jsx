@@ -3,7 +3,7 @@ var { Component } = React;
 class Main extends Component {
   constructor(props) {
     super(props);
-    this.state = { comments: [] };
+    this.state = { comments: [], history: [] };
   }
 
   handleChange = (event) => {
@@ -125,7 +125,15 @@ class Main extends Component {
     axios
       .post('/history', barcode)
       .then((response) => {
-        console.log(response.data.history);
+        const str = [];
+        const history = response.data.history;
+        const iter = response.data.history.length;
+        for (let i = 0; i < iter; i++) {
+          str.push(history[i].Value);
+        }
+        this.setState({ history: str });
+        console.log(this.state.history);
+        this.barcodeQeury.value = '';
       })
       .catch((err) => {
         console.log(err);

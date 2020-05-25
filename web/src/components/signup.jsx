@@ -4,20 +4,20 @@ import API from "../API";
 let emailInput = React.createRef();
 let passwordInput = React.createRef();
 let passwordCheckInput = React.createRef();
-let sectionInput = React.createRef();
+let companyCodeInput = React.createRef();
 
 function Signup(props) {
   const handleSubmit = async (e) => {
     e.preventDefault();
-    let email = emailInput.current.value;
-    let password = passwordInput.current.value;
-    let passwordcheck = passwordCheckInput.current.value;
-    let section = sectionInput.current.value;
+    let id = emailInput.current.value;
+    let pw = passwordInput.current.value;
+    let pwcheck = passwordCheckInput.current.value;
+    let companyCode = companyCodeInput.current.value;
 
-    if (password === passwordcheck) {
-      await API.addCustomer(email, password, section).then((data) => {
+    if (pw === pwcheck) {
+      await API.addCustomer(id, pw, companyCode).then((data) => {
         if (data.data.message) {
-          alert("회원가입 완료!");
+          alert(data.data.message + "회원가입 완료!");
         } else {
           alert("회원가입 실패!!!!!");
         }
@@ -61,13 +61,14 @@ function Signup(props) {
           ref={passwordCheckInput}
         />
         <br />
-        기관
-        <select id="signup-section" ref={sectionInput}>
-          <option value="factory">제조업체</option>
-          <option value="wholesale">도매업체</option>
-          <option value="hospital">병원</option>
-          <option value="pharmacy">약국</option>
-        </select>
+        업체 코드
+        <input
+          name="companyCode"
+          id="signup-companycode"
+          placeholder="업체 코드를 입력해주세요."
+          required
+          ref={companyCodeInput}
+        />
         <br />
         <button type="submit">회원가입</button>
         {/* <button onClick={props.login}>회원가입</button> */}

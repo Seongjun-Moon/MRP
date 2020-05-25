@@ -3,15 +3,13 @@ import API from "../API";
 
 let emailInput = React.createRef();
 let passwordInput = React.createRef();
-let sectionInput = React.createRef();
 
 function Signin(props) {
   const handleSubmit = async (e) => {
     e.preventDefault();
-    let email = emailInput.current.value;
-    let password = passwordInput.current.value;
-    let section = sectionInput.current.value;
-    await API.getCustomer(email, password, section).then((data) => {
+    let id = emailInput.current.value;
+    let pw = passwordInput.current.value;
+    await API.getCustomer(id, pw).then((data) => {
       if (data.data.message) {
         alert("로그인 완료!");
       } else {
@@ -45,14 +43,6 @@ function Signin(props) {
           required
           ref={passwordInput}
         />
-        <br />
-        기관
-        <select id="signin-section" ref={sectionInput}>
-          <option value="factory">제조업체</option>
-          <option value="wholesale">도매업체</option>
-          <option value="hospital">병원</option>
-          <option value="pharmacy">약국</option>
-        </select>
         <br />
         <button type="submit">테스트 로그인</button>
         {/* <button onClick={props.login}>로그인</button> */}

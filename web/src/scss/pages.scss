@@ -1,0 +1,17 @@
+@import "variables.scss";
+
+.main {
+  &-header {
+    text-align: center;
+
+    h1 {
+      margin: 0;
+      color: $brown;
+    }
+  }
+
+  &-container {
+    display: grid;
+    grid-template-columns: 20rem 1fr;
+  }
+}

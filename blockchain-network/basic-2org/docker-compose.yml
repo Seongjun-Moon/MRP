@@ -120,7 +120,7 @@ services:
       - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.org2.example.com:7051
       - CORE_PEER_ADDRESS=peer0.org2.example.com:7051
     ports:
-      - 8051:7051
+      - 8051:8051
       - 8053:7053
     volumes:
         - ./crypto-config/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/msp:/etc/hyperledger/msp/peer

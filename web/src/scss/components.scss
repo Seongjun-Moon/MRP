@@ -1,0 +1,16 @@
+@import "variables.scss";
+
+.sidebar {
+  background-color: $pink;
+  padding: 2rem;
+
+  &-menu {
+    li {
+      margin: 0.5rem;
+    }
+  }
+}
+
+.main {
+  padding: 0 2rem;
+}

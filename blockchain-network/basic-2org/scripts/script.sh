@@ -6,10 +6,12 @@
 DELAY=3
 MAX_RETRY=10
 CHANNEL_NAME="mychannel"
+
 CC_SRC_NAME=$1
 CC_SRC_VERSION="1.0"
 CC_RUNTIME_LANGUAGE=node
 CC_SRC_PATH=/opt/gopath/src/github.com/mrp
+
 
 
 verifyResult() {
@@ -32,8 +34,6 @@ joinChannel () {
 	done
 }
 
-
-
 installChainCode () {
 	for org in 1 2; do
 	    peer=0
@@ -45,8 +45,6 @@ installChainCode () {
 	done
 }
 
-
-
 instantiateChainCode () {
 	instantiateCCWIthRetry
 	echo "===================== peer${peer}.org${org} instantiate chaincode '$CC_SRC_NAME' ===================== "
@@ -54,7 +52,9 @@ instantiateChainCode () {
 	echo
 
 }
+
 joinChannel
 installChainCode
 instantiateChainCode
+
 

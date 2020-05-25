@@ -39,11 +39,13 @@ let Chaincode = class {
 
   // 전문의약품 유통내역 등록 (출고, 입고)
   async register(stub, args) {
-    let time = new Date().toLocaleString();
     console.info('============= START : Register Medicine Info ===========');
     if (args.length != 4) {
       throw new Error('Incorrect number of arguments. Expecting 4');
     }
+
+    let time = new Date().toLocaleString();
+
     // Value 등록
     var Medicine = {
       companyID: args[1],
@@ -57,7 +59,53 @@ let Chaincode = class {
     console.info('============= END : Register Medicine Info ===========');
   }
 
-  // 모든 전문의약품 유통내역 조회
+  // 기유통된 전문의약품의 유통내역 추가
+  async changeMediStatus(stub, args) {
+    console.info('============= START : update Medicine Status ===========');
+    if (args.length != 4) {
+      throw new Error('Incorrect number of arguments. Expecting 4');
+    }
+
+    let mediAsBytes = await stub.getState(args[0]); //get the Medicine from chaincode state
+    if (!mediAsBytes || mediAsBytes.toString().length <= 0) {
+      throw new Error(mediCode + ' does not exist: ');
+    }
+    let medi = JSON.parse(mediAsBytes);
+    let time = new Date().toLocaleString();
+    medi.companyID = args[1];
+    medi.targetID = args[2];
+    medi.time = time;
+    medi.state = args[3];
+
+    await stub.putState(args[0], Buffer.from(JSON.stringify(medi)));
+    console.info('============= END : update Medicine Status ===========');
+  }
+
+  // 특정 전문의약품의 유통내역 조회 (최신상태)
+  async queryOneMedicine(stub, args) {
+    if (args.length != 1) {
+      throw new Error(
+        'Incorrect number of arguments. Expecting CarNumber ex: MEDI0'
+      );
+    }
+    let mediCode = args[0];
+    let allResults = [];
+    let result = {};
+    let mediAsBytes = await stub.getState(mediCode); //get the Medicine from chaincode state
+    if (!mediAsBytes || mediAsBytes.toString().length <= 0) {
+      throw new Error(mediCode + ' does not exist: ');
+    }
+    result.Key = mediCode;
+    result.Record = JSON.parse(mediAsBytes.toString());
+    allResults.push(result);
+    // console.log(mediAsBytes.toString());
+    // return mediAsBytes;
+
+    console.info(allResults);
+    return Buffer.from(JSON.stringify(allResults));
+  }
+
+  // 모든 전문의약품 유통내역 조회 (최신상태)
   async showAll(stub, args) {
     let startKey = 'MEDI0';
     let endKey = 'MEDI999';

@@ -28,6 +28,7 @@ setGlobals() {
     CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.example.com/users/Admin@org2.example.com/msp
     if [ $PEER -eq 0 ]; then
       CORE_PEER_ADDRESS=peer0.org2.example.com:7051
+
     fi
 
   elif [ $ORG -eq 3 ]; then
@@ -170,18 +171,6 @@ sleep 10
 set +x
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

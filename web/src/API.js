@@ -33,6 +33,7 @@ const getCustomer = (email, password, section) => {
     section,
   });
 };
+
 /* 회원가입 */
 const addCustomer = (email, password, section) => {
   return axios.post(`http://${url}/`, {
@@ -40,6 +41,7 @@ const addCustomer = (email, password, section) => {
     password,
     section,
   });
+};
 
 /*
  * 의약품 CRUD
@@ -67,7 +69,6 @@ const createMedicineInfo = (
 
 const getMedicineInfo = () => {
   return axios.post(`http://${url}/oversee/mediInfo`, {});
-
 };
 
 export default {

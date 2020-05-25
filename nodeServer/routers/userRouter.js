@@ -5,8 +5,8 @@ const user = require("../models").User;
 
 // 로그인
 router.post("/signIn", async (req, res) => {
-  const id = req.body.email;
-  const password = req.body.password;
+  const id = req.body.id;
+  const password = req.body.pw;
 
   try {
     const signIn = await company.findOne({
@@ -33,9 +33,9 @@ router.post("/signIn", async (req, res) => {
 
 // 회원가입
 router.post("/signUp", async (req, res) => {
-  const id = req.body.email;
-  const password = req.body.password;
-  const companyCode = req.body.section;
+  const id = req.body.id;
+  const password = req.body.pw;
+  const companyCode = req.body.companyCode;
 
   try {
     const signUp = await user.create({

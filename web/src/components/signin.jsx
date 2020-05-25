@@ -1,16 +1,26 @@
 import React from "react";
+import API from "../API";
 
 let emailInput = React.createRef();
 let passwordInput = React.createRef();
+let sectionInput = React.createRef();
 
 function Signin(props) {
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     let email = emailInput.current.value;
     let password = passwordInput.current.value;
-    if (email === "a@naver.com" && password === "1234") {
+    let section = sectionInput.current.value;
+    await API.getCustomer(email, password, section).then((data) => {
+      if (data.data.message) {
+        alert("로그인 완료!");
+      } else {
+        alert("로그인 실패!!!!!");
+      }
+    });
+    /*     if (email === "a@naver.com" && password === "1234") {
       props.login();
-    } else alert("아이디 혹은 비밀번호가 일치 하지 않습니다.");
+    } else alert("아이디 혹은 비밀번호가 일치 하지 않습니다."); */
   };
 
   return (
@@ -37,7 +47,7 @@ function Signin(props) {
         />
         <br />
         기관
-        <select>
+        <select id="signin-section" ref={sectionInput}>
           <option value="factory">제조업체</option>
           <option value="wholesale">도매업체</option>
           <option value="hospital">병원</option>

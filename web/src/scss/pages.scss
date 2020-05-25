@@ -1,14 +1,25 @@
 @import "variables.scss";
 
-.mainpage-header {
-  background-color: pink;
+.main {
+  &-header {
+    text-align: center;
 
-  h1 {
-    margin: 0;
+    h1 {
+      margin: 0;
+      color: $brown;
+    }
+  }
+
+  &-container {
+    display: grid;
+    grid-template-columns: 20rem 1fr;
   }
 }
 
-.mainpage-container {
-  display: grid;
-  grid-template-columns: 20rem 1fr;
+.welcome {
+  header {
+    font-family: $Sanchez;
+    font-size: 3rem;
+    font-weight: 700;
+  }
 }

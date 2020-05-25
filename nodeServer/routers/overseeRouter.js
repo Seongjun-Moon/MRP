@@ -9,6 +9,37 @@ router.post('/search', (res,req)=>{
 
 })
 
+// 의약품 정보 등록
+router.post("/mediEnroll", async(req,res)=>{
+    const mediCode=req.body.mediCode
+    const companyCode=req.body.companyCode
+    const mediName=req.body.mediName
+    const mediType=req.body.mediType
+    const count=req.body.count
+    const permissionDate=req.body.permissionDate
+    const cancelDate=req.body.cancelDate
+
+    
+    try{
+        const mediEnroll=await medicine.create({
+            mediCode,
+            companyCode,
+            mediName,
+            mediType,
+            count,
+            permissionDate,
+            cancelDate
+        });
+
+        console.log(mediEnroll);
+        res.json({message:true});
+
+    }catch(err){
+        console.log(err);
+        res.json({message:false});
+    }
+})
+
 // 의약품 정보 조회
 router.post("/mediInfo", async(req, res)=>{
     try{

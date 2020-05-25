@@ -26,6 +26,15 @@ const ca = new FabricCAServices(caURL);
 const walletPath = path.join(process.cwd(), 'wallet');
 const wallet = new FileSystemWallet(walletPath);
 
+// 체인코드
+const chainCode = 'mrpChainCode_js';
+
+// 채널
+const channel = 'mychannel';
+
+// ==================  GET Method ==================
+
+// 1. MRP 블록체인 네트워크 연결 시도
 router.get('/connect', async (req, res) => {
   try {
     console.log(`Wallet path: ${walletPath}`);
@@ -86,13 +95,13 @@ router.get('/connect', async (req, res) => {
         'Successfully registered and enrolled admin user "user1" and imported it into the wallet'
       );
     }
-
     res.json({ msg: 'connected' });
-  } catch (error) {
-    console.log(error);
+  } catch (err) {
+    console.log(err);
   }
 });
 
+// 2. 모든 전문의약품의 최신 유통정보 조회
 router.get('/queryAll', async (req, res) => {
   try {
     const userExists = await wallet.exists('user1');
@@ -103,9 +112,7 @@ router.get('/queryAll', async (req, res) => {
       await res.json({ msg: '연결부터 해주세요' });
       return;
     }
-    console.log('====================================');
-    console.log('Connect to peer node');
-    console.log('====================================');
+    console.log('Start : Qeury All Medicine Info');
     // Create a new gateway for connecting to our peer node.
     const gateway = new Gateway();
     await gateway.connect(ccp, {
@@ -113,8 +120,107 @@ router.get('/queryAll', async (req, res) => {
       identity: 'user1',
       discovery: { enabled: false },
     });
-  } catch (error) {
-    console.log(error);
+    // Get the network (channel) our contract is deployed to.
+    const network = await gateway.getNetwork(channel);
+
+    // Get the contract from the network.
+    const contract = network.getContract(chainCode);
+
+    const result = await contract.evaluateTransaction('showAll', '');
+    console.log(
+      `Transaction has been evaluated, result is: ${result.toString()}`
+    );
+    console.log('End : Qeury All Medicine Info');
+    res.json({ allInfo: result.toString() });
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+// ==================  POST Method ==================
+// 3. 전문의약품 유통정보 신규등록
+router.post('/register', async (req, res) => {
+  try {
+    console.log(req.body);
+    const userExists = await wallet.exists('user1');
+    if (!userExists) {
+      console.log(
+        'An identity for the user "user1" does not exist in the wallet'
+      );
+      await res.json({ msg: '연결부터 해주세요' });
+      return;
+    }
+    console.log('Start : Insert Medicine Info');
+    // Create a new gateway for connecting to our peer node.
+    const gateway = new Gateway();
+    await gateway.connect(ccp, {
+      wallet,
+      identity: 'user1',
+      discovery: { enabled: false },
+    });
+    // Get the network (channel) our contract is deployed to.
+    const network = await gateway.getNetwork(channel);
+
+    // Get the contract from the network.
+    const contract = network.getContract(chainCode);
+
+    // 유통이력 트랜잭션 생성
+    await contract.submitTransaction(
+      'register',
+      `${req.body.barcode}`,
+      `${req.body.companyId}`,
+      `${req.body.targetId}`,
+      `${req.body.state}`
+    );
+    console.log(`Transaction has been evaluated, result is: OK`);
+    console.log('End : Insert Medicine Info');
+    res.json({
+      code: '1',
+      msg: `${req.body.barcode}의 유통정보가 정상적으로 입력되었습니다`,
+    });
+  } catch (err) {
+    console.log(err);
+    res.json({ code: '0', msg: `${req.body.barcode} 입력 오류` });
+  }
+});
+
+// 4. 특정 전문의약품의 유통 히스토리를 조회
+router.post('/history', async (req, res) => {
+  try {
+    const userExists = await wallet.exists('user1');
+    if (!userExists) {
+      console.log(
+        'An identity for the user "user1" does not exist in the wallet'
+      );
+      await res.json({ msg: '연결부터 해주세요' });
+      return;
+    }
+
+    // Create a new gateway for connecting to our peer node.
+    const gateway = new Gateway();
+    await gateway.connect(ccp, {
+      wallet,
+      identity: 'user1',
+      discovery: { enabled: false },
+    });
+
+    // Get the network (channel) our contract is deployed to.
+    const network = await gateway.getNetwork(channel);
+
+    // Get the contract from the network.
+    const contract = network.getContract(chainCode);
+
+    const result = await contract.evaluateTransaction(
+      'getHistoryForMedicine',
+      `${req.body.barcode}`
+    );
+
+    //const barcode = req.body.barcode;
+    console.log(result);
+
+    res.json({ msg: result });
+  } catch (err) {
+    console.log(err);
   }
 });
 

@@ -27,6 +27,7 @@ function CompanyPage(props) {
       (data) => {
         if (data.data.message) {
           alert("업체 등록 완료!");
+          getCompanyInfo();
         } else {
           alert("업체 등록 실패!!!!!");
         }
@@ -36,45 +37,50 @@ function CompanyPage(props) {
 
   return (
     <div>
-      <h3>여기는 업체 페이지</h3>
-      <table>
-        <thead>
-          <tr>
-            <td>순번</td>
-            <td>업체 코드</td>
-            <td>업체 이름</td>
-            <td>업체 종류</td>
-          </tr>
-        </thead>
-        <tbody>
-          {companyData.map((company, index) => {
-            return (
-              <tr key={company.companyCode}>
-                <td>{index}</td>
-                <td>{company.companyCode}</td>
-                <td>{company.companyName}</td>
-                <td>{company.companyType}</td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
-      <form onSubmit={(e) => handleSubmit(e)} action="">
-        업체 코드
-        <input id="company-code" required ref={inputCompanyCode} />
-        업체 이름
-        <input id="company-name" required ref={inputCompanyName} />
-        <br />
-        업체 종류
-        <select name="type" id="company-type" ref={inputCompanyType}>
-          <option value="factory">제조업체</option>
-          <option value="wholesale">도매업체</option>
-          <option value="hospital">병원</option>
-          <option value="pharmacy">약국</option>
-        </select>
-        <br />
-        <button type="submit">업체 등록</button>
-      </form>
+      <div>
+        <h3>업체 정보 조회</h3>
+        <table>
+          <thead>
+            <tr>
+              <td>업체 코드</td>
+              <td>업체 이름</td>
+              <td>업체 종류</td>
+            </tr>
+          </thead>
+          <tbody>
+            {companyData.map((company) => {
+              return (
+                <tr key={company.companyCode}>
+                  <td>{company.companyCode}</td>
+                  <td>{company.companyName}</td>
+                  <td>{company.companyType}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+
+      <div>
+        <h3>업체 정보 등록</h3>
+
+        <form onSubmit={(e) => handleSubmit(e)} action="">
+          업체 코드
+          <input id="company-code" required ref={inputCompanyCode} />
+          업체 이름
+          <input id="company-name" required ref={inputCompanyName} />
+          <br />
+          업체 종류
+          <select name="type" id="company-type" ref={inputCompanyType}>
+            <option value="factory">제조업체</option>
+            <option value="wholesale">도매업체</option>
+            <option value="hospital">병원</option>
+            <option value="pharmacy">약국</option>
+          </select>
+          <br />
+          <button type="submit">업체 등록</button>
+        </form>
+      </div>
     </div>
   );
 }

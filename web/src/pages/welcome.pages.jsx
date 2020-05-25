@@ -1,6 +1,7 @@
 import React from "react";
 import Signin from "../components/signin";
 import Signup from "../components/signup";
+import Footer from "../components/footer";
 
 class Welcome extends React.Component {
   constructor() {
@@ -30,8 +31,7 @@ class Welcome extends React.Component {
             <Signup login={this.props.login} />
           )}
         </article>
-
-        <footer>&copy;WooahSiblings</footer>
+        <Footer />
       </section>
     );
   }

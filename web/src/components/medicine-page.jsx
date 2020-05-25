@@ -31,7 +31,7 @@ function MedicinePage(props) {
 
   const getMedicineInfo = async () => {
     const data = await API.getMedicineInfo().then((data) => data.data);
-    setMediData(data);
+    setMediData(data.sort((a, b) => a.mediCode - b.mediCode));
   };
 
   const createMedicineInfo = async (event) => {
@@ -61,7 +61,6 @@ function MedicinePage(props) {
         <table>
           <thead>
             <tr>
-              <td>순번</td>
               <td>의약품 코드</td>
               <td>업체 코드</td>
               <td>의약품 이름</td>
@@ -72,10 +71,9 @@ function MedicinePage(props) {
             </tr>
           </thead>
           <tbody>
-            {mediData.map((medi, index) => {
+            {mediData.map((medi) => {
               return (
                 <tr key={medi.mediCode}>
-                  <td>{index}</td>
                   <td>{medi.mediCode}</td>
                   <td>{medi.companyCode}</td>
                   <td>{medi.mediName}</td>

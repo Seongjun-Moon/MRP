@@ -18,17 +18,21 @@ class Welcome extends React.Component {
 
   render() {
     return (
-      <div className="welcome-container">
-        <h1>MRP</h1>
-        {this.state.sign ? (
-          <>
-            <Signin login={this.props.login} />
-            <button onClick={this.signupButton}>회원가입</button>
-          </>
-        ) : (
-          <Signup login={this.props.login} />
-        )}
-      </div>
+      <section className="welcome">
+        <header>MRP</header>
+        <article className="login-container">
+          {this.state.sign ? (
+            <>
+              <Signin login={this.props.login} />
+              <button onClick={this.signupButton}>회원가입</button>
+            </>
+          ) : (
+            <Signup login={this.props.login} />
+          )}
+        </article>
+
+        <footer>&copy;WooahSiblings</footer>
+      </section>
     );
   }
 }

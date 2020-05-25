@@ -42,13 +42,8 @@ MRP/blockchain-network/basic-2org/
 - targetID : 대상 업체코드 (수동입력)
 - state : 유통상태 (수동입력, 출고/입고)
 
-### getHistoryForMedicine(barCode)  ------> timeout error (수정 필요)
+### getHistoryForMedicine(barCode)
 
 - 특정 전문의약품의 모든 유통이력(history)를 확인
 - barCode : 바코드 정보 (key)
-
-### queryOneMedicine(barCode)       ------> 주석
-- 특정 전문의약품에 대한 의약품 유통정보를 조회 (최신 상태값)
-- barCode : 바코드 정보 (key)
-- (추가 검토) 모든 전문의약품 정보 조회는 getHistoryForKey 메소드 활용
 

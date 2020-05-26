@@ -23,8 +23,7 @@ function Signin(props) {
 
   return (
     <div className="signin">
-      <form onSubmit={(e) => handleSubmit(e)} action="" className="signin-form">
-        Email
+      <form onSubmit={(e) => handleSubmit(e)} className="signin-form">
         <input
           type="email"
           name="email"
@@ -33,8 +32,6 @@ function Signin(props) {
           required
           ref={emailInput}
         />
-        <br />
-        PW
         <input
           type="password"
           name="password"

@@ -3,7 +3,7 @@ import API from "../API";
 
 let emailInput = React.createRef();
 let passwordInput = React.createRef();
-let passwordCheckInput = React.createRef();
+let passwordConfirmInput = React.createRef();
 let companyCodeInput = React.createRef();
 
 function Signup(props) {
@@ -11,7 +11,7 @@ function Signup(props) {
     e.preventDefault();
     let id = emailInput.current.value;
     let pw = passwordInput.current.value;
-    let pwcheck = passwordCheckInput.current.value;
+    let pwcheck = passwordConfirmInput.current.value;
     let companyCode = companyCodeInput.current.value;
 
     if (pw === pwcheck) {
@@ -29,9 +29,10 @@ function Signup(props) {
 
   return (
     <div className="signup">
+      <h1>회원가입 페이지</h1>
+
       <form onSubmit={(e) => handleSubmit(e)} action="" className="signup-form">
-        <h1>회원가입 페이지</h1>
-        Email
+        <label htmlFor="signup-email">Email</label>
         <input
           type="email"
           name="email"
@@ -40,8 +41,7 @@ function Signup(props) {
           required
           ref={emailInput}
         />
-        <br />
-        PW
+        <label htmlFor="signup-password">Password</label>
         <input
           type="password"
           name="password"
@@ -50,18 +50,18 @@ function Signup(props) {
           required
           ref={passwordInput}
         />
-        <br />
-        PW Check
+        <label htmlFor="signup-password-confirmation">
+          Password Confirmation
+        </label>
         <input
           type="password"
           name="password"
-          id="signup-password"
+          id="signup-password-confirmation"
           placeholder="비밀번호를 한번 더 입력해주세요."
           required
-          ref={passwordCheckInput}
+          ref={passwordConfirmInput}
         />
-        <br />
-        업체 코드
+        <label htmlFor="signup-companycode">업체코드</label>
         <input
           name="companyCode"
           id="signup-companycode"
@@ -71,7 +71,6 @@ function Signup(props) {
         />
         <br />
         <button type="submit">회원가입</button>
-        {/* <button onClick={props.login}>회원가입</button> */}
       </form>
     </div>
   );

@@ -23,8 +23,17 @@ table {
   }
 }
 
+label {
+  display: block;
+}
+
 input {
   display: block;
+  width: 15rem;
+  height: 2rem;
+  padding: 0.2rem 0.5rem;
+  margin: 0.5rem auto;
+  font-size: 1rem;
 }
 
 select {

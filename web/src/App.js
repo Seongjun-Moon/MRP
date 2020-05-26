@@ -9,7 +9,7 @@ function App() {
     setIsLoggedin(!isLoggedIn);
   };
 
-  return <div>{!isLoggedIn ? <Main /> : <Welcome login={login} />}</div>;
+  return <div>{isLoggedIn ? <Main /> : <Welcome login={login} />}</div>;
 }
 
 export default App;

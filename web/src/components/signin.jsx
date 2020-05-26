@@ -31,6 +31,7 @@ function Signin(props) {
           placeholder="ID@example.com"
           required
           ref={emailInput}
+          autoFocus
         />
         <input
           type="password"

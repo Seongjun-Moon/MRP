@@ -32,7 +32,6 @@ function Signup(props) {
       <h1>회원가입 페이지</h1>
 
       <form onSubmit={(e) => handleSubmit(e)} action="" className="signup-form">
-        <label htmlFor="signup-email">Email</label>
         <input
           type="email"
           name="email"
@@ -41,7 +40,6 @@ function Signup(props) {
           required
           ref={emailInput}
         />
-        <label htmlFor="signup-password">Password</label>
         <input
           type="password"
           name="password"
@@ -50,9 +48,6 @@ function Signup(props) {
           required
           ref={passwordInput}
         />
-        <label htmlFor="signup-password-confirmation">
-          Password Confirmation
-        </label>
         <input
           type="password"
           name="password"
@@ -61,7 +56,6 @@ function Signup(props) {
           required
           ref={passwordConfirmInput}
         />
-        <label htmlFor="signup-companycode">업체코드</label>
         <input
           name="companyCode"
           id="signup-companycode"

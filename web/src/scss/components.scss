@@ -12,6 +12,16 @@
 }
 
 .main {
-  background-color: $mint;
+  // background-color: $mint;
   padding: 1rem 2rem;
+}
+
+.medicine {
+  &-form {
+    width: 80%;
+
+    input {
+      margin: 0;
+    }
+  }
 }

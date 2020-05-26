@@ -5,6 +5,8 @@ $dark-pink: #cab1a9;
 $mint: #c9dad8;
 $dark-mint: #bdcac9;
 
+$black: #202020;
+
 // Font
 
 $Sanchez: "Sanchez", serif;
@@ -13,7 +15,7 @@ $Sanchez: "Sanchez", serif;
 
 .main-btn {
   display: block;
-  margin: 0.5rem auto;
+  margin: 0.5rem 0;
   width: 15rem;
   height: 2.5rem;
   text-align: center;
@@ -30,7 +32,7 @@ $Sanchez: "Sanchez", serif;
 
 .sub-btn {
   display: block;
-  margin: 0.5rem auto;
+  margin: 0.5rem 0;
   width: 15rem;
   height: 2.5rem;
   text-align: center;
@@ -43,10 +45,4 @@ $Sanchez: "Sanchez", serif;
   &:hover {
     background-color: $dark-mint;
   }
-}
-
-.tb-border {
-  padding: 1.5rem 0;
-  border-top: 1px solid #202020;
-  border-bottom: 1px solid #202020;
 }

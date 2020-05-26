@@ -17,9 +17,23 @@
 }
 
 .welcome {
+  width: 50rem;
+  margin: 0 auto;
+  text-align: center;
+
   header {
+    width: 30rem;
+    margin: 0 auto;
     font-family: $Sanchez;
     font-size: 3rem;
     font-weight: 700;
+  }
+
+  input {
+    margin: 0 auto;
+  }
+
+  button {
+    margin: 0 auto;
   }
 }

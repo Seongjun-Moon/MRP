@@ -70,6 +70,11 @@ const getMedicineInfo = () => {
   return axios.post(`http://${url}/oversee/mediInfo`, {});
 };
 
+/* 유통 조회 */
+const getCircuInfo = () => {
+  return axios.post(`http://${url}/oversee/companyInfo`, {});
+};
+
 export default {
   createCompanyInfo,
   getCompanyInfo,
@@ -78,4 +83,5 @@ export default {
   getUserInfo,
   createMedicineInfo,
   getMedicineInfo,
+  getCircuInfo,
 };

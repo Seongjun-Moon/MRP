@@ -20,6 +20,7 @@ function SidebarContainer(props) {
           <NavLink to="/circulation">유통 페이지</NavLink>
         </li>
       </ul>
+      <button>로그아웃</button>
     </aside>
   );
 }

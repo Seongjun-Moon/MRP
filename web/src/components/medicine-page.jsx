@@ -51,23 +51,30 @@ function MedicinePage(props) {
       ? alert("의약품 정보가 등록되었습니다.")
       : alert("의약품 정보 등록에 실패했습니다.");
 
+    mediCode.value = "";
+    companyCode.value = "";
+    mediName.value = "";
+    mediType.value = "";
+    count.value = "";
+    permissionDate.value = "";
+    cancelDate.value = "";
     getMedicineInfo();
   };
 
   return (
-    <>
-      <article className="medicine">
+    <section className="medicine">
+      <article className="medicine-list">
         <h3>의약품 목록 조회</h3>
-        <table>
+        <table className="medicine-list_table">
           <thead>
             <tr>
-              <td>의약품 코드</td>
-              <td>업체 코드</td>
-              <td>의약품 이름</td>
-              <td>의약품 종류</td>
-              <td>갯수</td>
-              <td>허가 일자</td>
-              <td>취소 일자</td>
+              <td className="mediCode">의약품 코드</td>
+              <td className="companyCode">업체 코드</td>
+              <td className="mediName">의약품 이름</td>
+              <td className="mediType">의약품 종류</td>
+              <td className="count">갯수</td>
+              <td className="permissionDate">허가 일자</td>
+              <td className="cancelDate">취소 일자</td>
             </tr>
           </thead>
           <tbody>
@@ -87,9 +94,10 @@ function MedicinePage(props) {
           </tbody>
         </table>
       </article>
+
       <article>
         <h3>의약품 정보 등록</h3>
-        <form action="" onSubmit={createMedicineInfo}>
+        <form action="" className="medicine-form" onSubmit={createMedicineInfo}>
           <label htmlFor="mediCode">의약품 표준코드</label>
           <input
             type="text"
@@ -153,10 +161,12 @@ function MedicinePage(props) {
             ref={(ref) => (cancelDate = ref)}
             required
           />
-          <button type="submit">등록</button>
+          <button type="submit" className="main-btn">
+            등록
+          </button>
         </form>
       </article>
-    </>
+    </section>
   );
 }
 

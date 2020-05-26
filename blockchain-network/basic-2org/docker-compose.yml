@@ -120,7 +120,7 @@ services:
       - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.org2.example.com:7051
       - CORE_PEER_ADDRESS=peer0.org2.example.com:7051
     ports:
-      - 8051:8051
+      - 8051:7051
       - 8053:7053
     volumes:
         - ./crypto-config/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/msp:/etc/hyperledger/msp/peer
@@ -128,6 +128,49 @@ services:
         - ./crypto-config/peerOrganizations/org2.example.com/users:/etc/hyperledger/msp/users
     depends_on:
       - orderer.example.com
+
+
+  peer0.org3.example.com:
+    extends:
+      service: peer-base
+    container_name: peer0.org3.example.com
+    environment:
+      - CORE_PEER_ID=peer0.org3.example.com
+      - CORE_PEER_LOCALMSPID=Org3MSP
+      - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp/users/Admin@org3.example.com/msp
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.org3.example.com:7051
+      - CORE_PEER_ADDRESS=peer0.org3.example.com:7051
+    ports:
+      - 9051:7051
+      - 9053:7053
+    volumes:
+        - ./crypto-config/peerOrganizations/org3.example.com/peers/peer0.org3.example.com/msp:/etc/hyperledger/msp/peer
+        - ./crypto-config/peerOrganizations/org3.example.com/peers/peer0.org3.example.com/tls:/etc/hyperledger/fabric/tls
+        - ./crypto-config/peerOrganizations/org3.example.com/users:/etc/hyperledger/msp/users
+    depends_on:
+      - orderer.example.com
+
+
+  peer0.org4.example.com:
+    extends:
+      service: peer-base
+    container_name: peer0.org4.example.com
+    environment:
+      - CORE_PEER_ID=peer0.org4.example.com
+      - CORE_PEER_LOCALMSPID=Org4MSP
+      - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp/users/Admin@org4.example.com/msp
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.org4.example.com:7051
+      - CORE_PEER_ADDRESS=peer0.org4.example.com:7051
+    ports:
+      - 10051:7051
+      - 10053:7053
+    volumes:
+        - ./crypto-config/peerOrganizations/org4.example.com/peers/peer0.org4.example.com/msp:/etc/hyperledger/msp/peer
+        - ./crypto-config/peerOrganizations/org4.example.com/peers/peer0.org4.example.com/tls:/etc/hyperledger/fabric/tls
+        - ./crypto-config/peerOrganizations/org4.example.com/users:/etc/hyperledger/msp/users
+    depends_on:
+      - orderer.example.com
+
 
   couchdb:
     container_name: couchdb

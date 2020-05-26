@@ -1,7 +1,7 @@
-const express = require("express");
-const dotenv = require("dotenv");
-const path = require("path");
-const automationDB = require("./middlewares/automationDB");
+const express = require("express")
+const dotenv = require("dotenv")
+const path = require("path")
+const automationDB = require("./middlewares/automationDB")
 
 const cors = require("cors");
 
@@ -10,14 +10,15 @@ const corsOptions = {
   credentials: true,
 };
 
-const app = express();
-const env = process.env;
 
-dotenv.config();
-automationDB;
-app.use(express.static(path.join(__dirname, "public")));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+const app = express()
+const env = process.env
+
+dotenv.config()
+automationDB
+app.use(express.static(path.join(__dirname, "public")))
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
 
 app.use(cors(corsOptions));
 app.use("/user", require("./routers/userRouter"));

@@ -27,7 +27,6 @@ router.post("/mediEnroll", async (req, res) => {
       permissionDate,
       cancelDate,
     });
-
     console.log(mediEnroll);
     res.json({ message: true });
   } catch (err) {
@@ -35,7 +34,6 @@ router.post("/mediEnroll", async (req, res) => {
     res.json({ message: false });
   }
 });
-
 // 의약품 정보 조회
 router.post("/mediInfo", async (req, res) => {
   try {
@@ -76,5 +74,23 @@ router.post("/companyInfo", async (req, res) => {
     res.json({ message: false });
   }
 });
+
+// Select product info
+router.post("/mediDetail", async (req, res) => {
+  const mediCode = req.body.barcode.substr(4, 13)
+  try {
+    const mediDetail = await medicine.findAll({
+      where: {
+        mediCode,
+      },
+    })
+
+    // console.log(mediDetail)
+    res.json(mediDetail)
+  } catch (err) {
+    console.log(err)
+    res.json({ message: false })
+  }
+})
 
 module.exports = router;

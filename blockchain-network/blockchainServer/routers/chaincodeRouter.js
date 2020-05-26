@@ -2,8 +2,6 @@ const express = require('express');
 const router = express.Router();
 const fs = require('fs');
 const path = require('path');
-const barcode = require('../models').Barcode;
-const axios = require('axios');
 const FabricCAServices = require('fabric-ca-client');
 const {
   FileSystemWallet,
@@ -260,34 +258,6 @@ router.post('/history', async (req, res) => {
     );
     const history = JSON.parse(result);
     res.json({ history });
-  } catch (err) {
-    console.log(err);
-  }
-});
-
-// 6. 표준코드에 대응하는 모든 바코드 항목을 조회
-router.post('/barcodeList', async (req, res) => {
-  console.log(req.body);
-  try {
-    const arr = [];
-    const barcodeList = await barcode.findAll({
-      attributes: ['barcodeName', 'mediCode'],
-      where: {
-        mediCode: req.body.mediCode,
-      },
-    });
-
-    // 대응되는 바코드 개수 (size)
-    const size = Object.keys(barcodeList).length;
-    for (let i = 0; i < size; i++) {
-      arr.push(barcodeList[i].barcodeName);
-    }
-
-    console.log(arr);
-
-    axios.post('');
-
-    res.json({ barcodeList });
   } catch (err) {
     console.log(err);
   }

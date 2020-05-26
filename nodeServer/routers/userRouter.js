@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const company=require("../models").Company;
+const company = require("../models").Company;
 const user = require("../models").User;
 
 // 로그인
@@ -10,21 +10,20 @@ router.post("/signIn", async (req, res) => {
 
   try {
     const signIn = await company.findOne({
-      
       // join => user table + company table
-      attributes:['companyType'],
-      include:{
-        model:user,
-        attributes:['companyCode'],
-        where:{id, password}
-      }
+      attributes: ["companyType"],
+      include: {
+        model: user,
+        attributes: ["companyCode"],
+        where: { id, password },
+      },
     });
     console.log("/////////////////////////////////////////////////////");
 
     console.log(signIn.companyType);
     console.log("/////////////////////////////////////////////////////");
 
-    res.json({ message:true, companyType: signIn.companyType });
+    res.json({ message: true, companyType: signIn.companyType });
   } catch (err) {
     console.log(err);
     res.json({ message: false });
@@ -41,7 +40,7 @@ router.post("/signUp", async (req, res) => {
     const signUp = await user.create({
       id,
       password,
-      companyCode
+      companyCode,
     });
     console.log(signUp);
     res.json({ message: id });

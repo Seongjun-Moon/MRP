@@ -18,17 +18,40 @@ body {
 }
 
 table {
+  border-collapse: collapse;
+
+  th,
+  td {
+    border: 1px solid $black;
+  }
+
   td {
     padding: 0.3rem;
   }
 }
 
+label {
+  display: block;
+  margin: 1rem auto 0.5rem auto;
+}
+
+// Custom Input
 input {
   display: block;
+  width: 20rem;
+  height: 2rem;
+  padding: 0.2rem 0.7rem;
+  margin: 0.5rem 0;
+  font-size: 0.8rem;
 }
+//
 
 select {
   display: block;
+  width: 20rem;
+  height: 2rem;
+  padding: 0.2rem 0.7rem;
+  margin: 0.5rem 0;
 }
 
 ul,
@@ -43,5 +66,6 @@ a {
 }
 
 footer {
+  margin-top: 3rem;
   text-align: center;
 }

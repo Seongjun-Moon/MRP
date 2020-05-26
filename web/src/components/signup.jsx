@@ -3,7 +3,7 @@ import API from "../API";
 
 let emailInput = React.createRef();
 let passwordInput = React.createRef();
-let passwordCheckInput = React.createRef();
+let passwordConfirmInput = React.createRef();
 let companyCodeInput = React.createRef();
 
 function Signup(props) {
@@ -11,13 +11,13 @@ function Signup(props) {
     e.preventDefault();
     let id = emailInput.current.value;
     let pw = passwordInput.current.value;
-    let pwcheck = passwordCheckInput.current.value;
+    let pwcheck = passwordConfirmInput.current.value;
     let companyCode = companyCodeInput.current.value;
 
     if (pw === pwcheck) {
       await API.addCustomer(id, pw, companyCode).then((data) => {
         if (data.data.message) {
-          alert(data.data.message + "회원가입 완료!");
+          alert(`${data.data.message}님, 회원가입 완료되었습니다.`);
         } else {
           alert("회원가입 실패!!!!!");
         }
@@ -29,9 +29,9 @@ function Signup(props) {
 
   return (
     <div className="signup">
+      <h1>회원가입</h1>
+
       <form onSubmit={(e) => handleSubmit(e)} action="" className="signup-form">
-        <h1>회원가입 페이지</h1>
-        Email
         <input
           type="email"
           name="email"
@@ -40,8 +40,6 @@ function Signup(props) {
           required
           ref={emailInput}
         />
-        <br />
-        PW
         <input
           type="password"
           name="password"
@@ -50,18 +48,14 @@ function Signup(props) {
           required
           ref={passwordInput}
         />
-        <br />
-        PW Check
         <input
           type="password"
           name="password"
-          id="signup-password"
+          id="signup-password-confirmation"
           placeholder="비밀번호를 한번 더 입력해주세요."
           required
-          ref={passwordCheckInput}
+          ref={passwordConfirmInput}
         />
-        <br />
-        업체 코드
         <input
           name="companyCode"
           id="signup-companycode"
@@ -70,8 +64,9 @@ function Signup(props) {
           ref={companyCodeInput}
         />
         <br />
-        <button type="submit">회원가입</button>
-        {/* <button onClick={props.login}>회원가입</button> */}
+        <button type="submit" className="main-btn">
+          회원가입
+        </button>
       </form>
     </div>
   );

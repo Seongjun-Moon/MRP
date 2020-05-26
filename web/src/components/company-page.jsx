@@ -78,7 +78,9 @@ function CompanyPage(props) {
             <option value="pharmacy">약국</option>
           </select>
           <br />
-          <button type="submit">업체 등록</button>
+          <button type="submit" className="main-btn">
+            업체 등록
+          </button>
         </form>
       </div>
     </div>

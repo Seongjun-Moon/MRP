@@ -2,6 +2,7 @@ ORDERER_CA=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrga
 PEER0_ORG1_CA=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt
 PEER0_ORG2_CA=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/ca.crt
 PEER0_ORG3_CA=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org3.example.com/peers/peer0.org3.example.com/tls/ca.crt
+PEER0_ORG4_CA=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org4.example.com/peers/peer0.org4.example.com/tls/ca.crt
 
 verifyResult() {
   if [ $1 -ne 0 ]; then
@@ -19,25 +20,26 @@ setGlobals() {
     CORE_PEER_LOCALMSPID="Org1MSP"
     CORE_PEER_TLS_ROOTCERT_FILE=$PEER0_ORG1_CA
     CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp
-    if [ $PEER -eq 0 ]; then
-      CORE_PEER_ADDRESS=peer0.org1.example.com:7051
-    fi
+    CORE_PEER_ADDRESS=peer0.org1.example.com:7051
+
   elif [ $ORG -eq 2 ]; then
     CORE_PEER_LOCALMSPID="Org2MSP"
     CORE_PEER_TLS_ROOTCERT_FILE=$PEER0_ORG2_CA
-    CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.example.com/users/Admin@org2.example.com/msp
-    if [ $PEER -eq 0 ]; then
-      CORE_PEER_ADDRESS=peer0.org2.example.com:7051
-
-    fi
+    CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.example.com/users/Admin@org2.example.com/msp  
+    CORE_PEER_ADDRESS=peer0.org2.example.com:7051
 
   elif [ $ORG -eq 3 ]; then
     CORE_PEER_LOCALMSPID="Org3MSP"
     CORE_PEER_TLS_ROOTCERT_FILE=$PEER0_ORG3_CA
     CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org3.example.com/users/Admin@org3.example.com/msp
-    if [ $PEER -eq 0 ]; then
-      CORE_PEER_ADDRESS=peer0.org3.example.com:9051
-    fi
+    CORE_PEER_ADDRESS=peer0.org3.example.com:7051
+
+  elif [ $ORG -eq 4 ]; then
+    CORE_PEER_LOCALMSPID="Org4MSP"
+    CORE_PEER_TLS_ROOTCERT_FILE=$PEER0_ORG4_CA
+    CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org4.example.com/users/Admin@org4.example.com/msp
+    CORE_PEER_ADDRESS=peer0.org4.example.com:7051
+ 
   else
     echo "================== ERROR !!! ORG Unknown =================="
   fi
@@ -52,6 +54,8 @@ joinChannelWithRetry() {
   PEER=$1
   ORG=$2
   setGlobals $PEER $ORG
+
+  echo "peer${PEER}.org${ORG}.example.com join channel"
 
   set -x
   peer channel join -b $CHANNEL_NAME.block >&log.txt
@@ -102,7 +106,7 @@ instantiateCCWIthRetry() {
   setGlobals $PEER $ORG
 
 echo "Instantiating smart contract on peer${PEER}.org${ORG}.example.com"
-echo "Waiting for upgrade making block ..."
+echo "Waiting for instantiating making block ..."
 
   peer chaincode instantiate \
     -C $CHANNEL_NAME \
@@ -110,7 +114,7 @@ echo "Waiting for upgrade making block ..."
     -l "$CC_RUNTIME_LANGUAGE" \
     -v $CC_SRC_VERSION \
     -c '{"Args":[]}' \
-    -P "OR('Org1MSP.member','Org2MSP.member')" >&log.txt
+    -P "OR('Org1MSP.member','Org2MSP.member','Org3MSP.member','Org4MSP.member')" >&log.txt
 
  res=$?
   set +x

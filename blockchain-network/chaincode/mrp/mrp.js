@@ -170,4 +170,3 @@ let Chaincode = class {
 };
 
 shim.start(new Chaincode());
-

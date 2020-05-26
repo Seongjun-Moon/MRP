@@ -55,8 +55,8 @@ function MedicinePage(props) {
   };
 
   return (
-    <>
-      <article className="medicine">
+    <section className="medicine">
+      <article className="medicine-list">
         <h3>의약품 목록 조회</h3>
         <table>
           <thead>
@@ -87,9 +87,10 @@ function MedicinePage(props) {
           </tbody>
         </table>
       </article>
+
       <article>
         <h3>의약품 정보 등록</h3>
-        <form action="" onSubmit={createMedicineInfo}>
+        <form action="" className="medicine-form" onSubmit={createMedicineInfo}>
           <label htmlFor="mediCode">의약품 표준코드</label>
           <input
             type="text"
@@ -153,10 +154,12 @@ function MedicinePage(props) {
             ref={(ref) => (cancelDate = ref)}
             required
           />
-          <button type="submit">등록</button>
+          <button type="submit" className="main-btn">
+            등록
+          </button>
         </form>
       </article>
-    </>
+    </section>
   );
 }
 

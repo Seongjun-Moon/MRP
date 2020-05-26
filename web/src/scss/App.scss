@@ -30,12 +30,13 @@ label {
 // Custom Input
 input {
   display: block;
-  width: 17rem;
+  width: 20rem;
   height: 2rem;
-  padding: 0.2rem 0.5rem;
+  padding: 0.2rem 0.7rem;
   margin: 0.5rem auto;
-  font-size: 1rem;
+  font-size: 0.8rem;
 }
+//
 
 select {
   display: block;
@@ -53,5 +54,6 @@ a {
 }
 
 footer {
+  margin-top: 3rem;
   text-align: center;
 }

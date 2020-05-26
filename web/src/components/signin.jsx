@@ -11,9 +11,11 @@ function Signin(props) {
     let pw = passwordInput.current.value;
     await API.getCustomer(id, pw).then((data) => {
       if (data.data.message) {
-        alert("로그인 완료!");
+        props.login();
       } else {
         alert("로그인 실패!!!!!");
+        emailInput.current.value = "";
+        passwordInput.current.value = "";
       }
     });
     /*     if (email === "a@naver.com" && password === "1234") {
@@ -23,6 +25,7 @@ function Signin(props) {
 
   return (
     <div className="signin">
+      <h1>로그인</h1>
       <form onSubmit={(e) => handleSubmit(e)} className="signin-form">
         <input
           type="email"
@@ -41,8 +44,9 @@ function Signin(props) {
           required
           ref={passwordInput}
         />
-        <br />
-        <button type="submit">테스트 로그인</button>
+        <button type="submit" className="main-btn">
+          로그인
+        </button>
         {/* <button onClick={props.login}>로그인</button> */}
       </form>
     </div>

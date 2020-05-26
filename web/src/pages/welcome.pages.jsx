@@ -25,12 +25,16 @@ class Welcome extends React.Component {
           {this.state.sign ? (
             <>
               <Signin login={this.props.login} />
-              <button onClick={this.signupButton}>회원가입하기</button>
+              <button className="sub-btn" onClick={this.signupButton}>
+                회원가입하기
+              </button>
             </>
           ) : (
             <>
               <Signup login={this.props.login} />
-              <button onClick={this.signupButton}>로그인하기</button>
+              <button className="sub-btn" onClick={this.signupButton}>
+                로그인하기
+              </button>
             </>
           )}
         </article>

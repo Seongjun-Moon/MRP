@@ -17,7 +17,7 @@ function Signup(props) {
     if (pw === pwcheck) {
       await API.addCustomer(id, pw, companyCode).then((data) => {
         if (data.data.message) {
-          alert(data.data.message + "회원가입 완료!");
+          alert(`${data.data.message}님, 회원가입 완료되었습니다.`);
         } else {
           alert("회원가입 실패!!!!!");
         }
@@ -29,7 +29,7 @@ function Signup(props) {
 
   return (
     <div className="signup">
-      <h1>회원가입 페이지</h1>
+      <h1>회원가입</h1>
 
       <form onSubmit={(e) => handleSubmit(e)} action="" className="signup-form">
         <input
@@ -64,7 +64,9 @@ function Signup(props) {
           ref={companyCodeInput}
         />
         <br />
-        <button type="submit">회원가입</button>
+        <button type="submit" className="main-btn">
+          회원가입
+        </button>
       </form>
     </div>
   );

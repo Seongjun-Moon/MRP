@@ -11,7 +11,7 @@ router.post("/signIn", async (req, res) => {
   try {
     const signIn = await company.findOne({
       // join => user table + company table
-      attributes: ["companyType"],
+      attributes: ["companyType", "companyCode"],
       include: {
         model: user,
         attributes: ["companyCode"],
@@ -21,9 +21,14 @@ router.post("/signIn", async (req, res) => {
     console.log("/////////////////////////////////////////////////////");
 
     console.log(signIn.companyType);
+    console.log(signIn.companyCode);
     console.log("/////////////////////////////////////////////////////");
 
-    res.json({ message: true, companyType: signIn.companyType });
+    res.json({
+      message: true,
+      companyType: signIn.companyType,
+      companyCode: signIn.companyCode,
+    });
   } catch (err) {
     console.log(err);
     res.json({ message: false });

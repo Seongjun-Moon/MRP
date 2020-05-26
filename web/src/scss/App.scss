@@ -20,12 +20,13 @@ body {
 table {
   border-collapse: collapse;
 
-  th,
-  td {
+  thead {
     border: 1px solid $black;
+    text-align: center;
   }
 
   td {
+    border: 1px solid $black;
     padding: 0.3rem;
   }
 }

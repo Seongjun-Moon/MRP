@@ -3,6 +3,7 @@
 .sidebar {
   background-color: $pink;
   padding: 2rem;
+  height: 45rem;
 
   &-menu {
     li {
@@ -14,6 +15,9 @@
 .main {
   // background-color: $mint;
   padding: 1rem 2rem;
+  header {
+    font-weight: 900;
+  }
 }
 
 .medicine {

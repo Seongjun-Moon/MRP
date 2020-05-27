@@ -1,5 +1,26 @@
 const medicine = require("../models").Medicine;
 const company = require("../models").Company;
+const user = require("../models/user").User;
+
+// user 정보 조회
+
+const userInfo = async (req, res) => {
+  try {
+    const userInfo = user.findAll({
+      attributes: ["id", "companyCode"],
+    });
+
+    console.log(userInfo);
+    res.json({
+      message: true,
+      id: userInfo.id,
+      companyCode: userInfo.companyCode,
+    });
+  } catch (err) {
+    console.log(err);
+    res.json({ message: false });
+  }
+};
 
 // 의약품 유통이력 조회
 const search = async (res, req) => {};
@@ -90,4 +111,11 @@ const mediDetail = async (req, res) => {
   }
 };
 
-module.exports = { search, mediEnroll, mediInfo, companyInfo, mediDetail };
+module.exports = {
+  userInfo,
+  search,
+  mediEnroll,
+  mediInfo,
+  companyInfo,
+  mediDetail,
+};

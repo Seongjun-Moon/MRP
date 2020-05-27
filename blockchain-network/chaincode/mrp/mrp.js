@@ -167,6 +167,38 @@ let Chaincode = class {
       }
     }
   }
+
+  // Key 배열에 해당하는 state 조회 (test용)
+  async showByKeyArray(stub, args) {
+    if (args.length < 1) {
+      throw new Error('please enter Array with more than 1 elements.');
+    }
+    while (true) {
+      let allResults = [];
+      let jsonReq = JSON.parse(args);
+      let iterator = Object.keys(jsonReq).length;
+      if (iterator != 0) {
+        let jsonRes = {};
+        let tmp = '';
+        for (let i = 0; i < iterator; i++) {
+          try {
+            tmp = await stub.getState(jsonReq[i]); //get barcode info from chaincode state
+            if (!tmp || tmp.toString().length <= 0) {
+              throw new Error(args[i] + ' does not exist: ');
+            }
+            jsonRes[i].Key = tmp.value.key;
+            jsonRes[i].Record = JSON.parse(tmp.value.value.toString('utf8'));
+          } catch (err) {
+            console.log(err);
+            jsonRes[i].Record = tmp.value.value.toString('utf8');
+          }
+        }
+        allResults.push(jsonRes);
+        console.log(allResults);
+        return allResults;
+      }
+    }
+  }
 };
 
 shim.start(new Chaincode());

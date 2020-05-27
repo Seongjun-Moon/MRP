@@ -3,7 +3,6 @@ const router = express.Router();
 const fs = require('fs');
 const path = require('path');
 const barcode = require('../models').Barcode;
-const axios = require('axios');
 const FabricCAServices = require('fabric-ca-client');
 const {
   FileSystemWallet,
@@ -29,7 +28,7 @@ const walletPath = path.join(process.cwd(), 'wallet');
 const wallet = new FileSystemWallet(walletPath);
 
 // 체인코드
-const chainCode = 'history_test';
+const chainCode = 'hybrid';
 
 // 채널
 const channel = 'mychannel';
@@ -280,14 +279,30 @@ router.post('/barcodeList', async (req, res) => {
     // 대응되는 바코드 개수 (size)
     const size = Object.keys(barcodeList).length;
     for (let i = 0; i < size; i++) {
+      console.log('barcord ' + i + ':' + barcodeList[i].barcodeName);
       arr.push(barcodeList[i].barcodeName);
     }
 
-    console.log(arr);
+    arr = JSON.stringify(arr);
 
-    axios.post('');
+    /* 
+    const gateway = new Gateway();
+    await gateway.connect(ccp, {
+      wallet,
+      identity: 'user1',
+      discovery: { enabled: false },
+    });
+    // Get the network (channel) our contract is deployed to.
+    const network = await gateway.getNetwork(channel);
 
-    res.json({ barcodeList });
+    // Get the contract from the network.
+    const contract = network.getContract(chainCode);
+
+    const result = await contract.evaluateTransaction('showByKeyArray', arr);
+
+    console.log(result) */ res.json(
+      { barcodeList, result, arr }
+    );
   } catch (err) {
     console.log(err);
   }

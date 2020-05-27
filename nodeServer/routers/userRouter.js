@@ -1,58 +1,10 @@
 const express = require("express");
 const router = express.Router();
-const company = require("../models").Company;
-const user = require("../models").User;
+const { signIn, signUp } = require("../controllers/userController");
 
 // 로그인
-router.post("/signIn", async (req, res) => {
-  const id = req.body.id;
-  const password = req.body.pw;
-
-  try {
-    const signIn = await company.findOne({
-      // join => user table + company table
-      attributes: ["companyType", "companyCode"],
-      include: {
-        model: user,
-        attributes: ["companyCode"],
-        where: { id, password },
-      },
-    });
-    console.log("/////////////////////////////////////////////////////");
-
-    console.log(signIn.companyType);
-    console.log(signIn.companyCode);
-    console.log("/////////////////////////////////////////////////////");
-
-    res.json({
-      message: true,
-      companyType: signIn.companyType,
-      companyCode: signIn.companyCode,
-    });
-  } catch (err) {
-    console.log(err);
-    res.json({ message: false });
-  }
-});
-
+router.post("/signIn", signIn);
 // 회원가입
-router.post("/signUp", async (req, res) => {
-  const id = req.body.id;
-  const password = req.body.pw;
-  const companyCode = req.body.companyCode;
-
-  try {
-    const signUp = await user.create({
-      id,
-      password,
-      companyCode,
-    });
-    console.log(signUp);
-    res.json({ message: id });
-  } catch (err) {
-    console.log(err);
-    res.json({ message: false });
-  }
-});
+router.post("/signUp", signUp);
 
 module.exports = router;

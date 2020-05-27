@@ -15,14 +15,6 @@ updatedAt:"2020-05-22T04:23:20.000Z"
 */
 
 function MedicinePage(props) {
-  let mediCode,
-    companyCode,
-    mediName,
-    mediType,
-    count,
-    permissionDate,
-    cancelDate;
-
   const [mediData, setMediData] = React.useState([]);
 
   React.useEffect(() => {
@@ -31,34 +23,11 @@ function MedicinePage(props) {
 
   const getMedicineInfo = async () => {
     const data = await API.getMedicineInfo().then((data) => data.data);
+    data.map((medi) => {
+      medi.permissionDate = medi.permissionDate.slice(0, 10);
+      medi.cancelDate = medi.cancelDate.slice(0, 10);
+    });
     setMediData(data.sort((a, b) => a.mediCode - b.mediCode));
-  };
-
-  const createMedicineInfo = async (event) => {
-    event.preventDefault();
-    const result = await API.createMedicineInfo(
-      mediCode.value,
-      companyCode.value,
-      mediName.value,
-      mediType.value,
-      count.value,
-      permissionDate.value,
-      cancelDate.value
-    ).then((data) => data.data);
-    console.log(result);
-
-    result
-      ? alert("의약품 정보가 등록되었습니다.")
-      : alert("의약품 정보 등록에 실패했습니다.");
-
-    mediCode.value = "";
-    companyCode.value = "";
-    mediName.value = "";
-    mediType.value = "";
-    count.value = "";
-    permissionDate.value = "";
-    cancelDate.value = "";
-    getMedicineInfo();
   };
 
   return (

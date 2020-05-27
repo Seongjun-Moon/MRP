@@ -31,7 +31,7 @@ function Signup(props) {
     <div className="signup">
       <h1>회원가입</h1>
 
-      <form onSubmit={(e) => handleSubmit(e)} action="" className="signup-form">
+      <form onSubmit={(e) => handleSubmit(e)} className="signup-form">
         <input
           type="email"
           name="email"

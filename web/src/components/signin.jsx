@@ -1,26 +1,38 @@
 import React from "react";
+import { connect } from "react-redux";
+
+import store from "../redux/store";
+import signin from "../redux/user/user.action";
+
 import API from "../API";
 
-let emailInput = React.createRef();
-let passwordInput = React.createRef();
+import Cookies from "universal-cookie";
+const cookies = new Cookies();
+
+let emailInput, passwordInput;
 
 function Signin(props) {
   const handleSubmit = async (e) => {
     e.preventDefault();
-    let id = emailInput.current.value;
-    let pw = passwordInput.current.value;
+
+    let id = emailInput.value;
+    let pw = passwordInput.value;
+
     await API.getCustomer(id, pw).then((data) => {
       if (data.data.message) {
-        props.login();
+        store.dispatch(
+          signin({
+            isLoggedIn: true,
+          })
+        );
+        cookies.set("loggedIn", true);
+        cookies.set("userCompanyType", data.data.companyType);
       } else {
-        alert("로그인 실패!!!!!");
-        emailInput.current.value = "";
-        passwordInput.current.value = "";
+        alert("아이디 혹은 비밀번호가 일치 하지 않습니다.");
+        emailInput.value = "";
+        passwordInput.value = "";
       }
     });
-    /*     if (email === "a@naver.com" && password === "1234") {
-      props.login();
-    } else alert("아이디 혹은 비밀번호가 일치 하지 않습니다."); */
   };
 
   return (
@@ -33,7 +45,7 @@ function Signin(props) {
           id="signin-email"
           placeholder="ID@example.com"
           required
-          ref={emailInput}
+          ref={(ref) => (emailInput = ref)}
           autoFocus
         />
         <input
@@ -42,7 +54,7 @@ function Signin(props) {
           id="signin-password"
           placeholder="비밀번호를 입력해주세요."
           required
-          ref={passwordInput}
+          ref={(ref) => (passwordInput = ref)}
         />
         <button type="submit" className="main-btn">
           로그인
@@ -53,4 +65,8 @@ function Signin(props) {
   );
 }
 
-export default Signin;
+const mapStateToProps = (state) => {
+  return state;
+};
+
+export default connect(mapStateToProps, null)(Signin);

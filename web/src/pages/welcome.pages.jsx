@@ -24,14 +24,14 @@ class Welcome extends React.Component {
         <article className="login-container">
           {this.state.sign ? (
             <>
-              <Signin login={this.props.login} />
+              <Signin />
               <button className="sub-btn" onClick={this.signupButton}>
                 회원가입하기
               </button>
             </>
           ) : (
             <>
-              <Signup login={this.props.login} />
+              <Signup />
               <button className="sub-btn" onClick={this.signupButton}>
                 로그인하기
               </button>

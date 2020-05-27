@@ -37,6 +37,20 @@ let Chaincode = class {
     }
   }
 
+  async getInfo(stub, args) {
+    if (args.length != 1) {
+      throw new Error('Incorrect number of arguments. Expecting ID ex: 1110101001');
+    }
+    let id = args[0];
+
+    let medicine_state = await stub.getState(id); //get the car from chaincode state
+    if (!medicine_state || medicine_state.toString().length <= 0) {
+      throw new Error(id + ' does not exist: ');
+    }
+    console.log(medicine_state.toString());
+    return medicine_state;
+
+  }
   // 전문의약품 유통내역 등록 (출고, 입고)
   async register(stub, args) {
     console.info('============= START : Register Medicine Info ===========');

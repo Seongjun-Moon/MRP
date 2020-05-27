@@ -170,14 +170,19 @@ let Chaincode = class {
 
   // Key 배열에 해당하는 state 조회 (test용)
   async showByKeyArray(stub, args) {
-    if (args.length < 1) {
+    /*     if (args.length < 1) {
       throw new Error('please enter Array with more than 1 elements.');
-    }
+    } */
     while (true) {
       let allResults = [];
       let jsonReq = JSON.parse(args);
+      console.log('parsing data : ' + jsonReq);
       let iterator = Object.keys(jsonReq).length;
-      if (iterator != 0) {
+      console.log('data length : ' + iterator);
+      let key1 = jsonReq.barcode.test[0]; 
+      let key2 = jsonReq.test[0];  // value : a 
+      jsonReq.
+      /* if (iterator != 0) {
         let jsonRes = {};
         let tmp = '';
         for (let i = 0; i < iterator; i++) {
@@ -186,8 +191,9 @@ let Chaincode = class {
             if (!tmp || tmp.toString().length <= 0) {
               throw new Error(args[i] + ' does not exist: ');
             }
-            jsonRes[i].Key = tmp.value.key;
-            jsonRes[i].Record = JSON.parse(tmp.value.value.toString('utf8'));
+            console.log('tmp : ' + tmp.value);
+            jsonRes.Key[i] = tmp.value.key;
+            jsonRes.Record[i] = JSON.parse(tmp.value.value.toString('utf8'));
           } catch (err) {
             console.log(err);
             jsonRes[i].Record = tmp.value.value.toString('utf8');
@@ -196,7 +202,7 @@ let Chaincode = class {
         allResults.push(jsonRes);
         console.log(allResults);
         return allResults;
-      }
+      } */
     }
   }
 };

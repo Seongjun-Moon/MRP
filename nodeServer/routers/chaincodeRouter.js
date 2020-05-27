@@ -30,7 +30,7 @@ const walletPath = path.join(process.cwd(), 'wallet');
 const wallet = new FileSystemWallet(walletPath);
 
 // 체인코드
-const chainCode = 'hybrid';
+const chainCode = 'mrp';
 
 // 채널
 const channel = 'mychannel';
@@ -293,7 +293,7 @@ router.post('/barcodeList', async (req, res) => {
   console.log(req.body);
   try {
     const arr = [];
-    const barcodeList = await barcode.findAll({
+    const barcodeList = await Barcode.findAll({
       attributes: ['barcodeName', 'mediCode'],
       where: {
         mediCode: req.body.mediCode,
@@ -306,10 +306,9 @@ router.post('/barcodeList', async (req, res) => {
       console.log('barcord ' + i + ':' + barcodeList[i].barcodeName);
       arr.push(barcodeList[i].barcodeName);
     }
+    const sendString = JSON.stringify(arr);
+    console.log(sendString);
 
-    arr = JSON.stringify(arr);
-
-    /* 
     const gateway = new Gateway();
     await gateway.connect(ccp, {
       wallet,
@@ -322,11 +321,14 @@ router.post('/barcodeList', async (req, res) => {
     // Get the contract from the network.
     const contract = network.getContract(chainCode);
 
-    const result = await contract.evaluateTransaction('showByKeyArray', arr);
-
-    console.log(result) */ res.json(
-      { barcodeList, result, arr }
+    const result = await contract.evaluateTransaction(
+      'showByKeyArray',
+      sendString
     );
+
+    console.log(result);
+
+    res.json({ barcodeList, sendString, result });
   } catch (err) {
     console.log(err);
   }

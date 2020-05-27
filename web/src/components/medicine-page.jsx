@@ -82,8 +82,8 @@ function MedicinePage(props) {
           barcodeArray.push(Response.data.barcodeList[i].barcodeName);
         }
         console.log(barcodeArray);
+        console.log(Response.data.sendString);
         console.log(Response.data.result);
-        console.log(Response.data.arr);
       })
       .catch((error) => {
         console.log(error);
@@ -121,9 +121,7 @@ function MedicinePage(props) {
   return (
     <section className="medicine">
       {/* MRP 블록체인 네트워크 연결 */}
-      <button onClick={connect} disabled>
-        blockchain connect
-      </button>
+      <button onClick={connect}>blockchain connect</button>
       {/* 모든 전문의약품 최신 유통상태 확인(world state) */}
       <button onClick={showAll}>showAll</button>
       <br />

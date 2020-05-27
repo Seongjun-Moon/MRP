@@ -11,9 +11,9 @@ function MainContainer(props) {
   return (
     <section className="main">
       <Route exact path="/" component={UserPage}></Route>
-      <Route exact path="/company" component={CompanyPage}></Route>
+      <Route exact path="/company/list" component={CompanyPage}></Route>
       <Route exact path="/company/register" component={CompanyRegister}></Route>
-      <Route exact path="/medicine" component={MedicinePage}></Route>
+      <Route exact path="/medicine/list" component={MedicinePage}></Route>
       <Route
         exact
         path="/medicine/register"

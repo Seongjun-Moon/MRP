@@ -42,13 +42,26 @@ router.post("/signUp", async (req, res) => {
   const companyCode = req.body.companyCode;
 
   try {
-    const signUp = await user.create({
-      id,
-      password,
-      companyCode,
+    const signUp = await company.findOne({
+      attributes: ["companyCode"],
     });
-    console.log(signUp);
-    res.json({ message: id });
+    if (!signUp) {
+      res.json({ message: false });
+    } else {
+      try {
+        const signUp2 = await user.create({
+          id,
+          password,
+          companyCode,
+        });
+
+        console.log(signUp2);
+        res.json({ message: id });
+      } catch (err) {
+        console.log(err);
+        res.json({ message: false });
+      }
+    }
   } catch (err) {
     console.log(err);
     res.json({ message: false });

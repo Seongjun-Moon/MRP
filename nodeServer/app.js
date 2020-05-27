@@ -1,8 +1,12 @@
 // 모듈
 const cors = require("cors");
+const cookieParser = require("cookie-parser");
 const dotenv = require("dotenv");
 const express = require("express");
+const helmet = require("helmet");
+const morgan = require("morgan");
 const path = require("path");
+const session = require("express-session");
 
 // 미들웨어
 const automationDB = require("./middlewares/automationDB");
@@ -28,8 +32,22 @@ automationDB;
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
 app.use(cors(corsOptions));
+app.use(helmet());
+app.use(morgan("dev"));
+app.use(cookieParser(process.env.COOKIE_SECRET));
+app.use(
+  session({
+    resave: false,
+    saveUninitialized: false,
+    secret: env.COOKIE_SECRET,
+    cookie: {
+      httpOnly: true,
+      secure: false,
+    },
+  })
+);
+
 app.use("/user", userRouter);
 app.use("/distributor", distributorRouter);
 app.use("/hospital", hospitalRouter);

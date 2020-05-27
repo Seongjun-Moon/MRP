@@ -1,3 +1,6 @@
+const Medicine = require("../models").Medicine
+const Barcode = require("../models").Barcode
+
 const express = require("express")
 const router = express.Router()
 const fs = require("fs")
@@ -92,6 +95,28 @@ router.get("/connect", async (req, res) => {
 
 // 2. 모든 전문의약품의 최신 유통정보 조회
 router.get("/queryAll", async (req, res) => {
+  let dataArr = []
+  const data = req.body.data
+  //barcode parsing
+  try {
+    const medicineData = await Barcode.findAll({
+      attributes: ["barcodeName"],
+      include: {
+        model: Medicine,
+        attributes: ["mediCode"],
+        where: {
+          data,
+        },
+      },
+    })
+    console.log(medicineData)
+    medicineData.ForEach((e) => {
+      dataArr.push(e)
+    })
+  } catch (err) {
+    console.log(err)
+  }
+
   try {
     const userExists = await wallet.exists("user1")
     if (!userExists) {

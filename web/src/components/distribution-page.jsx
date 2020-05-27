@@ -3,7 +3,7 @@ import API from "../API";
 
 let blockData = React.createRef();
 
-function CirculationPage(props) {
+function DistributionPage(props) {
   /*   const [circuData, setCircuData] = React.useState([]);
 
   React.useEffect(() => {
@@ -30,10 +30,10 @@ function CirculationPage(props) {
 
   ///////////////////////////////////////////
 
-  const deleteCirculationInfo = async (event) => {
+  const deleteDistributionInfo = async (event) => {
     let deleteCode = event.target.parentNode.parentNode.firstChild.firstChild;
     console.log(deleteCode);
-    //const data = await API.deleteCirculationInfo(deleteCode).then((data) => data.data);
+    //const data = await API.deletedistributionInfo(deleteCode).then((data) => data.data);
   };
 
   return (
@@ -64,7 +64,7 @@ function CirculationPage(props) {
                 <td>{medi.permissionDate}</td>
                 <td>{medi.cancelDate}</td>
                 <td>
-                  <button onClick={(event) => deleteCirculationInfo(event)}>
+                  <button onClick={(event) => deleteDistributionInfo(event)}>
                     X
                   </button>
                   {/* <input type="checkbox" name={medi.mediCode} /> */}
@@ -93,14 +93,14 @@ function CirculationPage(props) {
           </tr>
         </thead>
         <tbody>
-          {circuData.map((circulation, index) => {
+          {circuData.map((distribution, index) => {
             return (
-              <tr key={circulation.circulationCode}>
+              <tr key={distribution.distributionCode}>
                 <td>{index}</td>
-                <td>{circulation.barcodeNO}</td>
-                <td>{circulation.companyCode1}</td>
-                <td>{circulation.companyCode2}</td>
-                <td>{circulation.editTime}</td>
+                <td>{distribution.barcodeNO}</td>
+                <td>{distribution.companyCode1}</td>
+                <td>{distribution.companyCode2}</td>
+                <td>{distribution.editTime}</td>
               </tr>
             );
           })}
@@ -110,4 +110,4 @@ function CirculationPage(props) {
   ); */
 }
 
-export default CirculationPage;
+export default DistributionPage;

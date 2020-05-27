@@ -21,7 +21,7 @@ function SidebarContainer(props) {
     <aside className="sidebar">
       <ul className="sidebar-menu">
         <li>
-          <NavLink exact to="/">
+          <NavLink exact to="user">
             사용자 페이지
           </NavLink>
         </li>
@@ -38,7 +38,7 @@ function SidebarContainer(props) {
           <NavLink to="/medicine/register">전문의약품 정보 등록</NavLink>
         </li>
         <li>
-          <NavLink to="/circulation">유통 페이지</NavLink>
+          <NavLink to="/dirculation">유통 페이지</NavLink>
         </li>
       </ul>
       <button onClick={logout}>로그아웃</button>

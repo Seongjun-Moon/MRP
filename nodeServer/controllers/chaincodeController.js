@@ -292,7 +292,7 @@ const barcodeList = async (req, res) => {
   try {
     const arr = [];
     const barcodeList = await Barcode.findAll({
-      attributes: ['barcodeName', 'mediCode'],
+      attributes: ["barcodeName", "mediCode"],
       where: {
         mediCode: req.body.mediCode,
       },
@@ -301,7 +301,7 @@ const barcodeList = async (req, res) => {
     // 대응되는 바코드 개수 (size)
     const size = Object.keys(barcodeList).length;
     for (let i = 0; i < size; i++) {
-      console.log('barcord ' + i + ':' + barcodeList[i].barcodeName);
+      console.log("barcord " + i + ":" + barcodeList[i].barcodeName);
       arr.push(barcodeList[i].barcodeName);
     }
     const sendString = JSON.stringify(arr);
@@ -310,7 +310,7 @@ const barcodeList = async (req, res) => {
     const gateway = new Gateway();
     await gateway.connect(ccp, {
       wallet,
-      identity: 'user1',
+      identity: "user1",
       discovery: { enabled: false },
     });
     // Get the network (channel) our contract is deployed to.
@@ -320,7 +320,7 @@ const barcodeList = async (req, res) => {
     const contract = network.getContract(chainCode);
 
     const result = await contract.evaluateTransaction(
-      'showByKeyArray',
+      "showByKeyArray",
       sendString
     );
 
@@ -330,6 +330,6 @@ const barcodeList = async (req, res) => {
   } catch (err) {
     console.log(err);
   }
-});
+};
 
 module.exports = { connect, queryAll, register, update, history, barcodeList };

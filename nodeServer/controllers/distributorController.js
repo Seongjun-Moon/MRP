@@ -1,4 +1,40 @@
 const company = require("../models").Company;
+const temp = require("../models").Temp;
+
+// 입,출고 등록
+const productEnroll = async (req, res) => {
+  const barcode = req.body.data.barcode;
+  const companyCode = req.body.data.companyCode;
+  const targetCompanyCode = req.body.data.targetCompanyCode;
+  const state = req.body.data.state;
+
+  try {
+    const getCompanyCode = await company.findOne({
+      attributes: ["companyCode"],
+    });
+    if (!getCompanyCode) {
+      res.json({ message: false });
+    } else {
+      try {
+        const productEnroll = await temp.create({
+          barcode,
+          companyCode,
+          targetCompanyCode,
+          state,
+        });
+
+        console.log(productEnroll);
+        res.json({ message: true, productEnroll: productEnroll });
+      } catch (err) {
+        console.log(err);
+        res.json({ message: false });
+      }
+    }
+  } catch (err) {
+    console.log(err);
+    res.json({ message: false });
+  }
+};
 
 // 의약품 유통이력 조회
 const search = async (res, req) => {};
@@ -40,4 +76,4 @@ const companyInfo = async (req, res) => {
   }
 };
 
-module.exports = { search, companyEnroll, companyInfo };
+module.exports = { productEnroll, search, companyEnroll, companyInfo };

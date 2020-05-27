@@ -16,14 +16,6 @@ updatedAt:"2020-05-22T04:23:20.000Z"
 */
 
 function MedicinePage(props) {
-  let mediCode,
-    companyCode,
-    mediName,
-    mediType,
-    count,
-    permissionDate,
-    cancelDate;
-
   const [mediData, setMediData] = React.useState([]);
 
   /* 체인코드 사용변수(테스트용) */
@@ -38,6 +30,10 @@ function MedicinePage(props) {
 
   const getMedicineInfo = async () => {
     const data = await API.getMedicineInfo().then((data) => data.data);
+    data.map((medi) => {
+      medi.permissionDate = medi.permissionDate.slice(0, 10);
+      medi.cancelDate = medi.cancelDate.slice(0, 10);
+    });
     setMediData(data.sort((a, b) => a.mediCode - b.mediCode));
   };
 

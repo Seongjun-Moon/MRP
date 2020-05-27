@@ -1,8 +1,12 @@
 // 모듈
 const cors = require("cors");
+const cookieParser = require("cookie-parser");
 const dotenv = require("dotenv");
 const express = require("express");
+const helmet = require("helmet");
+const morgan = require("morgan");
 const path = require("path");
+const session = require("express-session");
 
 // 미들웨어
 const automationDB = require("./middlewares/automationDB");
@@ -23,37 +27,36 @@ const corsOptions = {
   credentials: true,
 };
 
-<<<<<<< HEAD
 const app = express();
 const env = process.env;
 
 dotenv.config();
 automationDB;
 app.use(express.static(path.join(__dirname, 'public')));
-=======
-dotenv.config();
-automationDB;
-app.use(express.static(path.join(__dirname, "public")));
->>>>>>> 171914aa4c8a37ae0d5cacb46ca0a119317abdf8
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
 app.use(cors(corsOptions));
-<<<<<<< HEAD
-app.use('/user', require('./routers/userRouter'));
-app.use('/distributor', require('./routers/distributorRouter'));
-app.use('/hospital', require('./routers/hospitalRouter'));
-app.use('/manufacture', require('./routers/manufacturerRouter'));
-app.use('/oversee', require('./routers/overseeRouter'));
-app.use('/chaincode', require('./routers/chaincodeRouter'));
-=======
+app.use(helmet());
+app.use(morgan("dev"));
+app.use(cookieParser(process.env.COOKIE_SECRET));
+app.use(
+  session({
+    resave: false,
+    saveUninitialized: false,
+    secret: env.COOKIE_SECRET,
+    cookie: {
+      httpOnly: true,
+      secure: false,
+    },
+  })
+);
+
 app.use("/user", userRouter);
 app.use("/distributor", distributorRouter);
 app.use("/hospital", hospitalRouter);
 app.use("/manufacture", manufacturerRouter);
 app.use("/oversee", overseeRouter);
 app.use("/chaincode", chaincodeRouter);
->>>>>>> 171914aa4c8a37ae0d5cacb46ca0a119317abdf8
 
 app.listen(env.PORT, () => {
   console.log(`MRP Node Server${env.PORT} listen...`);

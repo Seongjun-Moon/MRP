@@ -1,11 +1,14 @@
 const express = require("express");
 const router = express.Router();
 const {
+  productEnroll,
   search,
   companyEnroll,
   companyInfo,
 } = require("../controllers/distributorController");
 
+// 입,출고 등록
+router.post("/productEnroll", productEnroll);
 // 의약품 유통이력 조회
 router.post("/search", search);
 //업체 등록

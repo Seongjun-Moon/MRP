@@ -40,13 +40,26 @@ const signUp = async (req, res) => {
   const companyCode = req.body.companyCode;
 
   try {
-    const signUp = await user.create({
-      id,
-      password,
-      companyCode,
+    const getCompanyCode = await company.findOne({
+      attributes: ["companyCode"],
     });
-    console.log(signUp);
-    res.json({ message: id });
+    if (!getCompanyCode) {
+      res.json({ message: false });
+    } else {
+      try {
+        const signUp = await user.create({
+          id,
+          password,
+          companyCode,
+        });
+
+        console.log(signUp);
+        res.json({ message: id });
+      } catch (err) {
+        console.log(err);
+        res.json({ message: false });
+      }
+    }
   } catch (err) {
     console.log(err);
     res.json({ message: false });

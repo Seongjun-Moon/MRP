@@ -1,9 +1,9 @@
-import axios from 'axios';
+import axios from "axios";
 
 axios.defaults.withCredentials = true;
 
-// const url = "70.12.113.182:9090";
-const url = 'localhost:9090';
+const url = "70.12.113.182:9090";
+// const url = 'localhost:9090';
 
 /*
  *  업체 CRUD

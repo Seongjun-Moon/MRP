@@ -1,6 +1,6 @@
-import React from 'react';
-import API from '../API';
-import Axios from 'axios';
+import React from "react";
+import API from "../API";
+import Axios from "axios";
 
 /* Data Type ///
 cancelDate: "2020-05-20T00:00:00.000Z" 
@@ -37,35 +37,8 @@ function MedicinePage(props) {
     setMediData(data.sort((a, b) => a.mediCode - b.mediCode));
   };
 
-  const createMedicineInfo = async (event) => {
-    event.preventDefault();
-    const result = await API.createMedicineInfo(
-      mediCode.value,
-      companyCode.value,
-      mediName.value,
-      mediType.value,
-      count.value,
-      permissionDate.value,
-      cancelDate.value
-    ).then((data) => data.data);
-    console.log(result);
-
-    result
-      ? alert('의약품 정보가 등록되었습니다.')
-      : alert('의약품 정보 등록에 실패했습니다.');
-
-    mediCode.value = '';
-    companyCode.value = '';
-    mediName.value = '';
-    mediType.value = '';
-    count.value = '';
-    permissionDate.value = '';
-    cancelDate.value = '';
-    getMedicineInfo();
-  };
-
   const connect = () => {
-    Axios.get('http://localhost:9090/chaincode/connect')
+    Axios.get("http://localhost:9090/chaincode/connect")
       .then((Response) => console.log(Response))
       .catch((error) => {
         console.log(error);
@@ -73,8 +46,8 @@ function MedicinePage(props) {
   };
 
   const showAll = () => {
-    const sendParam = { mediCode: '8806587000202' };
-    Axios.post('http://localhost:9090/chaincode/barcodeList', sendParam)
+    const sendParam = { mediCode: "8806587000202" };
+    Axios.post("http://localhost:9090/chaincode/barcodeList", sendParam)
       .then((Response) => {
         const size = Object.keys(Response.data).length;
         const barcodeArray = [];
@@ -91,7 +64,7 @@ function MedicinePage(props) {
   };
 
   const register = () => {
-    const flag = confirm(
+    const flag = window.confirm(
       `아래 정보로 입력하시겠습니까?\n표준코드 : ${barcodeInput.current.value}\n회사코드: ${companyIdInput.current.value}\n대상업체코드: ${targetIdInput.current.value}\n유통상태: ${stateInput.current.value}`
     );
 
@@ -102,13 +75,13 @@ function MedicinePage(props) {
         targetId: targetIdInput.current.value,
         state: stateInput.current.value,
       };
-      Axios.post('http://localhost:9090/chaincode/register', sendParam)
+      Axios.post("http://localhost:9090/chaincode/register", sendParam)
         .then((response) => {
           alert(response.data.msg);
-          barcodeInput.current.value = '';
-          companyIdInput.current.value = '';
-          targetIdInput.current.value = '';
-          stateInput.current.value = '입고';
+          barcodeInput.current.value = "";
+          companyIdInput.current.value = "";
+          targetIdInput.current.value = "";
+          stateInput.current.value = "입고";
         })
         .catch((error) => {
           console.log(error);
@@ -165,78 +138,6 @@ function MedicinePage(props) {
             })}
           </tbody>
         </table>
-      </article>
-
-      <article>
-        <h3>의약품 정보 등록</h3>
-        <form action="" className="medicine-form" onSubmit={createMedicineInfo}>
-          <label htmlFor="mediCode">의약품 표준코드</label>
-          <input
-            type="text"
-            name=""
-            id="mediCode"
-            ref={(ref) => (mediCode = ref)}
-            required
-          />
-
-          <label htmlFor="mediName">의약품명</label>
-          <input
-            type="text"
-            name=""
-            id="mediName"
-            ref={(ref) => (mediName = ref)}
-            required
-          />
-
-          <label htmlFor="companyCode">제조업체 코드</label>
-          <input
-            type="text"
-            name=""
-            id="companyCode"
-            ref={(ref) => (companyCode = ref)}
-            required
-          />
-
-          <label htmlFor="mediType">의약품 유형</label>
-          <select
-            name=""
-            id="mediType"
-            ref={(ref) => (mediType = ref)}
-            required
-          >
-            <option value="의약품">전문 의약품</option>
-          </select>
-
-          <label htmlFor="count">제품 수량</label>
-          <input
-            type="number"
-            name=""
-            id="count"
-            ref={(ref) => (count = ref)}
-            required
-          />
-
-          <label htmlFor="permissionDate">품목 허가일자</label>
-          <input
-            type="date"
-            name=""
-            id="permissionDate"
-            ref={(ref) => (permissionDate = ref)}
-            required
-          />
-
-          <label htmlFor="cancelDate">취소일자</label>
-          <input
-            type="date"
-            name=""
-            id="cancelDate"
-            ref={(ref) => (cancelDate = ref)}
-            required
-          />
-          <button type="submit" className="main-btn">
-            등록
-          </button>
-        </form>
       </article>
     </section>
   );

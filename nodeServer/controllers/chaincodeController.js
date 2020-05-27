@@ -286,4 +286,50 @@ const history = async (req, res) => {
   }
 };
 
-module.exports = { connect, queryAll, register, update, history };
+// 6. 표준코드에 대응하는 모든 바코드 항목을 조회
+const barcodeList = async (req, res) => {
+  console.log(req.body);
+  try {
+    const arr = [];
+    const barcodeList = await Barcode.findAll({
+      attributes: ['barcodeName', 'mediCode'],
+      where: {
+        mediCode: req.body.mediCode,
+      },
+    });
+
+    // 대응되는 바코드 개수 (size)
+    const size = Object.keys(barcodeList).length;
+    for (let i = 0; i < size; i++) {
+      console.log('barcord ' + i + ':' + barcodeList[i].barcodeName);
+      arr.push(barcodeList[i].barcodeName);
+    }
+    const sendString = JSON.stringify(arr);
+    console.log(sendString);
+
+    const gateway = new Gateway();
+    await gateway.connect(ccp, {
+      wallet,
+      identity: 'user1',
+      discovery: { enabled: false },
+    });
+    // Get the network (channel) our contract is deployed to.
+    const network = await gateway.getNetwork(channel);
+
+    // Get the contract from the network.
+    const contract = network.getContract(chainCode);
+
+    const result = await contract.evaluateTransaction(
+      'showByKeyArray',
+      sendString
+    );
+
+    console.log(result);
+
+    res.json({ barcodeList, sendString, result });
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+module.exports = { connect, queryAll, register, update, history, barcodeList };

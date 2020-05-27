@@ -27,9 +27,12 @@ const corsOptions = {
   credentials: true,
 };
 
+const app = express();
+const env = process.env;
+
 dotenv.config();
 automationDB;
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors(corsOptions));

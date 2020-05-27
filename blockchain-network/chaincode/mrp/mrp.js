@@ -9,10 +9,11 @@ const shim = require('fabric-shim');
 const util = require('util');
 
 let Chaincode = class {
+
   // The Init method is called when the Smart Contract 'fabcar' is instantiated by the blockchain network
   // Best practice is to have any Ledger initialization in separate function -- see initLedger()
   async Init(stub) {
-    console.info('=========== Instantiated test chaincode ===========');
+    console.info('=========== Instantiated fabcar chaincode ===========');
     return shim.success();
   }
 
@@ -35,21 +36,6 @@ let Chaincode = class {
       console.log(err);
       return shim.error(err);
     }
-  }
-
-  async getInfo(stub, args) {
-    if (args.length != 1) {
-      throw new Error('Incorrect number of arguments. Expecting ID ex: 1110101001');
-    }
-    let id = args[0];
-
-    let medicine_state = await stub.getState(id); //get the car from chaincode state
-    if (!medicine_state || medicine_state.toString().length <= 0) {
-      throw new Error(id + ' does not exist: ');
-    }
-    console.log(medicine_state.toString());
-    return medicine_state;
-
   }
   // 전문의약품 유통내역 등록 (출고, 입고)
   async register(stub, args) {
@@ -179,44 +165,6 @@ let Chaincode = class {
         console.info(allResults);
         return allResults;
       }
-    }
-  }
-
-  // Key 배열에 해당하는 state 조회 (test용)
-  async showByKeyArray(stub, args) {
-    /*     if (args.length < 1) {
-      throw new Error('please enter Array with more than 1 elements.');
-    } */
-    while (true) {
-      let allResults = [];
-      let jsonReq = JSON.parse(args);
-      console.log('parsing data : ' + jsonReq);
-      let iterator = Object.keys(jsonReq).length;
-      console.log('data length : ' + iterator);
-      let key1 = jsonReq.barcode.test[0]; 
-      let key2 = jsonReq.test[0];  // value : a 
-      jsonReq.
-      /* if (iterator != 0) {
-        let jsonRes = {};
-        let tmp = '';
-        for (let i = 0; i < iterator; i++) {
-          try {
-            tmp = await stub.getState(jsonReq[i]); //get barcode info from chaincode state
-            if (!tmp || tmp.toString().length <= 0) {
-              throw new Error(args[i] + ' does not exist: ');
-            }
-            console.log('tmp : ' + tmp.value);
-            jsonRes.Key[i] = tmp.value.key;
-            jsonRes.Record[i] = JSON.parse(tmp.value.value.toString('utf8'));
-          } catch (err) {
-            console.log(err);
-            jsonRes[i].Record = tmp.value.value.toString('utf8');
-          }
-        }
-        allResults.push(jsonRes);
-        console.log(allResults);
-        return allResults;
-      } */
     }
   }
 };

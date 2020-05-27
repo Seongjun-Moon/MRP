@@ -153,7 +153,7 @@ echo "Waiting for upgrade making block ..."
     -l "$CC_RUNTIME_LANGUAGE" \
     -v "$CC_SRC_VERSION" \
     -c '{"Args":[]}' \
-    -P "OR('Org1MSP.member','Org2MSP.member')" >&log.txt
+    -P "OR('Org1MSP.member','Org2MSP.member','Org3MSP.member','Org4MSP.member')" >&log.txt
 
 res=$?
   set +x

@@ -22,6 +22,10 @@ function DistributionPage(props) {
 
   const getMedicineInfo = async () => {
     const data = await API.getMedicineInfo().then((data) => data.data);
+    data.map((medi) => {
+      medi.permissionDate = medi.permissionDate.slice(0, 10);
+      medi.cancelDate = medi.cancelDate.slice(0, 10);
+    });
     setMediData(data.sort((a, b) => a.mediCode - b.mediCode));
   };
 
@@ -32,6 +36,7 @@ function DistributionPage(props) {
     } else {
       dataArr.push(deleteCode);
     }
+
     setDelData(dataArr);
   };
 

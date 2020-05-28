@@ -48,8 +48,9 @@ const signUp = async (req, res) => {
 
   try {
     const getCompanyCode = await company.findOne({
-      attributes: ["companyCode"],
+      where: { companyCode },
     });
+    console.log(getCompanyCode);
     if (!getCompanyCode) {
       res.json({ message: false });
     } else {

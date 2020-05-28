@@ -121,8 +121,11 @@ const searchedMediInfo = async (req, res) => {
         mediName: { [sequelize.Op.like]: "%" + mediName + "%" },
       },
     });
-    console.log(Searchedmedicine);
-    res.json({ data: Searchedmedicine });
+    if (!Searchedmedicine) {
+      res.json({ message: false });
+    } else {
+      res.json({ data: Searchedmedicine });
+    }
   } catch (err) {
     console.log(err);
     res.json({ message: false });

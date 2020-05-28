@@ -16,5 +16,77 @@
     "count": "1",
     "permissionDate": "2020-05-20",
     "cancelDate": "2020-05-20"
+  },
+  {
+    "mediCode": "8806581004206",
+    "companyCode": "3",
+    "mediName": "레보로드정(레보드로프로피진)",
+    "mediType": "전문의약품",
+    "count": "1",
+    "permissionDate": "2020-05-20",
+    "cancelDate": "2020-05-20"
+  },
+  {
+    "mediCode": "8800592000103",
+    "companyCode": "4",
+    "mediName": "대전테크노파크멸균주사용수",
+    "mediType": "전문의약품",
+    "count": "1",
+    "permissionDate": "2020-05-20",
+    "cancelDate": "2020-05-20"
+  },
+  {
+    "mediCode": "8806949000109",
+    "companyCode": "5",
+    "mediName": "알토산(알긴산나트륨)",
+    "mediType": "전문의약품",
+    "count": "1",
+    "permissionDate": "2020-05-20",
+    "cancelDate": "2020-05-20"
+  },
+  {
+    "mediCode": "8806650000207",
+    "companyCode": "6",
+    "mediName": "경보레보설피리드정",
+    "mediType": "전문의약품",
+    "count": "1",
+    "permissionDate": "2020-05-20",
+    "cancelDate": "2020-05-20"
+  },
+  {
+    "mediCode": "8806648000806",
+    "companyCode": "7",
+    "mediName": "경인염산로페라미드캅셀",
+    "mediType": "전문의약품",
+    "count": "1",
+    "permissionDate": "2020-05-20",
+    "cancelDate": "2020-05-20"
+  },
+  {
+    "mediCode": "8806484000107",
+    "companyCode": "8",
+    "mediName": "렌티블록40정(염산소타롤)",
+    "mediType": "전문의약품",
+    "count": "1",
+    "permissionDate": "2020-05-20",
+    "cancelDate": "2020-05-20"
+  },
+  {
+    "mediCode": "8806483000306",
+    "companyCode": "9",
+    "mediName": "그로신정(플로로글루신)",
+    "mediType": "전문의약품",
+    "count": "1",
+    "permissionDate": "2020-05-20",
+    "cancelDate": "2020-05-20"
+  },
+  {
+    "mediCode": "8806500001606",
+    "companyCode": "10",
+    "mediName": "듀악트캅셀",
+    "mediType": "전문의약품",
+    "count": "1",
+    "permissionDate": "2020-05-20",
+    "cancelDate": "2020-05-20"
   }
 ]

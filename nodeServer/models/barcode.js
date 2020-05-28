@@ -3,7 +3,7 @@ module.exports = (sequelize, DataTypes) => {
     "barcode",
     {
       barcodeName: {
-        type: DataTypes.STRING(30),
+        type: DataTypes.STRING(50),
         primaryKey: true,
         allowNull: true,
         unique: true,
@@ -15,5 +15,5 @@ module.exports = (sequelize, DataTypes) => {
       timestamps: true,
       paranoid: true,
     }
-  )
-}
+  );
+};

@@ -3,18 +3,66 @@
     "companyCode": 1,
     "companyName": "(유)삼일엘러간",
     "companyType": "factory",
-    "companyOrg": "connection-org1.json"
+    "companyOrg": "connection-org1"
   },
   {
     "companyCode": 2,
     "companyName": "(유)한국비엠에스제약",
     "companyType": "wholesale",
-    "companyOrg": "connection-org2.json"
+    "companyOrg": "connection-org2"
   },
   {
     "companyCode": 3,
-    "companyName": "(유)지환회사",
+    "companyName": "(유)한풍제약",
     "companyType": "distributor",
-    "companyOrg": "connection-org3.json"
+    "companyOrg": "connection-org3"
+  },
+  {
+    "companyCode": 4,
+    "companyName": "(재)대전테크노파크",
+    "companyType": "factory",
+    "companyOrg": "connection-org1"
+  },
+  {
+    "companyCode": 5,
+    "companyName": "(주)가주메디코",
+    "companyType": "wholesale",
+    "companyOrg": "connection-org2"
+  },
+  {
+    "companyCode": 6,
+    "companyName": "(주)경보제약",
+    "companyType": "distributor",
+    "companyOrg": "connection-org3"
+  },
+  {
+    "companyCode": 7,
+    "companyName": "(주)경인제약",
+    "companyType": "factory",
+    "companyOrg": "connection-org1"
+  },
+  {
+    "companyCode": 8,
+    "companyName": "(주)경풍약품",
+    "companyType": "wholesale",
+    "companyOrg": "connection-org2"
+  },
+  {
+    "companyCode": 9,
+    "companyName": "(주)그린제약",
+    "companyType": "distributor",
+    "companyOrg": "connection-org3"
+  },
+  {
+    "companyCode": 10,
+    "companyName": "(주)글락소스미스클라인",
+    "companyType": "factory",
+    "companyOrg": "connection-org1"
+  },
+  {
+    "companyCode": 100,
+    "companyName": "심평원",
+    "companyType": "oversee",
+    "companyOrg": "connection-org4"
   }
 ]

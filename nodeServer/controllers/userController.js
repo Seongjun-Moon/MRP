@@ -1,3 +1,4 @@
+const bcrypt = require("bcrypt");
 const company = require("../models").Company;
 const user = require("../models").User;
 
@@ -5,28 +6,33 @@ const user = require("../models").User;
 const signIn = async (req, res) => {
   const id = req.body.id;
   const password = req.body.pw;
-
   try {
     const signIn = await company.findOne({
       // join => user table + company table
       attributes: ["companyType", "companyCode"],
       include: {
         model: user,
-        attributes: ["companyCode"],
-        where: { id, password },
+        attributes: ["companyCode", "password"],
+        where: { id },
       },
     });
     console.log("/////////////////////////////////////////////////////");
-
     console.log(signIn.companyType);
     console.log(signIn.companyCode);
     console.log("/////////////////////////////////////////////////////");
-
-    res.json({
-      message: true,
-      companyType: signIn.companyType,
-      companyCode: signIn.companyCode,
-    });
+    const comparePassword = await bcrypt.compare(
+      password,
+      signIn.users[0].password
+    );
+    if (comparePassword) {
+      res.json({
+        message: true,
+        companyType: signIn.companyType,
+        companyCode: signIn.companyCode,
+      });
+    } else {
+      res.json({ message: false });
+    }
   } catch (err) {
     console.log(err);
     res.json({ message: false });
@@ -38,6 +44,7 @@ const signUp = async (req, res) => {
   const id = req.body.id;
   const password = req.body.pw;
   const companyCode = req.body.companyCode;
+  const hash = await bcrypt.hash(password, 12);
 
   try {
     const getCompanyCode = await company.findOne({
@@ -49,7 +56,7 @@ const signUp = async (req, res) => {
       try {
         const signUp = await user.create({
           id,
-          password,
+          password: hash,
           companyCode,
         });
 

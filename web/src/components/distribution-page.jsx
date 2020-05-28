@@ -14,12 +14,10 @@ function DistributionPage(props) {
   }; */
 
   const [mediData, setMediData] = React.useState([]);
-
   const [delData, setDelData] = React.useState([]);
 
   React.useEffect(() => {
     getMedicineInfo();
-    //delStateInfo();
   }, []);
 
   const getMedicineInfo = async () => {
@@ -28,36 +26,17 @@ function DistributionPage(props) {
   };
 
   const delStateInfo = (deleteCode) => {
-    let dataArr = delData;
-    delData.push(deleteCode);
-    console.log(delData);
+    let dataArr = [...delData];
+    if (dataArr.includes(deleteCode)) {
+      dataArr = dataArr.filter((data) => data !== deleteCode);
+    } else {
+      dataArr.push(deleteCode);
+    }
     setDelData(dataArr);
   };
 
-  ///////////////////////////////////////////
-
-  /*   const deleteDistributionInfo = async (event) => {
-    let deleteCode = event.target.parentNode.parentNode.firstChild.firstChild;
-    console.log(deleteCode);
-    const answer = window.confirm("삭제 하시겠습니까?");
-    if (answer === true) {
-      const data = await API.deletedistributionInfo(deleteCode).then((data) => {
-        if (data.data.message) {
-          alert("삭제 했습니다.");
-        } else {
-          alert("삭제 싪패했습니다.");
-        }
-      });
-      console.log(deleteCode);
-    } else {
-      alert("취소했습니다.");
-    }
-  }; */
-
-  const deleteDistributionInfo = async (event, code) => {
-    // let deleteCode = event.target.parentNode.parentNode.firstChild.firstChild;
-    console.log(code);
-    const answer = window.confirm("삭제 하시겠습니까?");
+  const deleteDistInfo = async (event, code) => {
+    const answer = window.confirm("삭제하시겠습니까?");
     if (answer === true) {
       delStateInfo(code);
     } else {
@@ -82,7 +61,7 @@ function DistributionPage(props) {
           </tr>
         </thead>
         <tbody>
-          {mediData.map((medi, index) => {
+          {mediData.map((medi) => {
             return (
               <tr key={medi.mediCode}>
                 <td>{medi.mediCode}</td>
@@ -94,30 +73,31 @@ function DistributionPage(props) {
                 <td>{medi.cancelDate}</td>
                 <td>
                   <button
-                    onClick={(event) =>
-                      deleteDistributionInfo(event, medi.mediCode)
+                    className={
+                      delData.includes(medi.mediCode)
+                        ? "del-btn"
+                        : "default-btn"
                     }
+                    onClick={(event) => {
+                      deleteDistInfo(event, medi.mediCode);
+                    }}
                   >
-                    X
+                    {delData.includes(medi.mediCode) ? "삭제됨" : "삭제하기"}
                   </button>
-                  {/* <input type="checkbox" name={medi.mediCode} /> */}
                 </td>
               </tr>
             );
           })}
         </tbody>
-        <div>
-          삭제 리스트
-          {/* {JSON.stringify(delData)} */}
-          {delData.map((del) => {
-            console.log(del);
-            return <p>{del}</p>;
-          })}
-        </div>
-        <div>
-          <button type="submit">이력 저장</button>
-        </div>
       </table>
+      <div>
+        <h3>오류 데이터 목록</h3>
+        <ul>
+          {delData.map((d) => (
+            <li key={d}>{d}</li>
+          ))}
+        </ul>
+      </div>
     </article>
   );
   /*   return (

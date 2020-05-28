@@ -36,11 +36,10 @@ function MedicinePage(props) {
   const handleSearchSubmit = async (event) => {
     // onchange dropdown으로 구현하고 싶은데 장기적으로 한번에 의약품 데이터를 다 불러오지 않으므로, 서버에 쿼리 날리는 쪽으로 구현
     event.preventDefault();
-    alert(mediSearchInput.value);
     const data = await API.getSearchedMedicineInfo(mediSearchInput.value).then(
       (data) => data.data
     );
-    console.log(data);
+
     setSearchedMediData(data.data);
   };
 

@@ -7,7 +7,7 @@ const {
   mediInfo,
   companyInfo,
   mediDetail,
-  searchedMediEnroll,
+  searchedMediInfo,
 } = require("../controllers/overseeController");
 
 //user 정보 조회
@@ -23,6 +23,6 @@ router.post("/companyInfo", companyInfo);
 // Select product info
 router.post("/mediDetail", mediDetail);
 
-router.post("/searchedMediEnroll", searchedMediEnroll);
+router.post("/searchedMediInfo", searchedMediInfo);
 
 module.exports = router;

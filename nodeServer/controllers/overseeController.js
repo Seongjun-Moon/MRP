@@ -1,6 +1,7 @@
 const medicine = require("../models").Medicine;
 const company = require("../models").Company;
 const user = require("../models/user").User;
+const sequelize = require("sequelize");
 
 // user 정보 조회
 
@@ -111,16 +112,17 @@ const mediDetail = async (req, res) => {
   }
 };
 
-const searchedMediEnroll = async (req, res) => {
-  const mediName = req.body.keyword;
+const searchedMediInfo = async (req, res) => {
+  const mediName = String(req.body.keyword);
+  console.log(req.body.keyword);
   try {
     const Searchedmedicine = await medicine.findAll({
       where: {
-        mediName: "%" + mediName + "%",
+        mediName: { [sequelize.Op.like]: "%" + mediName + "%" },
       },
     });
     console.log(Searchedmedicine);
-    res.json(Searchedmedicine);
+    res.json({ data: Searchedmedicine });
   } catch (err) {
     console.log(err);
     res.json({ message: false });
@@ -134,5 +136,5 @@ module.exports = {
   mediInfo,
   companyInfo,
   mediDetail,
-  searchedMediEnroll,
+  searchedMediInfo,
 };

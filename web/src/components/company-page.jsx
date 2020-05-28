@@ -2,6 +2,7 @@ import React from "react";
 import API from "../API";
 
 function CompanyPage(props) {
+  let companySearchInput;
   const [companyData, setCompanyData] = React.useState([]);
 
   React.useEffect(() => {
@@ -13,12 +14,34 @@ function CompanyPage(props) {
     setCompanyData(data);
   };
 
+  const handleSearchSubmit = async () => {
+    alert(companySearchInput.value);
+    // const data = await API.getSearchedMedicineInfo(mediSearchInput.value).then(
+    //   (data) => data.data
+    // );
+    // setSearchedMediData(data);
+  };
+
   return (
-    <div>
+    <article className="company-list">
       <div>
         <h3>업체 목록 조회</h3>
-        <input type="text" placeholder="업체명 검색" />
-
+        <form action="">
+          <input
+            type="text"
+            name="company-search"
+            id="company-search"
+            placeholder="업체명 검색"
+            ref={(ref) => (companySearchInput = ref)}
+          />
+          <button
+            className="main-btn search-btn"
+            type="submit"
+            onClick={handleSearchSubmit}
+          >
+            검색
+          </button>
+        </form>
         <table>
           <thead>
             <tr>
@@ -40,7 +63,7 @@ function CompanyPage(props) {
           </tbody>
         </table>
       </div>
-    </div>
+    </article>
   );
 }
 

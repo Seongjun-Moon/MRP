@@ -3,7 +3,7 @@
 # import utils
 . scripts/utils.sh
 
-DELAY=3
+DELAY=1
 MAX_RETRY=10
 CHANNEL_NAME="mychannel"
 

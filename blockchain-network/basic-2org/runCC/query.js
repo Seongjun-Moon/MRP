@@ -32,7 +32,7 @@ async function main() {
         const network = await gateway.getNetwork('mychannel');
 
         // Get the contract from the network.
-        const contract = network.getContract('mrp1');
+        const contract = network.getContract('mrp5');
 
         // Evaluate the specified transaction.
         // queryCar transaction - requires 1 argument, ex: ('queryCar', 'CAR4')
@@ -40,10 +40,11 @@ async function main() {
 	
 	const a=[];
 	
-	const data = String(a);
+	a.push(1670222001);
+	a.push(1670222003);
 
-        const result = await contract.evaluateTransaction('getInfo', String(a));
-        console.log(`Transaction has been evaluated, result is: ${result.toString()}`);
+        const result = await contract.evaluateTransaction('showCodes', a.toString());
+        console.log(`Transaction has been evaluated, result is: ${result}`);
 
     } catch (error) {
         console.error(`Failed to evaluate transaction: ${error}`);

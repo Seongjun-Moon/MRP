@@ -80,6 +80,47 @@ let Chaincode = class {
     await stub.putState(args[0], Buffer.from(JSON.stringify(medi)));
     console.info('============= END : update Medicine Status ===========');
   }
+  
+  async getBarcode(stub, args) {
+    if (args.length != 1) {
+      throw new Error('Incorrect number of arguments. Expecting Barcode');
+    }
+    let barcode = args[0];
+
+    let result = await stub.getState(barcode); //get the car from chaincode state
+    if (!result || result.toString().length <= 0) {
+      throw new Error(barcode + ' does not exist: ');
+    }
+    console.log(result.toString());
+    return result;
+
+
+
+  }
+
+  // 모든 전문의약품 유통내역 조회 (최신상태)
+  async getAllBarcode(stub, args) {
+    console.info('============= START : get all Mdeicine ===========');
+    const codes=args[0].split(',');
+
+    const resultAll=[];
+
+    for(let i=0; i<codes.length; i++){
+	let code = await stub.getState(codes[i]); 
+	if (!code || code.toString().length <= 0) {
+	    throw new Error(codes[i] + ' does not exist: ');
+	}
+	console.log(code.toString());
+	resultAll.push(JSON.parse(code.toString('utf8')));
+
+    }
+    console.log(resultAll);
+
+    console.info('============= END : get all Mdeicine ===========');
+   // return resultAll;
+    return Buffer.from(JSON.stringify(resultAll));
+
+  }
 
   // 모든 전문의약품 유통내역 조회 (최신상태)
   async showAll(stub, args) {

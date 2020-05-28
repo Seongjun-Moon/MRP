@@ -48,6 +48,7 @@ class Main extends Component {
     this.setState({ mediData: allMediData });
   };
 
+<<<<<<< HEAD
   showDetails = (target) => {
     alert(target);
     axios
@@ -60,6 +61,8 @@ class Main extends Component {
       });
   };
 
+=======
+>>>>>>> a2ac8c7f5fc9b3c87aae8b293b58497e9ee7ec65
   // MRP 블록체인 네트워크 연결요청
   connect = () => {
     axios
@@ -190,7 +193,11 @@ class Main extends Component {
     return (
       <div>
         <button onClick={this.showMediData}>전문의약품 목록 조회</button>
+<<<<<<< HEAD
         <table>
+=======
+        <table style={{ border: '1px solid black' }}>
+>>>>>>> a2ac8c7f5fc9b3c87aae8b293b58497e9ee7ec65
           <thead>
             <tr>
               <th>표준코드</th>

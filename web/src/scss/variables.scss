@@ -1,10 +1,54 @@
 // Colour Schemes
 $brown: #7a4938;
 $pink: #e9ccc3;
+$dark-pink: #cab1a9;
 $mint: #c9dad8;
+$dark-mint: #bdcac9;
+
+$black: #202020;
 
 // Font
 
 $Sanchez: "Sanchez", serif;
 
-// Mixins
+// Style Setting
+
+.main-btn {
+  display: block;
+  margin: 0.5rem 0;
+  width: 15rem;
+  height: 2.5rem;
+  text-align: center;
+  border: none;
+  font-size: 1rem;
+  font-weight: 500;
+  background-color: $pink;
+  cursor: pointer;
+
+  &:hover {
+    background-color: $dark-pink;
+  }
+}
+
+.sub-btn {
+  display: block;
+  margin: 0.5rem 0;
+  width: 15rem;
+  height: 2.5rem;
+  text-align: center;
+  border: none;
+  font-size: 1rem;
+  font-weight: 500;
+  background-color: $mint;
+  cursor: pointer;
+
+  &:hover {
+    background-color: $dark-mint;
+  }
+}
+
+.search-btn {
+  display: inline-block;
+  width: 3rem;
+  margin: 0 0.5rem;
+}

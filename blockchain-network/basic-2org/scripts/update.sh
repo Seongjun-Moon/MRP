@@ -12,7 +12,7 @@ CC_RUNTIME_LANGUAGE=node
 CC_SRC_PATH=/opt/gopath/src/github.com/mrp
 
 installChainCode () {
-	for org in 1 2; do
+	for ((org=1;org<=4;org++)) do
 	    peer=0
 		installCCWithRetry $peer $org $CC_SRC_VERSION
 		echo "===================== peer${peer}.org${org} installed chaincode '$CC_SRC_NAME' ===================== "
@@ -25,6 +25,8 @@ installChainCode () {
 
 
 upgradeChainCode() {
+	peer=0
+	org=1
 	upgradeCCWIthRetry
 	echo "===================== peer${peer}.org${org} upgrade chaincode '$CC_SRC_NAME' ===================== "
 	sleep $DELAY

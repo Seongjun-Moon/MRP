@@ -9,10 +9,11 @@ const shim = require('fabric-shim');
 const util = require('util');
 
 let Chaincode = class {
+
   // The Init method is called when the Smart Contract 'fabcar' is instantiated by the blockchain network
   // Best practice is to have any Ledger initialization in separate function -- see initLedger()
   async Init(stub) {
-    console.info('=========== Instantiated test chaincode ===========');
+    console.info('=========== Instantiated fabcar chaincode ===========');
     return shim.success();
   }
 
@@ -36,7 +37,6 @@ let Chaincode = class {
       return shim.error(err);
     }
   }
-
   // 전문의약품 유통내역 등록 (출고, 입고)
   async register(stub, args) {
     console.info('============= START : Register Medicine Info ===========');
@@ -170,4 +170,3 @@ let Chaincode = class {
 };
 
 shim.start(new Chaincode());
-

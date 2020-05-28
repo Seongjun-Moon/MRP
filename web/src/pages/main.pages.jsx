@@ -1,7 +1,6 @@
 import React from "react";
 import SidebarContainer from "../components/sidebar-container";
 import MainContainer from "../components/main-container";
-import { HashRouter } from "react-router-dom";
 
 // import { ReactComponent as Medicine } from "../assets/medicine.svg";
 
@@ -17,12 +16,10 @@ class Main extends React.Component {
           <h1>MRP System</h1>
         </header>
 
-        <HashRouter>
-          <section className="mainpage-container">
-            <SidebarContainer />
-            <MainContainer />
-          </section>
-        </HashRouter>
+        <section className="mainpage-container">
+          <SidebarContainer />
+          <MainContainer />
+        </section>
 
         <Footer />
       </section>

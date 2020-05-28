@@ -1,5 +1,6 @@
 import React from "react";
 import API from "../API";
+import Axios from "axios";
 
 /* Data Type ///
 cancelDate: "2020-05-20T00:00:00.000Z" 
@@ -15,15 +16,9 @@ updatedAt:"2020-05-22T04:23:20.000Z"
 */
 
 function MedicinePage(props) {
-  let mediCode,
-    companyCode,
-    mediName,
-    mediType,
-    count,
-    permissionDate,
-    cancelDate;
-
+  let mediSearchInput;
   const [mediData, setMediData] = React.useState([]);
+  const [searchedMediData, setSearchedMediData] = React.useState([]);
 
   React.useEffect(() => {
     getMedicineInfo();
@@ -31,132 +26,81 @@ function MedicinePage(props) {
 
   const getMedicineInfo = async () => {
     const data = await API.getMedicineInfo().then((data) => data.data);
+    data.map((medi) => {
+      medi.permissionDate = medi.permissionDate.slice(0, 10);
+      medi.cancelDate = medi.cancelDate.slice(0, 10);
+    });
     setMediData(data.sort((a, b) => a.mediCode - b.mediCode));
   };
 
-  const createMedicineInfo = async (event) => {
+  const handleSearchSubmit = async (event) => {
+    // onchange dropdown으로 구현하고 싶은데 장기적으로 한번에 의약품 데이터를 다 불러오지 않으므로, 서버에 쿼리 날리는 쪽으로 구현
     event.preventDefault();
-    const result = await API.createMedicineInfo(
-      mediCode.value,
-      companyCode.value,
-      mediName.value,
-      mediType.value,
-      count.value,
-      permissionDate.value,
-      cancelDate.value
-    ).then((data) => data.data);
-    console.log(result);
+    alert(mediSearchInput.value);
+    const data = await API.getSearchedMedicineInfo(mediSearchInput.value).then(
+      (data) => data.data
+    );
+    console.log(data);
+    setSearchedMediData(data.data);
+  };
 
-    result
-      ? alert("의약품 정보가 등록되었습니다.")
-      : alert("의약품 정보 등록에 실패했습니다.");
-
-    getMedicineInfo();
+  const mediDataRender = () => {
+    let renderData;
+    searchedMediData.length > 0
+      ? (renderData = searchedMediData)
+      : (renderData = mediData);
+    return renderData.map((medi) => {
+      return (
+        <tr key={medi.mediCode}>
+          <td>{medi.mediCode}</td>
+          <td>{medi.companyCode}</td>
+          <td>{medi.mediName}</td>
+          <td>{medi.mediType}</td>
+          <td>{medi.count}</td>
+          <td>{medi.permissionDate}</td>
+          <td>{medi.cancelDate}</td>
+        </tr>
+      );
+    });
   };
 
   return (
-    <>
-      <article className="medicine">
+    <section className="medicine">
+      <article className="medicine-list">
         <h3>의약품 목록 조회</h3>
-        <table>
+        <form action="">
+          <input
+            type="text"
+            name="medi-search"
+            id="medi-search"
+            placeholder="의약품명 검색"
+            ref={(ref) => (mediSearchInput = ref)}
+          />
+          <button
+            className="main-btn search-btn"
+            type="submit"
+            onClick={(event) => handleSearchSubmit(event)}
+          >
+            검색
+          </button>
+        </form>
+
+        <table className="medicine-list_table">
           <thead>
             <tr>
-              <td>의약품 코드</td>
-              <td>업체 코드</td>
-              <td>의약품 이름</td>
-              <td>의약품 종류</td>
-              <td>갯수</td>
-              <td>허가 일자</td>
-              <td>취소 일자</td>
+              <td className="mediCode">의약품 코드</td>
+              <td className="companyCode">업체 코드</td>
+              <td className="mediName">의약품 이름</td>
+              <td className="mediType">의약품 종류</td>
+              <td className="count">갯수</td>
+              <td className="permissionDate">허가 일자</td>
+              <td className="cancelDate">취소 일자</td>
             </tr>
           </thead>
-          <tbody>
-            {mediData.map((medi) => {
-              return (
-                <tr key={medi.mediCode}>
-                  <td>{medi.mediCode}</td>
-                  <td>{medi.companyCode}</td>
-                  <td>{medi.mediName}</td>
-                  <td>{medi.mediType}</td>
-                  <td>{medi.count}</td>
-                  <td>{medi.permissionDate}</td>
-                  <td>{medi.cancelDate}</td>
-                </tr>
-              );
-            })}
-          </tbody>
+          <tbody>{mediDataRender()}</tbody>
         </table>
       </article>
-      <article>
-        <h3>의약품 정보 등록</h3>
-        <form action="" onSubmit={createMedicineInfo}>
-          <label htmlFor="mediCode">의약품 표준코드</label>
-          <input
-            type="text"
-            name=""
-            id="mediCode"
-            ref={(ref) => (mediCode = ref)}
-            required
-          />
-
-          <label htmlFor="mediName">의약품명</label>
-          <input
-            type="text"
-            name=""
-            id="mediName"
-            ref={(ref) => (mediName = ref)}
-            required
-          />
-
-          <label htmlFor="companyCode">제조업체 코드</label>
-          <input
-            type="text"
-            name=""
-            id="companyCode"
-            ref={(ref) => (companyCode = ref)}
-            required
-          />
-
-          <label htmlFor="mediType">의약품 유형</label>
-          <select
-            name=""
-            id="mediType"
-            ref={(ref) => (mediType = ref)}
-            required
-          >
-            <option value="의약품">전문 의약품</option>
-          </select>
-
-          <label htmlFor="count">제품 수량</label>
-          <input
-            type="number"
-            name=""
-            id="count"
-            ref={(ref) => (count = ref)}
-            required
-          />
-
-          <label htmlFor="permissionDate">품목 허가일자</label>
-          <input
-            type="date"
-            name=""
-            id="permissionDate"
-            ref={(ref) => (permissionDate = ref)}
-            required
-          />
-
-          <label htmlFor="cancelDate">취소일자</label>
-          <input
-            type="date"
-            name=""
-            id="cancelDate"
-            ref={(ref) => (cancelDate = ref)}
-            required
-          />
-          <button type="submit">등록</button>
-        </form>
-      </article>
-    </>
+    </section>
   );
 }
 

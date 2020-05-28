@@ -1,5 +1,2 @@
-#mychannel.block
-./config/mychannel.block
-
-#log.txt
-./config/log.txt
+/config/*
+/crypto-config/*

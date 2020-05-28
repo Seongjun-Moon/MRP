@@ -2,16 +2,19 @@
   {
     "companyCode": 1,
     "companyName": "(유)삼일엘러간",
-    "companyType": "제조사"
+    "companyType": "factory",
+    "companyOrg": "connection-org1.json"
   },
   {
     "companyCode": 2,
     "companyName": "(유)한국비엠에스제약",
-    "companyType": "유통사"
+    "companyType": "wholesale",
+    "companyOrg": "connection-org2.json"
   },
   {
     "companyCode": 3,
     "companyName": "(유)지환회사",
-    "companyType": "유통사"
+    "companyType": "distributor",
+    "companyOrg": "connection-org3.json"
   }
 ]

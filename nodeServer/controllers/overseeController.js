@@ -111,6 +111,22 @@ const mediDetail = async (req, res) => {
   }
 };
 
+const searchedMediEnroll = async (req, res) => {
+  const mediName = req.body.keyword;
+  try {
+    const Searchedmedicine = await medicine.findAll({
+      where: {
+        mediName: "%" + mediName + "%",
+      },
+    });
+    console.log(Searchedmedicine);
+    res.json(Searchedmedicine);
+  } catch (err) {
+    console.log(err);
+    res.json({ message: false });
+  }
+};
+
 module.exports = {
   userInfo,
   search,
@@ -118,4 +134,5 @@ module.exports = {
   mediInfo,
   companyInfo,
   mediDetail,
+  searchedMediEnroll,
 };

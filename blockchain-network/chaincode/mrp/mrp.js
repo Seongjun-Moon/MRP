@@ -114,8 +114,28 @@ let Chaincode = class {
     }
   }
 
+  // 바코드 조회
+	async getBarcode(stub, args){
+	  let AllResult = [];
+	  //let jsonRes = {};
+	  const barcodes = args[0].split(',');
+	  console.log(barcodes);
+	  
+	  for (let i=0; i<barcodes.length; i++){
+	    console.log(i + barcodes[i]);
+	    jsonRes= await stub.getState(barcodes[i]);
+	    if (!jsonRes || jsonRes.toString().length <=0){
+	      throw new Error(barcode + ' does not exist');
+	    }
+	    console.log(jsonRes);
+	    AllResult.push(jsonRes);
+	  }
+	  console.log(AllResult);
+	  return AllResult;
+	}
+
   // 유통이력 히스토리 조회
-  async getHistoryForMedicine(stub, args, thisClass) {
+  /* async getHistoryForMedicine(stub, args, thisClass) {
     if (args.length < 1) {
       throw new Error('Incorrect number of arguments. Expecting 1');
     }
@@ -128,7 +148,8 @@ let Chaincode = class {
 
     return Buffer.from(JSON.stringify(results));
   }
-
+  */
+  /*
   async getAllResults(iterator, isHistory) {
     let allResults = [];
     while (true) {
@@ -167,6 +188,7 @@ let Chaincode = class {
       }
     }
   }
+  */
 };
 
 shim.start(new Chaincode());

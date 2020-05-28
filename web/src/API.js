@@ -71,6 +71,10 @@ const getMedicineInfo = () => {
   return axios.post(`http://${url}/oversee/mediInfo`, {});
 };
 
+const getSearchedMedicineInfo = () => {
+  return axios.post(`http://${url}/oversee/searchedMediInfo`, {});
+};
+
 /* 유통 조회 */
 const getCircuInfo = () => {
   return axios.post(`http://${url}/oversee/companyInfo`, {});
@@ -89,6 +93,7 @@ export default {
   getUserInfo,
   createMedicineInfo,
   getMedicineInfo,
+  getSearchedMedicineInfo,
   getCircuInfo,
   deletedistributionInfo,
 };

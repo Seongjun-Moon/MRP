@@ -25,25 +25,52 @@ MRP/blockchain-network/basic-2org/
 
 ### register(barCode, companyID, targetID, state)
 
-- 전문의약품 정보를 입력
+- 전문의약품의 최초 유통시 정보를 입력
+- 함수를 호출하는 주체 : 제약회사
 - barCode : 바코드 정보 (key)
 - companyID : 로그인한 사용자가 속한 업체코드 (로그인 시 자동입력)
 - targetID : 대상 업체코드 (수동입력)
 - state : 유통상태 (수동입력, 출고/입고)
   
-- [example]
-- peer chaincode invoke -n [체인코드명] -c '{"Args":["register","MEDI1","업체코드","업체코드","유통상태"]}' -C mychannel
+- [cli command example]
+- peer chaincode invoke -n [체인코드명] -c '{"Args":["register","바코드","업체코드","업체코드","유통상태"]}' -C mychannel
 
-### changeMediStatus(barCode, companyID, targetID, state)
+### changeMediStatus(barCode, companyID, targetID, state)드
 
 - 기존 블록체인에 등록된 전문의약품에 새로운 유통이력을 추가
+- 함수를 호출하는 주체 : 제약회사, 도매회사, 약국 및 병원
 - barCode : 바코드 정보 (key)
 - companyID : 로그인한 사용자가 속한 업체코드 (로그인 시 자동입력)
 - targetID : 대상 업체코드 (수동입력)
 - state : 유통상태 (수동입력, 출고/입고)
 
-### getHistoryForMedicine(barCode)
+- [cli command example]
+- peer chaincode invoke -n [체인코드명] -c '{"Args":["changeMediStatus","바코드","업체코드","업체코드","유통상태"]}' -C mychannel
 
-- 특정 전문의약품의 모든 유통이력(history)를 확인
+### getBarcode(barCode)
+
+- 하나의 바코드 정보로 최신 유통상태를 조회
+- 함수를 호출하는 주체 : 모든 사용자
 - barCode : 바코드 정보 (key)
 
+- [cli command example]
+- peer chaincode query -n [체인코드명] -c '{"Args":["getBarcode","바코드"]}' -C mychannel
+
+### getAllBarcode(barCode1,barCode2,...)
+
+- 바코드 배열로 담은 후, 문자열 변환(toString)후 인자로 전달
+- 해당하는 바코드에 대한 최신 유통상태를 조회
+- 함수를 호출하는 주체 : 모든 사용자
+- barCode : 바코드 정보(key)
+
+- [cli command example]
+- peer chaincode query -n [체인코드명] -c '{"Args":["getAllBarcode","바코드1,바코드2,..."]}' -C mychannel
+
+### getHistoryForMedicine(barCode)
+
+- 하나의 바코드 정보로 모든 유통이력 히스토리를 조회 (world state)
+- 함수를 호출하는 주체 : 모든 사용자
+- barCode : 바코드 정보 (key)
+
+- [cli command example]
+- peer chaincode query -n [체인코드명] -c '{"Args":["getHistoryForMedicine","바코드"]}' -C mychannel

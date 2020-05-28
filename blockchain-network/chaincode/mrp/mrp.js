@@ -37,7 +37,7 @@ let Chaincode = class {
       return shim.error(err);
     }
   }
-  // 전문의약품 유통내역 등록 (출고, 입고)
+  // 전문의약품의 최초 유통내역 추가 (최초 유통단계에서만 함수 실행 / 업체 : 제조사)
   async register(stub, args) {
     console.info('============= START : Register Medicine Info ===========');
     if (args.length != 4) {
@@ -59,7 +59,7 @@ let Chaincode = class {
     console.info('============= END : Register Medicine Info ===========');
   }
 
-  // 기유통된 전문의약품의 유통내역 추가
+  // 기유통된 전문의약품의 유통내역 추가 (기존 블록체인에 등록된 바코드만 함수 실행 / 모든 업체)
   async changeMediStatus(stub, args) {
     console.info('============= START : update Medicine Status ===========');
     if (args.length != 4) {
@@ -81,6 +81,7 @@ let Chaincode = class {
     console.info('============= END : update Medicine Status ===========');
   }
   
+  // 하나의 바코드에서 최신 유통내역 조회 (world state)
   async getBarcode(stub, args) {
     if (args.length != 1) {
       throw new Error('Incorrect number of arguments. Expecting Barcode');
@@ -98,7 +99,7 @@ let Chaincode = class {
 
   }
 
-  // 모든 전문의약품 유통내역 조회 (최신상태)
+  // 바코드 항목(배열)으로 각 전문의약품의 유통내역 조회 (world state)
   async getAllBarcode(stub, args) {
     console.info('============= START : get all Mdeicine ===========');
     const codes=args[0].split(',');
@@ -122,61 +123,8 @@ let Chaincode = class {
 
   }
 
-  // 모든 전문의약품 유통내역 조회 (최신상태)
-  async showAll(stub, args) {
-    let startKey = 'MEDI1';
-    let endKey = 'MEDI999';
-
-    let iterator = await stub.getStateByRange(startKey, endKey);
-
-    let allResults = [];
-    while (true) {
-      let res = await iterator.next();
-
-      if (res.value && res.value.value.toString()) {
-        let jsonRes = {};
-        console.log(res.value.value.toString('utf8'));
-
-        jsonRes.Key = res.value.key;
-        try {
-          jsonRes.Record = JSON.parse(res.value.value.toString('utf8'));
-        } catch (err) {
-          console.log(err);
-          jsonRes.Record = res.value.value.toString('utf8');
-        }
-        allResults.push(jsonRes);
-      }
-      if (res.done) {
-        console.log('end of data');
-        await iterator.close();
-        console.info(allResults);
-        return Buffer.from(JSON.stringify(allResults));
-      }
-    }
-  }
-
-  // 바코드 조회
-	async getBarcode(stub, args){
-	  let AllResult = [];
-	  //let jsonRes = {};
-	  const barcodes = args[0].split(',');
-	  console.log(barcodes);
-	  
-	  for (let i=0; i<barcodes.length; i++){
-	    console.log(i + barcodes[i]);
-	    jsonRes= await stub.getState(barcodes[i]);
-	    if (!jsonRes || jsonRes.toString().length <=0){
-	      throw new Error(barcode + ' does not exist');
-	    }
-	    console.log(jsonRes);
-	    AllResult.push(jsonRes);
-	  }
-	  console.log(AllResult);
-	  return AllResult;
-	}
-
-  // 유통이력 히스토리 조회
-  /* async getHistoryForMedicine(stub, args, thisClass) {
+  // 하나의 바코드에서 유통이력 히스토리 조회 (blockchain)
+  async getHistoryForMedicine(stub, args, thisClass) {
     if (args.length < 1) {
       throw new Error('Incorrect number of arguments. Expecting 1');
     }
@@ -189,8 +137,7 @@ let Chaincode = class {
 
     return Buffer.from(JSON.stringify(results));
   }
-  */
-  /*
+
   async getAllResults(iterator, isHistory) {
     let allResults = [];
     while (true) {
@@ -229,7 +176,7 @@ let Chaincode = class {
       }
     }
   }
-  */
+  
 };
 
 shim.start(new Chaincode());

@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: true,
       },
       companyOrg: {
-        type: DataTypes.STRING(20),
+        type: DataTypes.STRING(30),
         allowNull: true,
       },
     },
@@ -27,5 +27,5 @@ module.exports = (sequelize, DataTypes) => {
       timestamps: true,
       paranoid: true,
     }
-  )
-}
+  );
+};

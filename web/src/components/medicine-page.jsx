@@ -16,7 +16,9 @@ updatedAt:"2020-05-22T04:23:20.000Z"
 */
 
 function MedicinePage(props) {
+  let mediSearchInput;
   const [mediData, setMediData] = React.useState([]);
+  const [searchedMediData, setSearchedMediData] = React.useState([]);
 
   React.useEffect(() => {
     getMedicineInfo();
@@ -31,16 +33,54 @@ function MedicinePage(props) {
     setMediData(data.sort((a, b) => a.mediCode - b.mediCode));
   };
 
+  const handleSearchSubmit = () => {
+    // onchange dropdown으로 구현하고 싶은데 장기적으로 한번에 의약품 데이터를 다 불러오지 않으므로, 서버에 쿼리 날리는 쪽으로 구현
+    alert(mediSearchInput.value);
+    const data = API.getSearchedMedicineInfo().then((data) => data.data);
+    setSearchedMediData(data);
+  };
+
+  const mediDataRender = () => {
+    let renderData;
+    searchedMediData.length > 0
+      ? (renderData = searchedMediData)
+      : (renderData = mediData);
+    return renderData.map((medi) => {
+      return (
+        <tr key={medi.mediCode}>
+          <td>{medi.mediCode}</td>
+          <td>{medi.companyCode}</td>
+          <td>{medi.mediName}</td>
+          <td>{medi.mediType}</td>
+          <td>{medi.count}</td>
+          <td>{medi.permissionDate}</td>
+          <td>{medi.cancelDate}</td>
+        </tr>
+      );
+    });
+  };
+
   return (
     <section className="medicine">
       <article className="medicine-list">
         <h3>의약품 목록 조회</h3>
-        <input
-          type="text"
-          name="mediSearch"
-          id="mediSearch"
-          placeholder="의약품명 검색"
-        />
+        <form action="">
+          <input
+            type="text"
+            name="medi-search"
+            id="medi-search"
+            placeholder="의약품명 검색"
+            ref={(ref) => (mediSearchInput = ref)}
+          />
+          <button
+            className="main-btn search-btn"
+            type="submit"
+            onClick={handleSearchSubmit}
+          >
+            검색
+          </button>
+        </form>
+
         <table className="medicine-list_table">
           <thead>
             <tr>
@@ -53,21 +93,7 @@ function MedicinePage(props) {
               <td className="cancelDate">취소 일자</td>
             </tr>
           </thead>
-          <tbody>
-            {mediData.map((medi) => {
-              return (
-                <tr key={medi.mediCode}>
-                  <td>{medi.mediCode}</td>
-                  <td>{medi.companyCode}</td>
-                  <td>{medi.mediName}</td>
-                  <td>{medi.mediType}</td>
-                  <td>{medi.count}</td>
-                  <td>{medi.permissionDate}</td>
-                  <td>{medi.cancelDate}</td>
-                </tr>
-              );
-            })}
-          </tbody>
+          <tbody>{mediDataRender()}</tbody>
         </table>
       </article>
     </section>

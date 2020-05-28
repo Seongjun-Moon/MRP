@@ -2,8 +2,8 @@ import axios from "axios";
 
 axios.defaults.withCredentials = true;
 
-//const url = "70.12.113.182:9090";
-const url = "localhost:9090";
+const url = "70.12.113.182:9090";
+// const url = "localhost:9090";
 
 /*
  *  업체 CRUD
@@ -71,6 +71,10 @@ const getMedicineInfo = () => {
   return axios.post(`http://${url}/oversee/mediInfo`, {});
 };
 
+const getSearchedMedicineInfo = (keyword) => {
+  return axios.post(`http://${url}/oversee/searchedMediInfo`, { keyword });
+};
+
 /* 유통 조회 */
 const getCircuInfo = () => {
   return axios.post(`http://${url}/oversee/companyInfo`, {});
@@ -89,6 +93,7 @@ export default {
   getUserInfo,
   createMedicineInfo,
   getMedicineInfo,
+  getSearchedMedicineInfo,
   getCircuInfo,
   deletedistributionInfo,
 };

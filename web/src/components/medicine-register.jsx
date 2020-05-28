@@ -21,7 +21,6 @@ function MedicineRegister(props) {
       permissionDate.value,
       cancelDate.value
     ).then((data) => data.data);
-    console.log(result);
 
     result
       ? alert("의약품 정보가 등록되었습니다.")
@@ -69,7 +68,7 @@ function MedicineRegister(props) {
 
         <label htmlFor="mediType">의약품 유형</label>
         <select name="" id="mediType" ref={(ref) => (mediType = ref)} required>
-          <option value="의약품">전문 의약품</option>
+          <option value="전문의약품">전문 의약품</option>
         </select>
 
         <label htmlFor="count">제품 수량</label>

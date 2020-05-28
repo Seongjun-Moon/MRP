@@ -16,13 +16,9 @@ updatedAt:"2020-05-22T04:23:20.000Z"
 */
 
 function MedicinePage(props) {
+  let mediSearchInput;
   const [mediData, setMediData] = React.useState([]);
-
-  /* 체인코드 사용변수(테스트용) */
-  const barcodeInput = React.useRef();
-  const companyIdInput = React.useRef();
-  const targetIdInput = React.useRef();
-  const stateInput = React.useRef();
+  const [searchedMediData, setSearchedMediData] = React.useState([]);
 
   React.useEffect(() => {
     getMedicineInfo();
@@ -37,79 +33,56 @@ function MedicinePage(props) {
     setMediData(data.sort((a, b) => a.mediCode - b.mediCode));
   };
 
-  const connect = () => {
-    Axios.get("http://localhost:9090/chaincode/connect")
-      .then((Response) => console.log(Response))
-      .catch((error) => {
-        console.log(error);
-      });
+  const handleSearchSubmit = async () => {
+    // onchange dropdown으로 구현하고 싶은데 장기적으로 한번에 의약품 데이터를 다 불러오지 않으므로, 서버에 쿼리 날리는 쪽으로 구현
+    alert(mediSearchInput.value);
+    // const data = await API.getSearchedMedicineInfo(mediSearchInput.value).then(
+    //   (data) => data.data
+    // );
+    // setSearchedMediData(data);
   };
 
-  const showAll = () => {
-    const sendParam = { mediCode: "8806587000202" };
-    Axios.post("http://localhost:9090/chaincode/barcodeList", sendParam)
-      .then((Response) => {
-        const size = Object.keys(Response.data).length;
-        const barcodeArray = [];
-        for (let i = 0; i < size; i++) {
-          barcodeArray.push(Response.data.barcodeList[i].barcodeName);
-        }
-        console.log(barcodeArray);
-        console.log(Response.data.sendString);
-        console.log(Response.data.result);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
-  const register = () => {
-    const flag = window.confirm(
-      `아래 정보로 입력하시겠습니까?\n표준코드 : ${barcodeInput.current.value}\n회사코드: ${companyIdInput.current.value}\n대상업체코드: ${targetIdInput.current.value}\n유통상태: ${stateInput.current.value}`
-    );
-
-    if (flag) {
-      const sendParam = {
-        barcode: barcodeInput.current.value,
-        companyId: companyIdInput.current.value,
-        targetId: targetIdInput.current.value,
-        state: stateInput.current.value,
-      };
-      Axios.post("http://localhost:9090/chaincode/register", sendParam)
-        .then((response) => {
-          alert(response.data.msg);
-          barcodeInput.current.value = "";
-          companyIdInput.current.value = "";
-          targetIdInput.current.value = "";
-          stateInput.current.value = "입고";
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    } else {
-      return;
-    }
+  const mediDataRender = () => {
+    let renderData;
+    searchedMediData.length > 0
+      ? (renderData = searchedMediData)
+      : (renderData = mediData);
+    return renderData.map((medi) => {
+      return (
+        <tr key={medi.mediCode}>
+          <td>{medi.mediCode}</td>
+          <td>{medi.companyCode}</td>
+          <td>{medi.mediName}</td>
+          <td>{medi.mediType}</td>
+          <td>{medi.count}</td>
+          <td>{medi.permissionDate}</td>
+          <td>{medi.cancelDate}</td>
+        </tr>
+      );
+    });
   };
 
   return (
     <section className="medicine">
-      {/* MRP 블록체인 네트워크 연결 */}
-      <button onClick={connect}>blockchain connect</button>
-      {/* 모든 전문의약품 최신 유통상태 확인(world state) */}
-      <button onClick={showAll}>showAll</button>
-      <br />
-      {/* 전문의약품 유통정보 신규등록(최초) */}
-      <input placeholder="바코드 입력" ref={barcodeInput} />
-      <input placeholder="업체코드(사용자)" ref={companyIdInput} />
-      <input placeholder="업체코드(대상))" ref={targetIdInput} />
-      <select ref={stateInput}>
-        <option>입고</option>
-        <option>출고</option>
-        <option>반송</option>
-      </select>
-      <button onClick={register}>register</button>
       <article className="medicine-list">
         <h3>의약품 목록 조회</h3>
+        <form action="">
+          <input
+            type="text"
+            name="medi-search"
+            id="medi-search"
+            placeholder="의약품명 검색"
+            ref={(ref) => (mediSearchInput = ref)}
+          />
+          <button
+            className="main-btn search-btn"
+            type="submit"
+            onClick={handleSearchSubmit}
+          >
+            검색
+          </button>
+        </form>
+
         <table className="medicine-list_table">
           <thead>
             <tr>
@@ -122,21 +95,7 @@ function MedicinePage(props) {
               <td className="cancelDate">취소 일자</td>
             </tr>
           </thead>
-          <tbody>
-            {mediData.map((medi) => {
-              return (
-                <tr key={medi.mediCode}>
-                  <td>{medi.mediCode}</td>
-                  <td>{medi.companyCode}</td>
-                  <td>{medi.mediName}</td>
-                  <td>{medi.mediType}</td>
-                  <td>{medi.count}</td>
-                  <td>{medi.permissionDate}</td>
-                  <td>{medi.cancelDate}</td>
-                </tr>
-              );
-            })}
-          </tbody>
+          <tbody>{mediDataRender()}</tbody>
         </table>
       </article>
     </section>

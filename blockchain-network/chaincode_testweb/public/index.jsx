@@ -1,13 +1,63 @@
 var { Component } = React;
 
+const url = '70.12.113.182:9090';
+
 class Main extends Component {
   constructor(props) {
     super(props);
-    this.state = { comments: [], history: [] };
+    this.state = { comments: [], history: [], mediData: [] };
   }
+
+  /* getMedicineInfo = async () => {
+    const data = await getMedicineInfo().then((data) => data.data);
+    this.setState({ mediData: data.sort((a, b) => a.mediCode - b.mediCode) });
+  };
+
+  getMedicineInfo = () => {
+    return axios.post(`http://${url}/oversee/mediInfo`, {});
+  }; */
 
   handleChange = (event) => {
     this.setState({ productState: event.target.value });
+  };
+
+  // 전문의약품 목록 조회
+  showMediData = async () => {
+    let data = await axios.post(`http://${url}/oversee/mediInfo`, {});
+    data.data.sort((a, b) => a.mediCode - b.mediCode);
+    data = data.data;
+
+    let allMediData = data.map((element) => {
+      return (
+        <tr
+          key={element.mediCode}
+          onClick={() => {
+            this.showDetails(element.mediCode);
+          }}
+        >
+          <td>{element.mediCode}</td>
+          <td>{element.mediName}</td>
+          <td>{element.mediType}</td>
+          <td>{element.count}</td>
+          <td>{element.permissionDate}</td>
+          <td>{element.cancelDate}</td>
+          <td>{element.updatedAt}</td>
+        </tr>
+      );
+    });
+    this.setState({ mediData: allMediData });
+  };
+
+  showDetails = (target) => {
+    alert(target);
+    axios
+      .post('/showBarcode', target)
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   // MRP 블록체인 네트워크 연결요청
@@ -95,17 +145,13 @@ class Main extends Component {
 
           let allComments = result.map((element) => {
             return (
-              <div key={element.Key}>
-                <table>
-                  <tr>
-                    <td>{element.Key}</td>
-                    <td>{element.Record.companyID}</td>
-                    <td>{element.Record.targetID}</td>
-                    <td>{element.Record.state}</td>
-                    <td>{element.Record.time}</td>
-                  </tr>
-                </table>
-              </div>
+              <tr key={element.Key}>
+                <td>{element.Key}</td>
+                <td>{element.Record.companyID}</td>
+                <td>{element.Record.targetID}</td>
+                <td>{element.Record.state}</td>
+                <td>{element.Record.time}</td>
+              </tr>
             );
           });
           this.setState({ comments: allComments });
@@ -143,6 +189,22 @@ class Main extends Component {
   render() {
     return (
       <div>
+        <button onClick={this.showMediData}>전문의약품 목록 조회</button>
+        <table>
+          <thead>
+            <tr>
+              <th>표준코드</th>
+              <th>의약품명</th>
+              <th>유형</th>
+              <th>수량</th>
+              <th>허가일자</th>
+              <th>취소일자</th>
+              <th>업데이트일자</th>
+            </tr>
+          </thead>
+          <tbody>{this.state.mediData}</tbody>
+        </table>
+        <hr />
         <button onClick={this.connect} disabled>
           네트워크 연결
         </button>
@@ -175,7 +237,7 @@ class Main extends Component {
           <option>출고</option>
         </select>
         <button onClick={this.register}>
-          전문의약품 유통정보 등록 (제조업체)
+          전문의약품 유통정보 등록 (최초 유통시작)
         </button>
         <br />
         <input
@@ -204,6 +266,7 @@ class Main extends Component {
         >
           <option>입고</option>
           <option>출고</option>
+          <option>반송</option>
         </select>
         <button onClick={this.update}>
           전문의약품 유통정보 등록 (도매, 병원 및 약국)

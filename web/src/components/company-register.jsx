@@ -24,7 +24,7 @@ function CompanyRegister(props) {
   };
 
   return (
-    <article>
+    <article className="medicine-register">
       <h3>업체 정보 등록</h3>
 
       <form onSubmit={(e) => handleSubmit(e)} action="">

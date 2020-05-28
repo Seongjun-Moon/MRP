@@ -71,8 +71,8 @@ const getMedicineInfo = () => {
   return axios.post(`http://${url}/oversee/mediInfo`, {});
 };
 
-const getSearchedMedicineInfo = () => {
-  return axios.post(`http://${url}/oversee/searchedMediInfo`, {});
+const getSearchedMedicineInfo = (keyword) => {
+  return axios.post(`http://${url}/oversee/searchedMediInfo`, { keyword });
 };
 
 /* 유통 조회 */

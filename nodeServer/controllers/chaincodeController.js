@@ -244,36 +244,9 @@ const barcodeList = async (req, res) => {
       arr.push(barcodeList[i].barcodeName)
       console.log(barcodeList[i].barcodeName)
     }
-    try {
-      const mediCodes = arr // 바코드 배열
-      console.log(mediCodes)
-      console.log(mediCodes.toString())
-
-      const gateway = new Gateway()
-      await gateway.connect(ccp, {
-        wallet,
-        identity: "user1",
-        discovery: { enabled: false },
-      })
-      // Get the network (channel) our contract is deployed to.
-      const network = await gateway.getNetwork(channel)
-
-      // Get the contract from the network.
-      const contract = network.getContract(chainCode)
-
-      const result = await contract.evaluateTransaction("getAllBarcode", mediCodes.toString())
-      console.log(result)
-      const state = JSON.parse(result)
-      resultState = state
-      console.log(state)
-    } catch (err) {
-      console.log(err)
-    }
-    res.json({ resultState })
     // 콜백함수 (블록체인 네트워크에 바코드별 최신 유통정보 조회)
-    // showBarcodes([바코드 배열]);
-
-    //res.json({ arr });
+    showBarcodes(arr)
+    res.json({ resultState })
   } catch (err) {
     console.log(err)
   }
@@ -281,32 +254,32 @@ const barcodeList = async (req, res) => {
 
 // 6. 각 바코드의 현재 유통상태 조회 (world state)
 // ??? 에서 [barcode1,barcode2,...,]를 인자로 전달
-// const showBarcodes = async (req, res) => {
-//   try {
-//     const mediCode = req.body // 바코드 배열
-//     console.log(mediCode)
-//     console.log(mediCode.toString())
+const showBarcodes = async (arr, res) => {
+  try {
+    const mediCode = arr // 바코드 배열
+    console.log(mediCode)
+    console.log(mediCode.toString())
 
-//     const gateway = new Gateway()
-//     await gateway.connect(ccp, {
-//       wallet,
-//       identity: "user1",
-//       discovery: { enabled: false },
-//     })
-//     // Get the network (channel) our contract is deployed to.
-//     const network = await gateway.getNetwork(channel)
+    const gateway = new Gateway()
+    await gateway.connect(ccp, {
+      wallet,
+      identity: "user1",
+      discovery: { enabled: false },
+    })
+    // Get the network (channel) our contract is deployed to.
+    const network = await gateway.getNetwork(channel)
 
-//     // Get the contract from the network.
-//     const contract = network.getContract(chainCode)
+    // Get the contract from the network.
+    const contract = network.getContract(chainCode)
 
-//     const result = await contract.evaluateTransaction("getAllBarcode", mediCode.toString())
-//     console.log(result)
-//     const state = JSON.parse(result)
-//     res.json({ state })
-//   } catch (err) {
-//     console.log(err)
-//   }
-// }
+    const result = await contract.evaluateTransaction("getAllBarcode", mediCode.toString())
+    console.log(result)
+    const state = JSON.parse(result)
+    resultState = state
+  } catch (err) {
+    console.log(err)
+  }
+}
 
 // 7. 특정 전문의약품의 유통 히스토리를 조회
 // front-end에서 barcode 인자(1개) 전달

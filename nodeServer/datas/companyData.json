@@ -1,66 +1,78 @@
 [
   {
-    "companyCode": 1,
+    "companyCode": "MANU-0000000001",
     "companyName": "(유)삼일엘러간",
-    "companyType": "factory",
+    "companyType": "manufacturer",
     "companyOrg": "connection-org1.json"
   },
   {
-    "companyCode": 2,
+    "companyCode": "DIST-0000000002",
     "companyName": "(유)한국비엠에스제약",
-    "companyType": "wholesale",
+    "companyType": "distributor",
     "companyOrg": "connection-org2.json"
   },
   {
-    "companyCode": 3,
+    "companyCode": "DIST-0000000003",
     "companyName": "(유)한풍제약",
     "companyType": "distributor",
-    "companyOrg": "connection-org3.json"
-  },
-  {
-    "companyCode": 4,
-    "companyName": "(재)대전테크노파크",
-    "companyType": "factory",
-    "companyOrg": "connection-org1.json"
-  },
-  {
-    "companyCode": 5,
-    "companyName": "(주)가주메디코",
-    "companyType": "wholesale",
     "companyOrg": "connection-org2.json"
   },
   {
-    "companyCode": 6,
+    "companyCode": "MANU-0000000004",
+    "companyName": "(재)대전테크노파크",
+    "companyType": "manufacturer",
+    "companyOrg": "connection-org1.json"
+  },
+  {
+    "companyCode": "DIST-0000000005",
+    "companyName": "(주)가주메디코",
+    "companyType": "distributor",
+    "companyOrg": "connection-org2.json"
+  },
+  {
+    "companyCode": "DIST-0000000006",
     "companyName": "(주)경보제약",
     "companyType": "distributor",
-    "companyOrg": "connection-org3.json"
-  },
-  {
-    "companyCode": 7,
-    "companyName": "(주)경인제약",
-    "companyType": "factory",
-    "companyOrg": "connection-org1.json"
-  },
-  {
-    "companyCode": 8,
-    "companyName": "(주)경풍약품",
-    "companyType": "wholesale",
     "companyOrg": "connection-org2.json"
   },
   {
-    "companyCode": 9,
-    "companyName": "(주)그린제약",
-    "companyType": "distributor",
-    "companyOrg": "connection-org3.json"
-  },
-  {
-    "companyCode": 10,
-    "companyName": "(주)글락소스미스클라인",
-    "companyType": "factory",
+    "companyCode": "MANU-0000000007",
+    "companyName": "(주)경인제약",
+    "companyType": "manufacturer",
     "companyOrg": "connection-org1.json"
   },
   {
-    "companyCode": 100,
+    "companyCode": "DIST-0000000008",
+    "companyName": "(주)경풍약품",
+    "companyType": "distributor",
+    "companyOrg": "connection-org2.json"
+  },
+  {
+    "companyCode": "DIST-0000000009",
+    "companyName": "(주)그린제약",
+    "companyType": "distributor",
+    "companyOrg": "connection-org2.json"
+  },
+  {
+    "companyCode": "MANU-0000000010",
+    "companyName": "(주)글락소스미스클라인",
+    "companyType": "manufacturer",
+    "companyOrg": "connection-org1.json"
+  },
+  {
+    "companyCode": "HOSP-0000000011",
+    "companyName": "연대세브란스병원",
+    "companyType": "hospital",
+    "companyOrg": "connection-org3.json"
+  },
+  {
+    "companyCode": "PHAR-0000000012",
+    "companyName": "강남약국",
+    "companyType": "pharmacy",
+    "companyOrg": "connection-org3.json"
+  },
+  {
+    "companyCode": "OVER-0123456789",
     "companyName": "심평원",
     "companyType": "oversee",
     "companyOrg": "connection-org4.json"

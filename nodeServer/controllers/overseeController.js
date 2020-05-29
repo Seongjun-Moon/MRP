@@ -1,21 +1,24 @@
 const medicine = require("../models").Medicine;
 const company = require("../models").Company;
-const user = require("../models/user").User;
+const user = require("../models").User;
 const sequelize = require("sequelize");
 
 // user 정보 조회
 
 const userInfo = async (req, res) => {
   try {
-    const userInfo = user.findAll({
+    const userInfo = await user.findAll({
       attributes: ["id", "companyCode"],
+      include: {
+        model: company,
+        attributes: ["companyType", "companyName"],
+      },
     });
-
     console.log(userInfo);
+
     res.json({
       message: true,
-      id: userInfo.id,
-      companyCode: userInfo.companyCode,
+      userInfo,
     });
   } catch (err) {
     console.log(err);

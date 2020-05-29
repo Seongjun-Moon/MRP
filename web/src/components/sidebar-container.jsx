@@ -39,7 +39,7 @@ function SidebarContainer(props) {
           <NavLink to="/medicine/register">전문의약품 정보 등록</NavLink>
         </li>
         <li>
-          <NavLink to="/distribution">유통 페이지</NavLink>
+          <NavLink to="/distribution">유통 이력 조회</NavLink>
         </li>
       </ul>
       <button onClick={logout}>로그아웃</button>

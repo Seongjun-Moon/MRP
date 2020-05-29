@@ -9,7 +9,7 @@ const {
 } = require("../controllers/distributorController");
 
 // 의약품 임시 유통이력 조회
-router.post("/tempDisInfo", tempDistInfo);
+router.post("/tempDistInfo", tempDistInfo);
 // 입,출고 등록
 router.post("/productEnroll", productEnroll);
 // 의약품 유통이력 조회

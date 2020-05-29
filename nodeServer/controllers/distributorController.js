@@ -1,6 +1,7 @@
 const company = require("../models").Company;
 const temp = require("../models").Temp;
 const medicine = require("../models").Medicine;
+const sequelize = require("sequelize");
 
 // 입,출고 등록
 const productEnroll = async (req, res) => {
@@ -53,6 +54,25 @@ const productEnroll = async (req, res) => {
 // 의약품 유통이력 조회
 const search = async (res, req) => {};
 
+// 의약품 임시 유통이력 조회
+// 바코드 번호, 유통등록 업체 코드, 대상 업체 코드, 상태 , 등록 시간
+const tempDistInfo = async (req, res) => {
+  const mediCode = req.body.mediCode;
+
+  try {
+    const tempDistInfo = await temp.findAll({
+      where: {
+        barcode: { [sequelize.Op.like]: "%" + mediCode + "%" },
+      },
+    });
+    console.log(tempDistInfo);
+    res.json({ message: true, tempDistInfo });
+  } catch (err) {
+    console.log(err);
+    res.json({ message: false });
+  }
+};
+
 //업체 등록
 const companyEnroll = async (req, res) => {
   const companyCode = req.body.companyCode;
@@ -90,4 +110,10 @@ const companyInfo = async (req, res) => {
   }
 };
 
-module.exports = { productEnroll, search, companyEnroll, companyInfo };
+module.exports = {
+  tempDistInfo,
+  productEnroll,
+  search,
+  companyEnroll,
+  companyInfo,
+};

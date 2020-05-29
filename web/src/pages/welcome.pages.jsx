@@ -31,7 +31,7 @@ class Welcome extends React.Component {
             </>
           ) : (
             <>
-              <Signup />
+              <Signup toggleSignin={this.signupButton} />
               <button className="sub-btn" onClick={this.signupButton}>
                 로그인하기
               </button>

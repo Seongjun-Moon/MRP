@@ -18,7 +18,7 @@ function Signin(props) {
     let id = emailInput.value;
     let pw = passwordInput.value;
 
-    await API.getCustomer(id, pw).then((data) => {
+    await API.getUser(id, pw).then((data) => {
       if (data.data.message) {
         store.dispatch(
           signin({
@@ -59,7 +59,6 @@ function Signin(props) {
         <button type="submit" className="main-btn">
           로그인
         </button>
-        {/* <button onClick={props.login}>로그인</button> */}
       </form>
     </div>
   );

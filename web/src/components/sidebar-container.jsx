@@ -9,7 +9,8 @@ const cookies = new Cookies();
 
 function SidebarContainer(props) {
   const logout = () => {
-    cookies.remove("loggedIn");
+    cookies.remove("loggedIn", { path: "/" });
+    cookies.remove("userCompanyType", { path: "/" });
     store.dispatch(
       signin({
         isLoggedIn: false,
@@ -21,7 +22,7 @@ function SidebarContainer(props) {
     <aside className="sidebar">
       <ul className="sidebar-menu">
         <li>
-          <NavLink exact to="user">
+          <NavLink exact to="/user">
             사용자 페이지
           </NavLink>
         </li>

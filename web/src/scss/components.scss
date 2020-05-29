@@ -3,9 +3,10 @@
 .sidebar {
   background-color: $pink;
   padding: 2rem;
-  height: 45rem;
+  height: 40rem;
 
-  &-menu {
+  ul {
+    margin-bottom: 3rem;
     li {
       margin: 0.5rem;
     }
@@ -37,6 +38,11 @@
   #company-search {
     display: inline-block;
   }
+}
+
+.company-register {
+  display: flex;
+  justify-content: space-evenly;
 }
 
 .distribution {

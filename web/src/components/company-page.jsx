@@ -2,7 +2,6 @@ import React from "react";
 import API from "../API";
 
 function CompanyPage(props) {
-  let companySearchInput;
   const [companyData, setCompanyData] = React.useState([]);
 
   React.useEffect(() => {
@@ -11,22 +10,32 @@ function CompanyPage(props) {
 
   const getCompanyInfo = async () => {
     const data = await API.getCompanyInfo().then((data) => data.data);
+    data.map((company) => {
+      switch (company.companyType) {
+        case "manufacturer":
+          company.companyType = "제조사";
+          break;
+        case "distributor":
+          company.companyType = "유통사";
+          break;
+        case "hospital":
+          company.companyType = "병원";
+          break;
+        case "pharmacy":
+          company.companyType = "약국";
+          break;
+        case "oversee":
+          company.companyType = "심사평가원";
+          break;
+      }
+    });
     setCompanyData(data);
-  };
-
-  const handleSearchSubmit = async () => {
-    alert(companySearchInput.value);
-    // const data = await API.getSearchedMedicineInfo(mediSearchInput.value).then(
-    //   (data) => data.data
-    // );
-    // setSearchedMediData(data);
   };
 
   return (
     <article className="company-list">
       <div>
         <h3>업체 목록 조회</h3>
-
         <table>
           <thead>
             <tr>

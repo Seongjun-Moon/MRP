@@ -56,69 +56,66 @@ function CompanyRegister(props) {
   };
 
   return (
-    <article className="medicine-register">
-      <h3>업체 정보 등록</h3>
+    <article className="company-register">
+      <div className="company-register_company">
+        <h3>업체 정보 등록</h3>
+        <form onSubmit={(e) => handleSubmit(e)} action="">
+          업체 코드
+          <input
+            id="company-code"
+            required
+            ref={(ref) => (inputCompanyCode = ref)}
+          />
+          업체 이름
+          <input
+            id="company-name"
+            required
+            ref={(ref) => (inputCompanyName = ref)}
+          />
+          <br />
+          업체 종류
+          <select
+            name="type"
+            id="company-type"
+            ref={(ref) => (inputCompanyType = ref)}
+          >
+            <option value="factory">제조업체</option>
+            <option value="wholesale">도매업체</option>
+            <option value="hospital">병원</option>
+            <option value="pharmacy">약국</option>
+          </select>
+          <br />
+          <button type="submit" className="main-btn">
+            업체 등록
+          </button>
+        </form>
+      </div>
 
-      <form onSubmit={(e) => handleSubmit(e)} action="">
-        업체 코드
-        <input
-          id="company-code"
-          required
-          ref={(ref) => (inputCompanyCode = ref)}
-        />
-        업체 이름
-        <input
-          id="company-name"
-          required
-          ref={(ref) => (inputCompanyName = ref)}
-        />
-        <br />
-        업체 종류
-        <select
-          name="type"
-          id="company-type"
-          ref={(ref) => (inputCompanyType = ref)}
-        >
-          <option value="factory">제조업체</option>
-          <option value="wholesale">도매업체</option>
-          <option value="hospital">병원</option>
-          <option value="pharmacy">약국</option>
-        </select>
-        <br />
-        <button type="submit" className="main-btn">
-          업체 등록
-        </button>
-      </form>
+      <div className="company-register_user">
+        <h3>업체 회원 등록</h3>
 
-      <h3>업체 회원 등록</h3>
-
-      <form onSubmit={(e) => joinSubmit(e)} action="">
-        업체 코드
-        <input
-          id="company-code"
-          required
-          ref={(ref) => (inputCompanyCode = ref)}
-        />
-        아이디
-        <input id="company-id" required ref={(ref) => (inputCompanyId = ref)} />
-        비밀번호
-        <input
-          type="password"
-          id="company-pw"
-          required
-          ref={(ref) => (inputCompanyPw = ref)}
-        />
-        비밀번호 재입력
-        <input
-          type="password"
-          id="company-pw"
-          required
-          ref={(ref) => (inputCompanyPwCheck = ref)}
-        />
-        <button type="submit" className="main-btn">
-          업체 회원 등록
-        </button>
-      </form>
+        <form onSubmit={(e) => joinSubmit(e)} action="">
+          업체 코드
+          <input required ref={(ref) => (inputCompanyCode = ref)} />
+          아이디
+          <input required ref={(ref) => (inputCompanyId = ref)} />
+          비밀번호
+          <input
+            type="password"
+            required
+            ref={(ref) => (inputCompanyPw = ref)}
+          />
+          비밀번호 재입력
+          <input
+            type="password"
+            required
+            ref={(ref) => (inputCompanyPwCheck = ref)}
+          />
+          <button type="submit" className="main-btn">
+            업체 회원 등록
+          </button>
+        </form>
+      </div>
     </article>
   );
 }

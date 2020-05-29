@@ -22,6 +22,15 @@ const createCompanyInfo = (companyCode, companyName, companyType) => {
   });
 };
 
+/* 업체 회원 등록 (링크는 아직 안맞춤) */
+const createCompanyUserInfo = (companyCode, companyId, companyPw) => {
+  return axios.post(`http://${url}/manufacture/companyEnroll`, {
+    companyCode,
+    companyId,
+    companyPw,
+  });
+};
+
 const getCompanyInfo = () => {
   return axios.post(`http://${url}/manufacture/companyInfo`, {});
 };
@@ -87,6 +96,7 @@ const deletedistributionInfo = (deleteCode) => {
 
 export default {
   createCompanyInfo,
+  createCompanyUserInfo,
   getCompanyInfo,
   getCustomer,
   addCustomer,

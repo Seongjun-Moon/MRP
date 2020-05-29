@@ -13,20 +13,18 @@ function DistributionPage(props) {
     setCircuData(data);
   }; */
 
-  const [mediData, setMediData] = React.useState([]);
+  const [distData, setDistData] = React.useState([]);
   const [delData, setDelData] = React.useState([]);
 
   React.useEffect(() => {
-    getMedicineInfo();
+    getDistInfo();
   }, []);
 
-  const getMedicineInfo = async () => {
-    const data = await API.getMedicineInfo().then((data) => data.data);
-    data.map((medi) => {
-      medi.permissionDate = medi.permissionDate.slice(0, 10);
-      medi.cancelDate = medi.cancelDate.slice(0, 10);
-    });
-    setMediData(data.sort((a, b) => a.mediCode - b.mediCode));
+  const getDistInfo = async () => {
+    const data = await API.getDistInfo().then((data) => data.data);
+    // data.map((dist) => {});
+    console.log(data);
+    // setDistData(data);
   };
 
   const delStateInfo = (deleteCode) => {
@@ -50,44 +48,50 @@ function DistributionPage(props) {
   };
 
   return (
-    <article className="medicine">
+    <article className="distribution">
+      <form>
+        <input
+          type="text"
+          name="company-search"
+          className="medi-search"
+          placeholder="의약품 코드로 검색"
+          // ref={(ref) => (companySearchInput = ref)}
+        />
+        <button className="main-btn search-btn" type="submit">
+          검색
+        </button>
+      </form>
       <h3>유통 이력 조회</h3>
       <table>
         <thead>
           <tr>
-            <td>의약품 코드</td>
-            <td>업체 코드</td>
-            <td>의약품 이름</td>
-            <td>의약품 종류</td>
-            <td>갯수</td>
-            <td>허가 일자</td>
-            <td>취소 일자</td>
-            <td>오류 보고</td>
+            <td>바코드 번호</td>
+            <td>유통 등록 업체 코드</td>
+            <td>대상 업체 코드</td>
+            <td>상태</td>
+            <td>등록 시간</td>
+            <td>확인 여부</td>
           </tr>
         </thead>
         <tbody>
-          {mediData.map((medi) => {
+          {distData.map((dist, index) => {
             return (
-              <tr key={medi.mediCode}>
-                <td>{medi.mediCode}</td>
-                <td>{medi.companyCode}</td>
-                <td>{medi.mediName}</td>
-                <td>{medi.mediType}</td>
-                <td>{medi.count}</td>
-                <td>{medi.permissionDate}</td>
-                <td>{medi.cancelDate}</td>
+              <tr key={dist.barcode}>
+                <td>{dist.barcode}</td>
+                <td>{dist.companyCode}</td>
+                <td>{dist.targetCompanyCode}</td>
+                <td>{dist.state}</td>
+                <td>{dist.createdAt}</td>
                 <td>
                   <button
                     className={
-                      delData.includes(medi.mediCode)
-                        ? "del-btn"
-                        : "default-btn"
+                      delData.includes(dist.barcode) ? "del-btn" : "default-btn"
                     }
                     onClick={(event) => {
-                      deleteDistInfo(event, medi.mediCode);
+                      deleteDistInfo(event, dist.barcode);
                     }}
                   >
-                    {delData.includes(medi.mediCode) ? "삭제됨" : "삭제하기"}
+                    {delData.includes(dist.barcode) ? "삭제됨" : "삭제하기"}
                   </button>
                 </td>
               </tr>
@@ -95,6 +99,7 @@ function DistributionPage(props) {
           })}
         </tbody>
       </table>
+
       <div>
         <h3>오류 데이터 목록</h3>
         <ul>
@@ -119,14 +124,14 @@ function DistributionPage(props) {
           </tr>
         </thead>
         <tbody>
-          {circuData.map((distribution, index) => {
+          {circuData.map((dist, index) => {
             return (
-              <tr key={distribution.distributionCode}>
+              <tr key={dist.distCode}>
                 <td>{index}</td>
-                <td>{distribution.barcodeNO}</td>
-                <td>{distribution.companyCode1}</td>
-                <td>{distribution.companyCode2}</td>
-                <td>{distribution.editTime}</td>
+                <td>{dist.barcode}</td>
+                <td>{dist.companyCode}</td>
+                <td>{dist.targetCompanyCode}</td>
+                <td>{dist.createdAt}</td>
               </tr>
             );
           })}

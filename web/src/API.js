@@ -2,7 +2,7 @@ import axios from "axios";
 
 axios.defaults.withCredentials = true;
 
-const url = "70.12.113.182:9090";
+const url = "70.12.113.180:9090";
 // const url = "localhost:9090";
 
 /*
@@ -11,7 +11,7 @@ const url = "70.12.113.182:9090";
 
 /* 유저 페이지 조회 (링크는 아직 안맞춤)*/
 const getUserInfo = () => {
-  return axios.post(`http://${url}/user/userInfo`, {});
+  return axios.post(`http://${url}/oversee/userInfo`, {});
 };
 
 const createCompanyInfo = (companyCode, companyName, companyType) => {
@@ -76,8 +76,8 @@ const getSearchedMedicineInfo = (keyword) => {
 };
 
 /* 유통 조회 */
-const getCircuInfo = () => {
-  return axios.post(`http://${url}/oversee/companyInfo`, {});
+const getDistInfo = () => {
+  return axios.post(`http://${url}/distributor/search`, {});
 };
 
 /*유통삭제*/
@@ -94,6 +94,6 @@ export default {
   createMedicineInfo,
   getMedicineInfo,
   getSearchedMedicineInfo,
-  getCircuInfo,
+  getDistInfo,
   deletedistributionInfo,
 };

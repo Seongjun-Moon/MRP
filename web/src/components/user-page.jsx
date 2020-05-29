@@ -10,7 +10,8 @@ function UserPage(props) {
 
   const getUserInfo = async () => {
     const data = await API.getUserInfo().then((data) => data.data);
-    setUserData(data);
+    console.log(data);
+    // setUserData(data);
   };
 
   return (

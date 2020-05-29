@@ -4,9 +4,11 @@ const sequelize = require("../models").sequelize;
 const medicineData = require("../datas/medicineData.json");
 const companyData = require("../datas/companyData.json");
 const barcodeData = require("../datas/barcodeData.json");
+const tempData = require("../datas/tempData.json");
 const Company = require("../models").Company;
 const Medicine = require("../models").Medicine;
 const Barcode = require("../models").Barcode;
+const Temp = require("../models").Temp;
 
 dotenv.config();
 
@@ -65,6 +67,18 @@ const automationDB = sequelize
                 await Barcode.create({
                   barcodeName: barcodeElements.barcodeName,
                   mediCode: barcodeElements.mediCode,
+                });
+              } catch (err) {
+                console.log(err);
+              }
+            });
+            tempData.forEach(async (tempElements) => {
+              try {
+                await Temp.create({
+                  barcode: tempElements.barcode,
+                  companyCode: tempElements.companyCode,
+                  targetCompanyCode: tempElements.targetCompanyCode,
+                  state: tempElements.state,
                 });
               } catch (err) {
                 console.log(err);

@@ -1,7 +1,7 @@
 [
   {
     "mediCode": "8806920000104",
-    "companyCode": "1",
+    "companyCode": "MANU-0000000001",
     "mediName": "간포트점안액",
     "mediType": "전문의약품",
     "count": "1",
@@ -10,7 +10,7 @@
   },
   {
     "mediCode": "8806587000202",
-    "companyCode": "2",
+    "companyCode": "MANU-0000000004",
     "mediName": "레야타즈캅셀100밀리그람(아타자나비어)",
     "mediType": "전문의약품",
     "count": "1",
@@ -19,7 +19,7 @@
   },
   {
     "mediCode": "8806581004206",
-    "companyCode": "3",
+    "companyCode": "MANU-0000000007",
     "mediName": "레보로드정(레보드로프로피진)",
     "mediType": "전문의약품",
     "count": "1",
@@ -28,7 +28,7 @@
   },
   {
     "mediCode": "8800592000103",
-    "companyCode": "4",
+    "companyCode": "MANU-0000000010",
     "mediName": "대전테크노파크멸균주사용수",
     "mediType": "전문의약품",
     "count": "1",
@@ -37,7 +37,7 @@
   },
   {
     "mediCode": "8806949000109",
-    "companyCode": "5",
+    "companyCode": "MANU-0000000001",
     "mediName": "알토산(알긴산나트륨)",
     "mediType": "전문의약품",
     "count": "1",
@@ -46,7 +46,7 @@
   },
   {
     "mediCode": "8806650000207",
-    "companyCode": "6",
+    "companyCode": "MANU-0000000004",
     "mediName": "경보레보설피리드정",
     "mediType": "전문의약품",
     "count": "1",
@@ -55,7 +55,7 @@
   },
   {
     "mediCode": "8806648000806",
-    "companyCode": "7",
+    "companyCode": "MANU-0000000007",
     "mediName": "경인염산로페라미드캅셀",
     "mediType": "전문의약품",
     "count": "1",
@@ -64,7 +64,7 @@
   },
   {
     "mediCode": "8806484000107",
-    "companyCode": "8",
+    "companyCode": "MANU-0000000010",
     "mediName": "렌티블록40정(염산소타롤)",
     "mediType": "전문의약품",
     "count": "1",
@@ -73,7 +73,7 @@
   },
   {
     "mediCode": "8806483000306",
-    "companyCode": "9",
+    "companyCode": "MANU-0000000001",
     "mediName": "그로신정(플로로글루신)",
     "mediType": "전문의약품",
     "count": "1",
@@ -82,7 +82,7 @@
   },
   {
     "mediCode": "8806500001606",
-    "companyCode": "10",
+    "companyCode": "MANU-0000000001",
     "mediName": "듀악트캅셀",
     "mediType": "전문의약품",
     "count": "1",

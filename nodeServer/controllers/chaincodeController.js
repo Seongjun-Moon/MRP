@@ -288,8 +288,8 @@ const history = async (req, res) => {
 
 // 6. 표준코드에 대응하는 모든 바코드 항목을 조회
 const barcodeList = async (req, res) => {
-  console.log(req.body);
   try {
+    /*
     const arr = [];
     const barcodeList = await Barcode.findAll({
       attributes: ["barcodeName", "mediCode"],
@@ -322,11 +322,11 @@ const barcodeList = async (req, res) => {
     const result = await contract.evaluateTransaction(
       "showByKeyArray",
       sendString
-    );
+    ); 
 
     console.log(result);
-
-    res.json({ barcodeList, sendString, result });
+    */
+    res.json({ msg : "ok" });
   } catch (err) {
     console.log(err);
   }

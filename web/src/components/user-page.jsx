@@ -5,13 +5,14 @@ function UserPage(props) {
   const [userData, setUserData] = React.useState([]);
 
   React.useEffect(() => {
-    // getUserInfo();
+    getUserInfo();
   }, []);
 
-  // const getUserInfo = async () => {
-  //   const data = await API.getUserInfo().then((data) => data.data);
-  //   setUserData(data);
-  // };
+  const getUserInfo = async () => {
+    const data = await API.getUserInfo().then((data) => data.data);
+    console.log(data);
+    // setUserData(data);
+  };
 
   return (
     <div>

@@ -13,7 +13,7 @@ class Welcome extends React.Component {
 
   signupButton = () => {
     this.setState({
-      sign: false,
+      sign: !this.state.sign,
     });
   };
 
@@ -24,11 +24,18 @@ class Welcome extends React.Component {
         <article className="login-container">
           {this.state.sign ? (
             <>
-              <Signin login={this.props.login} />
-              <button onClick={this.signupButton}>회원가입</button>
+              <Signin />
+              <button className="sub-btn" onClick={this.signupButton}>
+                회원가입하기
+              </button>
             </>
           ) : (
-            <Signup login={this.props.login} />
+            <>
+              <Signup />
+              <button className="sub-btn" onClick={this.signupButton}>
+                로그인하기
+              </button>
+            </>
           )}
         </article>
         <Footer />

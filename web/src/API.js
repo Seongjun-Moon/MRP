@@ -2,7 +2,8 @@ import axios from "axios";
 
 axios.defaults.withCredentials = true;
 
-const url = "70.12.113.182:9090";
+const url = "70.12.113.180:9090";
+// const url = "localhost:9090";
 
 /*
  *  업체 CRUD
@@ -70,6 +71,20 @@ const getMedicineInfo = () => {
   return axios.post(`http://${url}/oversee/mediInfo`, {});
 };
 
+const getSearchedMedicineInfo = (keyword) => {
+  return axios.post(`http://${url}/oversee/searchedMediInfo`, { keyword });
+};
+
+/* 유통 조회 */
+const getDistInfo = () => {
+  return axios.post(`http://${url}/distributor/search`, {});
+};
+
+/*유통삭제*/
+const deletedistributionInfo = (deleteCode) => {
+  return axios.post(`http://${url}/`, { deleteCode });
+};
+
 export default {
   createCompanyInfo,
   getCompanyInfo,
@@ -78,4 +93,7 @@ export default {
   getUserInfo,
   createMedicineInfo,
   getMedicineInfo,
+  getSearchedMedicineInfo,
+  getDistInfo,
+  deletedistributionInfo,
 };

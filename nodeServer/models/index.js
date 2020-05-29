@@ -19,6 +19,8 @@ db.Sequelize = Sequelize;
 db.User = require("./user")(sequelize, Sequelize);
 db.Medicine = require("./medicine")(sequelize, Sequelize);
 db.Company = require("./company")(sequelize, Sequelize);
+db.Barcode = require("./barcode")(sequelize, Sequelize);
+db.Temp = require("./temp")(sequelize, Sequelize);
 
 db.Company.hasMany(db.User, {
   foreignKey: "companyCode",
@@ -43,6 +45,24 @@ db.Company.hasMany(db.User, {
   sourceKey: "companyCode",
 });
 db.User.belongsTo(db.Company, {
+  foreignKey: "companyCode",
+  sourceKey: "companyCode",
+});
+
+db.Medicine.hasMany(db.Barcode, {
+  foreignKey: "mediCode",
+  sourceKey: "mediCode",
+});
+db.Barcode.belongsTo(db.Medicine, {
+  foreignKey: "mediCode",
+  sourceKey: "mediCode",
+});
+
+db.Company.hasMany(db.Temp, {
+  foreignKey: "companyCode",
+  sourceKey: "companyCode",
+});
+db.Temp.belongsTo(db.Company, {
   foreignKey: "companyCode",
   sourceKey: "companyCode",
 });

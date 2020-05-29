@@ -3,8 +3,12 @@ const dotenv = require("dotenv");
 const sequelize = require("../models").sequelize;
 const medicineData = require("../datas/medicineData.json");
 const companyData = require("../datas/companyData.json");
+const barcodeData = require("../datas/barcodeData.json");
+const tempData = require("../datas/tempData.json");
 const Company = require("../models").Company;
 const Medicine = require("../models").Medicine;
+const Barcode = require("../models").Barcode;
+const Temp = require("../models").Temp;
 
 dotenv.config();
 
@@ -37,6 +41,7 @@ const automationDB = sequelize
                   companyCode: companyElements.companyCode,
                   companyName: companyElements.companyName,
                   companyType: companyElements.companyType,
+                  companyOrg: companyElements.companyOrg,
                 });
               } catch (err) {
                 console.log(err);
@@ -52,6 +57,28 @@ const automationDB = sequelize
                   count: Number.parseInt(medicineElements.count),
                   permissionDate: medicineElements.permissionDate,
                   cancelDate: medicineElements.cancelDate,
+                });
+              } catch (err) {
+                console.log(err);
+              }
+            });
+            barcodeData.forEach(async (barcodeElements) => {
+              try {
+                await Barcode.create({
+                  barcodeName: barcodeElements.barcodeName,
+                  mediCode: barcodeElements.mediCode,
+                });
+              } catch (err) {
+                console.log(err);
+              }
+            });
+            tempData.forEach(async (tempElements) => {
+              try {
+                await Temp.create({
+                  barcode: tempElements.barcode,
+                  companyCode: tempElements.companyCode,
+                  targetCompanyCode: tempElements.targetCompanyCode,
+                  state: tempElements.state,
                 });
               } catch (err) {
                 console.log(err);

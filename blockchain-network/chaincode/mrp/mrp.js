@@ -43,7 +43,11 @@ let Chaincode = class {
     if (args.length != 4) {
       throw new Error('Incorrect number of arguments. Expecting 4');
     }
-
+    let find = await stub.getState(args[0]);
+    if (find && find.toString().length > 0) { 
+        console.log(args[0] + ' already exist: ');
+	return Buffer.from("false");
+    }
     let time = new Date().toLocaleString();
 
     // Value 등록
@@ -55,20 +59,23 @@ let Chaincode = class {
     };
     // Key 등록
     console.info(JSON.stringify(Medicine));
-    await stub.putState(args[0], Buffer.from(JSON.stringify(Medicine)));
+    let result = await stub.putState(args[0], Buffer.from(JSON.stringify(Medicine)));
     console.info('============= END : Register Medicine Info ===========');
+    return Buffer.from("true");
   }
 
   // 기유통된 전문의약품의 유통내역 추가 (기존 블록체인에 등록된 바코드만 함수 실행 / 모든 업체)
   async changeMediStatus(stub, args) {
     console.info('============= START : update Medicine Status ===========');
     if (args.length != 4) {
-      throw new Error('Incorrect number of arguments. Expecting 4');
-    }
+        console.log('Incorrect number of arguments. Expecting 4');
+	return Buffer.from("false");
+    }true
 
     let mediAsBytes = await stub.getState(args[0]); //get the Medicine from chaincode state
     if (!mediAsBytes || mediAsBytes.toString().length <= 0) {
-      throw new Error(mediCode + ' does not exist: ');
+        console.log(mediCode + ' does not exist: ');
+	return Buffer.from("false");
     }
     let medi = JSON.parse(mediAsBytes);
     let time = new Date().toLocaleString();
@@ -79,22 +86,24 @@ let Chaincode = class {
 
     await stub.putState(args[0], Buffer.from(JSON.stringify(medi)));
     console.info('============= END : update Medicine Status ===========');
+    return Buffer.from("true");
   }
   
   // 하나의 바코드에서 최신 유통내역 조회 (world state)
   async getBarcode(stub, args) {
     if (args.length != 1) {
-      throw new Error('Incorrect number of arguments. Expecting Barcode');
+      console.log('Incorrect number of arguments. Expecting Barcode');
+	return Buffer.from("false");
     }
     let barcode = args[0];
 
     let result = await stub.getState(barcode); //get the car from chaincode state
     if (!result || result.toString().length <= 0) {
-      throw new Error(barcode + ' does not exist: ');
+      console.log(barcode + ' does not exist: ');
+	return Buffer.from("false");
     }
     console.log(result.toString());
     return result;
-
 
 
   }
@@ -109,10 +118,11 @@ let Chaincode = class {
     for(let i=0; i<codes.length; i++){
 	let code = await stub.getState(codes[i]); 
 	if (!code || code.toString().length <= 0) {
-	    throw new Error(codes[i] + ' does not exist: ');
+	    resultAll.push(JSON.parse("does not exist"));
+	}else{
+	    resultAll.push(JSON.parse(code.toString('utf8')));
 	}
 	console.log(code.toString());
-	resultAll.push(JSON.parse(code.toString('utf8')));
 
     }
     console.log(resultAll);

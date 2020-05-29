@@ -32,7 +32,7 @@ async function main() {
         const network = await gateway.getNetwork('mychannel');
 
         // Get the contract from the network.
-        const contract = network.getContract('mrp5');
+        const contract = network.getContract('mrp-2');
 
         // Evaluate the specified transaction.
         // queryCar transaction - requires 1 argument, ex: ('queryCar', 'CAR4')
@@ -43,8 +43,21 @@ async function main() {
 	a.push(1670222001);
 	a.push(1670222003);
 
-        const result = await contract.evaluateTransaction('showCodes', a.toString());
-        console.log(`Transaction has been evaluated, result is: ${result}`);
+/*
+        const result = await contract.evaluateTransaction('getBarcode', '1670222003');
+	console.log(`Transaction has been evaluated, result is: ${result}`);
+	console.log(result.toString());*/
+
+ 	const result = await contract.submitTransaction('register',"1670222009","L6","I8","output");
+	if(result){
+            console.log(`Transaction has been evaluated, result is: true`);
+	    console.log(result.toString());
+	    console.log(result);
+	}else{
+            console.log("fail");
+	}
+
+	await gateway.disconnect();
 
     } catch (error) {
         console.error(`Failed to evaluate transaction: ${error}`);

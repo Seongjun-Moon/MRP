@@ -2,7 +2,7 @@ import axios from "axios";
 
 axios.defaults.withCredentials = true;
 
-const url = "70.12.113.182:9090";
+const url = "70.12.113.180:9090";
 // const url = "localhost:9090";
 
 /*
@@ -19,6 +19,15 @@ const createCompanyInfo = (companyCode, companyName, companyType) => {
     companyCode,
     companyName,
     companyType,
+  });
+};
+
+/* 업체 회원 등록 (링크는 아직 안맞춤) */
+const createCompanyUserInfo = (companyCode, companyId, companyPw) => {
+  return axios.post(`http://${url}/manufacture/companyEnroll`, {
+    companyCode,
+    companyId,
+    companyPw,
   });
 };
 
@@ -87,6 +96,7 @@ const deletedistributionInfo = (deleteCode) => {
 
 export default {
   createCompanyInfo,
+  createCompanyUserInfo,
   getCompanyInfo,
   getCustomer,
   addCustomer,

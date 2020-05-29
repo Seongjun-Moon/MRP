@@ -15,11 +15,12 @@ function Signup(props) {
     let companyCode = companyCodeInput.current.value;
 
     if (pw === pwcheck) {
-      await API.addCustomer(id, pw, companyCode).then((data) => {
+      await API.addUser(id, pw, companyCode).then((data) => {
         if (data.data.message) {
           alert(`${data.data.message}님, 회원가입 완료되었습니다.`);
+          props.toggleSignin();
         } else {
-          alert("회원가입 실패!!!!!");
+          alert("회원가입 실패!!!!");
         }
       });
     } else {

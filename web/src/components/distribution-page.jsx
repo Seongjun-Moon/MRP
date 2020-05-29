@@ -2,29 +2,17 @@ import React from "react";
 import API from "../API";
 
 function DistributionPage(props) {
-  /*   const [circuData, setCircuData] = React.useState([]);
-
-  React.useEffect(() => {
-    getCircuInfo();
-  }, []);
-
-  const getCircuInfo = async () => {
-    const data = await API.getCircuInfo().then((data) => data.data);
-    setCircuData(data);
-  }; */
-
+  let distSearchInput;
   const [distData, setDistData] = React.useState([]);
   const [delData, setDelData] = React.useState([]);
 
-  React.useEffect(() => {
-    getDistInfo();
-  }, []);
+  React.useEffect(() => {}, []);
 
-  const getDistInfo = async () => {
-    const data = await API.getDistInfo().then((data) => data.data);
-    // data.map((dist) => {});
-    console.log(data);
-    // setDistData(data);
+  const getDistInfo = async (event, mediCode) => {
+    event.preventDefault();
+    const data = await API.getDistInfo(mediCode).then((data) => data.data);
+
+    setDistData(data.tempDistInfo);
   };
 
   const delStateInfo = (deleteCode) => {
@@ -49,13 +37,13 @@ function DistributionPage(props) {
 
   return (
     <article className="distribution">
-      <form>
+      <form onSubmit={(event) => getDistInfo(event, distSearchInput.value)}>
         <input
           type="text"
           name="company-search"
           className="medi-search"
           placeholder="의약품 코드로 검색"
-          // ref={(ref) => (companySearchInput = ref)}
+          ref={(ref) => (distSearchInput = ref)}
         />
         <button className="main-btn search-btn" type="submit">
           검색

@@ -10,8 +10,7 @@ function UserPage(props) {
 
   const getUserInfo = async () => {
     const data = await API.getUserInfo().then((data) => data.data);
-    console.log(data);
-    // setUserData(data);
+    setUserData(data.userInfo);
   };
 
   return (
@@ -20,7 +19,6 @@ function UserPage(props) {
       <table>
         <thead>
           <tr>
-            <td>순번</td>
             <td>아이디</td>
             <td>업체 코드</td>
             <td>업체 명</td>
@@ -28,14 +26,13 @@ function UserPage(props) {
           </tr>
         </thead>
         <tbody>
-          {userData.map((user, index) => {
+          {userData.map((user) => {
             return (
-              <tr key={user.userCode}>
-                <td>{index}</td>
+              <tr key={user.id}>
                 <td>{user.id}</td>
                 <td>{user.companyCode}</td>
-                <td>{user.companyName}</td>
-                <td>{user.companyType}</td>
+                <td>{user.company.companyName}</td>
+                <td>{user.company.companyType}</td>
               </tr>
             );
           })}

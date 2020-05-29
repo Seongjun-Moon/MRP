@@ -36,7 +36,7 @@ const getCompanyInfo = () => {
 };
 
 /* 로그인 */
-const getCustomer = (id, pw) => {
+const getUser = (id, pw) => {
   return axios.post(`http://${url}/user/signIn`, {
     id,
     pw,
@@ -44,7 +44,7 @@ const getCustomer = (id, pw) => {
 };
 
 /* 회원가입 */
-const addCustomer = (id, pw, companyCode) => {
+const addUser = (id, pw, companyCode) => {
   return axios.post(`http://${url}/user/signUp`, {
     id,
     pw,
@@ -84,9 +84,13 @@ const getSearchedMedicineInfo = (keyword) => {
   return axios.post(`http://${url}/oversee/searchedMediInfo`, { keyword });
 };
 
+/*
+ * 유통 이력
+ */
+
 /* 유통 조회 */
-const getDistInfo = () => {
-  return axios.post(`http://${url}/distributor/search`, {});
+const getDistInfo = (mediCode) => {
+  return axios.post(`http://${url}/distributor/tempDistInfo`, { mediCode });
 };
 
 /*유통삭제*/
@@ -98,8 +102,8 @@ export default {
   createCompanyInfo,
   createCompanyUserInfo,
   getCompanyInfo,
-  getCustomer,
-  addCustomer,
+  getUser,
+  addUser,
   getUserInfo,
   createMedicineInfo,
   getMedicineInfo,

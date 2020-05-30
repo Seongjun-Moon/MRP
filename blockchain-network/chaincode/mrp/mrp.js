@@ -117,8 +117,10 @@ let Chaincode = class {
 
     for(let i=0; i<codes.length; i++){
 	let code = await stub.getState(codes[i]); 
+	console.log(typeof(code));
 	if (!code || code.toString().length <= 0) {
-	    resultAll.push(JSON.parse("does not exist"));
+	    resultAll.push(JSON.parse('"does not exist"'));
+
 	}else{
 	    resultAll.push(JSON.parse(code.toString('utf8')));
 	}

@@ -1,4 +1,4 @@
-peer chaincode invoke -n mrp-2 -c '{"Args":["register","1670222001","A3","B6","output"]}' -C mychannel
+peer chaincode invoke -n mrp-test -c '{"Args":["register","1670222001","A3","B6","output"]}' -C mychannel
 peer chaincode invoke -n mrp-2 -c '{"Args":["register","1670222003","A3","B6","input"]}' -C mychannel
 
 peer chaincode query -n mrp-2 -c '{"Args":["getInfo","1670222001"]}' -C mychannel

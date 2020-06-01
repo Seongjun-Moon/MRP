@@ -43,6 +43,11 @@ const getUser = (id, pw) => {
   });
 };
 
+/* 로그아웃 */
+const logout = () => {
+  return axios.get(`http://${url}/user/logout`);
+};
+
 /* 회원가입 */
 const addUser = (id, pw, companyCode) => {
   return axios.post(`http://${url}/user/signUp`, {
@@ -103,6 +108,7 @@ export default {
   createCompanyUserInfo,
   getCompanyInfo,
   getUser,
+  logout,
   addUser,
   getUserInfo,
   createMedicineInfo,

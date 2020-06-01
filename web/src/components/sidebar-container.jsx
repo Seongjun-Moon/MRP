@@ -7,17 +7,24 @@ import store from "../redux/store";
 import signin from "../redux/user/user.action";
 
 import Cookies from "universal-cookie";
+import API from "../API";
 const cookies = new Cookies();
 
 function SidebarContainer(props) {
-  const logout = () => {
-    cookies.remove("loggedIn", { path: "/" });
-    cookies.remove("userCompanyType", { path: "/" });
-    store.dispatch(
-      signin({
-        isLoggedIn: false,
-      })
-    );
+  const logout = async (event) => {
+    const status = await API.logout();
+    if (status.message) {
+      event.preventDefault();
+      cookies.remove("loggedIn", { path: "/" });
+      cookies.remove("userCompanyType", { path: "/" });
+      store.dispatch(
+        signin({
+          isLoggedIn: false,
+        })
+      );
+    } else {
+      alert("로그아웃에 실패했습니다.");
+    }
   };
 
   return (
@@ -73,7 +80,7 @@ function SidebarContainer(props) {
       <ul className="sidebar-menu_user">
         <li>마이페이지</li>
       </ul>
-      <button onClick={logout} className="sub-btn">
+      <button onClick={(event) => logout(event)} className="sub-btn">
         로그아웃
       </button>
     </aside>

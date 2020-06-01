@@ -1,6 +1,8 @@
-import React from "react";
+import React, { Component } from "react";
 import API from "../API";
 import Axios from "axios";
+import { Route, Redirect, Link } from "react-router-dom";
+import DistributionPage from "../components/distribution-page";
 
 /* Data Type ///
 cancelDate: "2020-05-20T00:00:00.000Z" 
@@ -43,6 +45,13 @@ function MedicinePage(props) {
     setSearchedMediData(data.data);
   };
 
+  const sendLink = (event) => {
+    alert(event);
+    window.location.replace("../../distribution");
+    //return <Redirect Component={DistributionPage} />;
+    //<Route exact path="/medicine/list" component={MedicinePage}></Route>
+  };
+
   const mediDataRender = () => {
     let renderData;
     searchedMediData.length > 0
@@ -51,7 +60,13 @@ function MedicinePage(props) {
     return renderData.map((medi) => {
       return (
         <tr key={medi.mediCode}>
-          <td>{medi.mediCode}</td>
+          <td
+            onClick={() => {
+              sendLink(medi.mediCode);
+            }}
+          >
+            {medi.mediCode}
+          </td>
           <td>{medi.companyCode}</td>
           <td>{medi.mediName}</td>
           <td>{medi.mediType}</td>

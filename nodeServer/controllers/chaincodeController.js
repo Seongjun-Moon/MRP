@@ -1,32 +1,35 @@
-const os = require("os")
 const dotenv = require("dotenv")
 const fs = require("fs")
-const path = require("path")
 const FabricCAServices = require("fabric-ca-client")
 const { FileSystemWallet, X509WalletMixin, Gateway } = require("fabric-network")
+const os = require("os")
+const path = require("path")
 
-const Medicine = require("../models").Medicine
 const Barcode = require("../models").Barcode
 
 const env = process.env
 
-let userOrg // Insert connection-org1.json
+// 소속 식별을 위한 변수들
+let connectionConfig
+let companyMSP
+let companyAffiliation
+
 const ccpPath = path.resolve(
   __dirname,
   "..",
   `${env.NETWORK_CONFIG}`,
-  "connection-org1.json" // 세션에 있는 변수값으로 받음
+  `${connectionConfig}` // connection-org1.json
 )
 const ccpJSON = fs.readFileSync(ccpPath, "utf8")
 const ccp = JSON.parse(ccpJSON)
 
 // 인증기관과 통신할 수 있는 객체 생성
-const caURL = ccp.certificateAuthorities["ca.example.com"].url
+const caURL = ccp.certificateAuthorities[`${env.CA}`].url
 const ca = new FabricCAServices(caURL)
 
 // 신원 증명서를 저장할 wallet 생성
-// const walletPath = path.join(os.homedir(), "wallet");
-const walletPath = path.join(process.cwd(), "wallet")
+const walletPath = path.join(os.homedir(), "wallet")
+// const walletPath = path.join(process.cwd(), "wallet")
 const wallet = new FileSystemWallet(walletPath)
 
 // 체인코드
@@ -38,7 +41,47 @@ const channel = `${env.CHANNEL_NAME}`
 dotenv.config()
 // ==================  GET Method ==================
 // 1. MRP 블록체인 네트워크 연결 시도
+
+// 소속 식별 변수들 주입
+const IdentifyOrg = (companyType) => {
+  return new Promise((resolve, reject) => {
+    switch (companyType) {
+      case "oversee":
+        ;(connectionConfig = "connection-org1.json"),
+          (companyMSP = "Org1MSP"),
+          (companyAffiliation = "org1.department1")
+        resolve()
+        break
+      case "manufacturer":
+        ;(connectionConfig = "connection-org2.json"),
+          (companyMSP = "Org2MSP"),
+          (companyAffiliation = "org2.department1")
+        resolve()
+        break
+      case "distributor":
+        ;(connectionConfig = "connection-org3.json"),
+          (companyMSP = "Org3MSP"),
+          (companyAffiliation = "org3.department1")
+        resolve()
+        break
+      case "hospital":
+        ;(connectionConfig = "connection-org4.json"),
+          (companyMSP = "Org4MSP"),
+          (companyAffiliation = "org4.department1")
+        resolve()
+        break
+      default:
+        ;(connectionConfig = "connection-org4.json"),
+          (companyMSP = "Org4MSP"),
+          (companyAffiliation = "org4.department1")
+        resolve()
+    }
+  })
+}
+
 const connect = async (req, res) => {
+  const companyType = req.session.companyType
+  await IdentifyOrg(companyType)
   try {
     console.log(`Wallet path: ${walletPath}`)
     // Check to see if we've already enrolled the admin user.
@@ -50,7 +93,7 @@ const connect = async (req, res) => {
         enrollmentSecret: `${env.ENROLLMENT_SECRET}`,
       })
       const identity = X509WalletMixin.createIdentity(
-        "Org1MSP", // session vriable
+        OrgMSP, // session vriable
         enrollment.certificate,
         enrollment.key.toBytes()
       )
@@ -59,7 +102,7 @@ const connect = async (req, res) => {
     }
 
     // Check to see if we've already enrolled the user.
-    const userExists = await wallet.exists("user1") // session company type
+    const userExists = await wallet.exists(companyTpye) // session company type
     if (!userExists) {
       // Create a new gateway for connecting to our peer node.
       const gateway = new Gateway()
@@ -76,24 +119,24 @@ const connect = async (req, res) => {
       // Register the user, enroll the user, and import the new identity into the wallet.
       const secret = await ca.register(
         {
-          affiliation: "org1.department1", // session vriable
-          enrollmentID: "user1", // session companyType
+          affiliation: companyAffiliation, // session vriable
+          enrollmentID: companyType, // session companyType
           role: "client", //
         },
         adminIdentity
       )
       const enrollment = await ca.enroll({
-        enrollmentID: "user1", // session companyType
+        enrollmentID: userWalletID, // session companyType
         enrollmentSecret: secret,
       })
       const userIdentity = X509WalletMixin.createIdentity(
-        "Org1MSP", // session MSP + Modify table
+        companyMSP, // session MSP
         enrollment.certificate,
         enrollment.key.toBytes()
       )
-      await wallet.import("user1", userIdentity)
+      await wallet.import(userWalletID, userIdentity)
       console.log(
-        'Successfully registered and enrolled admin user "user1" and imported it into the wallet'
+        `Successfully registered and enrolled admin user ${companyType} and imported it into the wallet`
       )
     }
     res.json({ message: true })
@@ -106,10 +149,11 @@ const connect = async (req, res) => {
 // 2. 전문의약품 유통정보 신규등록 (제조)
 // front-end에서 barcode, companyCode, targetCompanyCode, state 순으로 인자 전달
 const register = async (req, res) => {
+  const companyType = req.session.companyType
   try {
-    const userExists = await wallet.exists("user1")
+    const userExists = await wallet.exists(companyType)
     if (!userExists) {
-      console.log('An identity for the user "user1" does not exist in the wallet')
+      console.log(`An identity for the user ${companyType} does not exist in the wallet`)
       await res.json({ msg: "연결부터 해주세요" })
       return
     }
@@ -118,7 +162,7 @@ const register = async (req, res) => {
     const gateway = new Gateway()
     await gateway.connect(ccp, {
       wallet,
-      identity: "user1",
+      identity: companyType,
       discovery: { enabled: false },
     })
     // Get the network (channel) our contract is deployed to.
@@ -150,10 +194,11 @@ const register = async (req, res) => {
 // 기존 블록체인에 등록된 경우에만 정상 수행함
 // front-end에서 barcode, companyCode, targetCompanyCode, state 순으로 인자 전달
 const update = async (req, res) => {
+  const companyType = req.session.companyType
   try {
-    const userExists = await wallet.exists("user1")
+    const userExists = await wallet.exists(companyType)
     if (!userExists) {
-      console.log('An identity for the user "user1" does not exist in the wallet')
+      console.log(`An identity for the user ${companyType} does not exist in the wallet`)
       await res.json({ msg: "연결부터 해주세요" })
       return
     }
@@ -162,7 +207,7 @@ const update = async (req, res) => {
     const gateway = new Gateway()
     await gateway.connect(ccp, {
       wallet,
-      identity: "user1",
+      identity: userWalletID,
       discovery: { enabled: false },
     })
     // Get the network (channel) our contract is deployed to.
@@ -193,11 +238,12 @@ const update = async (req, res) => {
 // 4. 단일 전문의약품의 현재 유통정보를 확인 (world state)
 // front-end에서 barcode 1개를 인자로 전달
 const getBarcode = async (req, res) => {
-  console.log(req.body.barcode)
+  const companyType = req.session.companyType
+  //console.log(req.body.barcode)
   try {
-    const userExists = await wallet.exists("user1")
+    const userExists = await wallet.exists(companyType)
     if (!userExists) {
-      console.log('An identity for the user "user1" does not exist in the wallet')
+      console.log(`An identity for the user ${companyType} does not exist in the wallet`)
       await res.json({ msg: "연결부터 해주세요" })
       return
     }
@@ -206,7 +252,7 @@ const getBarcode = async (req, res) => {
     const gateway = new Gateway()
     await gateway.connect(ccp, {
       wallet,
-      identity: "user1",
+      identity: userWalletID,
       discovery: { enabled: false },
     })
 
@@ -228,7 +274,15 @@ const getBarcode = async (req, res) => {
 // 5. 표준코드에 대응하는 모든 바코드 항목을 조회
 // front-end에서 mediCode(표준코드) 1개를 인자로 전달
 const barcodeList = async (req, res) => {
+  const companyType = req.session.companyType
   try {
+    const userExists = await wallet.exists(companyType)
+    if (!userExists) {
+      console.log(`An identity for the user ${companyType} does not exist in the wallet`)
+      await res.json({ msg: "연결부터 해주세요" })
+      return
+    }
+
     let resultState
     const arr = []
     const barcodeList = await Barcode.findAll({
@@ -255,7 +309,14 @@ const barcodeList = async (req, res) => {
 // 6. 각 바코드의 현재 유통상태 조회 (world state)
 // ??? 에서 [barcode1,barcode2,...,]를 인자로 전달
 const showBarcodes = async (arr, res) => {
+  const companyType = req.session.companyType
   try {
+    const userExists = await wallet.exists(companyType)
+    if (!userExists) {
+      console.log(`An identity for the user ${companyType} does not exist in the wallet`)
+      await res.json({ msg: "연결부터 해주세요" })
+      return
+    }
     const mediCode = arr // 바코드 배열
     console.log(mediCode)
     console.log(mediCode.toString())
@@ -263,7 +324,7 @@ const showBarcodes = async (arr, res) => {
     const gateway = new Gateway()
     await gateway.connect(ccp, {
       wallet,
-      identity: "user1",
+      identity: userWalletID,
       discovery: { enabled: false },
     })
     // Get the network (channel) our contract is deployed to.
@@ -284,10 +345,11 @@ const showBarcodes = async (arr, res) => {
 // 7. 특정 전문의약품의 유통 히스토리를 조회
 // front-end에서 barcode 인자(1개) 전달
 const history = async (req, res) => {
+  const companyType = req.session.companyType
   try {
-    const userExists = await wallet.exists("user1")
+    const userExists = await wallet.exists(companyType)
     if (!userExists) {
-      console.log('An identity for the user "user1" does not exist in the wallet')
+      console.log(`An identity for the user ${companyType} does not exist in the wallet`)
       await res.json({ msg: "연결부터 해주세요" })
       return
     }
@@ -296,7 +358,7 @@ const history = async (req, res) => {
     const gateway = new Gateway()
     await gateway.connect(ccp, {
       wallet,
-      identity: "user1",
+      identity: userWalletID,
       discovery: { enabled: false },
     })
 

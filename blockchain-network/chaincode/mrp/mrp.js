@@ -67,24 +67,17 @@ let Chaincode = class {
   // 기유통된 전문의약품의 유통내역 추가 (기존 블록체인에 등록된 바코드만 함수 실행 / 모든 업체)
   async changeMediStatus(stub, args) {
     console.info('============= START : update Medicine Status ===========');
-    if (args.length != 4) {
-        console.log('Incorrect number of arguments. Expecting 4');
-	return Buffer.from("false");
-    }true
-
-    let mediAsBytes = await stub.getState(args[0]); //get the Medicine from chaincode state
-    if (!mediAsBytes || mediAsBytes.toString().length <= 0) {
-        console.log(mediCode + ' does not exist: ');
-	return Buffer.from("false");
+    if (args.length != 1) {
+      throw new Error('Incorrect number of arguments. Expecting 1');
     }
-    let medi = JSON.parse(mediAsBytes);
-    let time = new Date().toLocaleString();
-    medi.companyID = args[1];
-    medi.targetID = args[2];
-    medi.time = time;
-    medi.state = args[3];
-
-    await stub.putState(args[0], Buffer.from(JSON.stringify(medi)));
+    let updateList = JSON.parse(args[0])
+    for(let i=0; i<updateList.length; i++){
+	let barcode = updateList[i].barcode;
+	delete updateList[i].barcode;
+	updateList.time = new Date().toLocaleString();
+	console.info(JSON.stringify(updateList[i]));
+	await stub.putState(barcode, Buffer.from(JSON.stringify(updateList[i])));	
+    }
     console.info('============= END : update Medicine Status ===========');
     return Buffer.from("true");
   }

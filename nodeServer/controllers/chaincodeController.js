@@ -141,51 +141,8 @@ const connect = async (req, res) => {
 }
 
 // ==================  POST Method ==================
-// 2. 전문의약품 유통정보 신규등록 (제조)
-// front-end에서 barcode, companyCode, targetCompanyCode, state 순으로 인자 전달
-const register = async (req, res) => {
-  const companyType = req.session.companyType
-  try {
-    const userExists = await wallet.exists(companyType)
-    if (!userExists) {
-      console.log(`An identity for the user ${companyType} does not exist in the wallet`)
-      await res.json({ msg: "연결부터 해주세요" })
-      return
-    }
-    console.log("Start : Insert Medicine Info")
-    // Create a new gateway for connecting to our peer node.
-    const gateway = new Gateway()
-    await gateway.connect(ccp, {
-      wallet,
-      identity: companyType,
-      discovery: { enabled: false },
-    })
-    // Get the network (channel) our contract is deployed to.
-    const network = await gateway.getNetwork(channel)
 
-    // Get the contract from the network.
-    const contract = network.getContract(chainCode)
-
-    // 유통이력 트랜잭션 생성
-    await contract.submitTransaction(
-      "register",
-      `${req.body.barcode}`,
-      `${req.body.companyId}`,
-      `${req.body.targetId}`,
-      `${req.body.state}`
-    )
-    console.log(`Transaction has been submit, result is: OK`)
-    res.json({
-      code: "1",
-      msg: `${req.body.barcode}의 유통정보가 정상적으로 입력되었습니다`,
-    })
-  } catch (err) {
-    console.log(err)
-    res.json({ code: "0", msg: `${req.body.barcode} 입력 오류` })
-  }
-}
-
-// 3. 전문의약품 유통정보 등록 (도매, 병원 및 약국)
+// 2. 전문의약품 유통정보 등록 (도매, 병원 및 약국)
 // 기존 블록체인에 등록된 경우에만 정상 수행함
 // front-end에서 barcode, companyCode, targetCompanyCode, state 순으로 인자 전달
 const update = async (req, res) => {
@@ -230,7 +187,7 @@ const update = async (req, res) => {
   }
 }
 
-// 4. 단일 전문의약품의 현재 유통정보를 확인 (world state)
+// 3. 단일 전문의약품의 현재 유통정보를 확인 (world state)
 // front-end에서 barcode 1개를 인자로 전달
 const getBarcode = async (req, res) => {
   const companyType = req.session.companyType
@@ -266,7 +223,7 @@ const getBarcode = async (req, res) => {
   }
 }
 
-// 5. 표준코드에 대응하는 모든 바코드 항목을 조회
+// 4. 표준코드에 대응하는 모든 바코드 항목을 조회
 // front-end에서 mediCode(표준코드) 1개를 인자로 전달
 const barcodeList = async (req, res) => {
   const companyType = req.session.companyType
@@ -301,7 +258,7 @@ const barcodeList = async (req, res) => {
   }
 }
 
-// 6. 각 바코드의 현재 유통상태 조회 (world state)
+// 5. 각 바코드의 현재 유통상태 조회 (world state)
 // ??? 에서 [barcode1,barcode2,...,]를 인자로 전달
 const showBarcodes = async (arr) => {
   try {
@@ -332,7 +289,7 @@ const showBarcodes = async (arr) => {
   }
 }
 
-// 7. 특정 전문의약품의 유통 히스토리를 조회
+// 6. 특정 전문의약품의 유통 히스토리를 조회
 // front-end에서 barcode 인자(1개) 전달
 const history = async (req, res) => {
   const companyType = req.session.companyType
@@ -369,4 +326,4 @@ const history = async (req, res) => {
   }
 }
 
-module.exports = { connect, register, update, getBarcode, history, barcodeList }
+module.exports = { connect, update, getBarcode, history, barcodeList }

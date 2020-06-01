@@ -39,9 +39,8 @@ async function main() {
         // queryAllCars transaction - requires no arguments, ex: ('queryAllCars')
 	
 	const a=[];
-	
-	a.push(1670222001);
-	//a.push(1670222003);
+	a.push(111);
+	a.push(222);
 
 
         const result = await contract.evaluateTransaction('getAllBarcode', a.toString());
@@ -50,17 +49,21 @@ async function main() {
 	console.log(typeof(result));
 
 /*
- 	const result = await contract.submitTransaction('register',"1670222009","L6","I8","output");
+	const a=[];
+	a.push({barcode:"111", companyID:"A3", targetID:"L2", state:"out", description:"test"});
+	a.push({barcode:"222", companyID:"B3", targetID:"K2", state:"in", description:"return"});
+ 	const result = await contract.submitTransaction('changeMediStatus',JSON.stringify(a));
 	if(result.toString()=="true"){
             console.log(`Transaction has been evaluated, result is: true`);
 	    console.log(result.toString());
-	    console.log(result);
+	    console.log(result);	
 	    console.log(typeof(result));
 	}else{
             console.log("fail");
 	}
 
 	await gateway.disconnect(); */
+
 
     } catch (error) {
         console.error(`Failed to evaluate transaction: ${error}`);

@@ -3,6 +3,8 @@ import Signin from "../components/signin";
 import Signup from "../components/signup";
 import Footer from "../components/footer";
 
+// import { ReactComponent as Medicine } from "../assets/medicine.svg";
+
 class Welcome extends React.Component {
   constructor() {
     super();

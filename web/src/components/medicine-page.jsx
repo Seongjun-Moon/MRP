@@ -4,7 +4,6 @@ import Axios from "axios";
 import { Route, Redirect, Link } from "react-router-dom";
 import DistributionPage from "../components/distribution-page";
 
-
 /* Data Type ///
 cancelDate: "2020-05-20T00:00:00.000Z" 
 companyCode: "1" 
@@ -46,12 +45,12 @@ function MedicinePage(props) {
     setSearchedMediData(data.data);
   };
 
-  const sendLink = (event) => {
-    alert(event);
-    window.location.replace("../../distribution");
-    //return <Redirect Component={DistributionPage} />;
-    //<Route exact path="/medicine/list" component={MedicinePage}></Route>
-  };
+  // const sendLink = (event) => {
+  //   alert(event);
+  //   window.location.replace("../../distribution");
+  //   //return <Redirect Component={DistributionPage} />;
+  //   //<Route exact path="/medicine/list" component={MedicinePage}></Route>
+  // };
 
   const mediDataRender = () => {
     let renderData;
@@ -63,7 +62,7 @@ function MedicinePage(props) {
         <tr key={medi.mediCode}>
           <td
             onClick={() => {
-              sendLink(medi.mediCode);
+              // sendLink(medi.mediCode);
             }}
           >
             {medi.mediCode}

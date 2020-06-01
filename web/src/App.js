@@ -12,7 +12,7 @@ const cookies = new Cookies();
 
 function App(props) {
   React.useEffect(() => {
-    if (cookies.get("loggedIn") === true) {
+    if (cookies.get("loggedIn") === "true") {
       store.dispatch(
         signin({
           isLoggedIn: true,

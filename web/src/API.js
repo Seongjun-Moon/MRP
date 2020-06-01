@@ -90,17 +90,19 @@ const getSearchedMedicineInfo = (keyword) => {
 };
 
 /*
- * 유통 이력
+ * 임시 유통 이력
  */
 
 /* 유통 조회 */
-const getDistInfo = (mediCode) => {
+const getTempDistInfo = (mediCode) => {
   return axios.post(`http://${url}/distributor/tempDistInfo`, { mediCode });
 };
 
-/*유통삭제*/
-const deletedistributionInfo = (deleteCode) => {
-  return axios.post(`http://${url}/`, { deleteCode });
+/*
+ * 유통 이력
+ */
+const getDistInfo = (mediCode) => {
+  // return axios.post(`http://${url}/distributor/tempDistInfo`, { mediCode });
 };
 
 export default {
@@ -114,6 +116,6 @@ export default {
   createMedicineInfo,
   getMedicineInfo,
   getSearchedMedicineInfo,
+  getTempDistInfo,
   getDistInfo,
-  deletedistributionInfo,
 };

@@ -13,7 +13,8 @@ const cookies = new Cookies();
 function SidebarContainer(props) {
   const logout = async (event) => {
     const status = await API.logout();
-    if (status.message) {
+    console.log(status);
+    if (status.data.message) {
       event.preventDefault();
       cookies.remove("loggedIn", { path: "/" });
       cookies.remove("userCompanyType", { path: "/" });

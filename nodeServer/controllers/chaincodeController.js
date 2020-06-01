@@ -308,15 +308,8 @@ const barcodeList = async (req, res) => {
 
 // 6. 각 바코드의 현재 유통상태 조회 (world state)
 // ??? 에서 [barcode1,barcode2,...,]를 인자로 전달
-const showBarcodes = async (arr, res) => {
-  const companyType = req.session.companyType
+const showBarcodes = async (arr) => {
   try {
-    const userExists = await wallet.exists(companyType)
-    if (!userExists) {
-      console.log(`An identity for the user ${companyType} does not exist in the wallet`)
-      await res.json({ msg: "연결부터 해주세요" })
-      return
-    }
     const mediCode = arr // 바코드 배열
     console.log(mediCode)
     console.log(mediCode.toString())
@@ -339,6 +332,8 @@ const showBarcodes = async (arr, res) => {
     resultState = state
   } catch (err) {
     console.log(err)
+  } finally {
+    resultState = "fail"
   }
 }
 

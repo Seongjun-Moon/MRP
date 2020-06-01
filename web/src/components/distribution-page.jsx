@@ -10,29 +10,9 @@ function DistributionPage(props) {
 
   const getDistInfo = async (event, mediCode) => {
     event.preventDefault();
-    const data = await API.getDistInfo(mediCode).then((data) => data.data);
+    // const data = await API.getDistInfo(mediCode).then((data) => data.data);
 
-    setDistData(data.tempDistInfo);
-  };
-
-  const delStateInfo = (deleteCode) => {
-    let dataArr = [...delData];
-    if (dataArr.includes(deleteCode)) {
-      dataArr = dataArr.filter((data) => data !== deleteCode);
-    } else {
-      dataArr.push(deleteCode);
-    }
-
-    setDelData(dataArr);
-  };
-
-  const deleteDistInfo = async (event, code) => {
-    const answer = window.confirm("삭제하시겠습니까?");
-    if (answer === true) {
-      delStateInfo(code);
-    } else {
-      alert("취소했습니다.");
-    }
+    // setDistData(data.tempDistInfo);
   };
 
   return (
@@ -62,7 +42,7 @@ function DistributionPage(props) {
                 <td>대상 업체 코드</td>
                 <td>상태</td>
                 <td>등록 시간</td>
-                <td>확인 여부</td>
+                <td>비고</td>
               </tr>
             </thead>
             <tbody>
@@ -74,34 +54,12 @@ function DistributionPage(props) {
                     <td>{dist.targetCompanyCode}</td>
                     <td>{dist.state}</td>
                     <td>{dist.createdAt}</td>
-                    <td>
-                      <button
-                        className={
-                          delData.includes(dist.barcode)
-                            ? "del-btn"
-                            : "default-btn"
-                        }
-                        onClick={(event) => {
-                          deleteDistInfo(event, dist.barcode);
-                        }}
-                      >
-                        {delData.includes(dist.barcode) ? "삭제됨" : "삭제하기"}
-                      </button>
-                    </td>
+                    <td>비고</td>
                   </tr>
                 );
               })}
             </tbody>
           </table>
-
-          <div>
-            <h3>오류 데이터 목록</h3>
-            <ul>
-              {delData.map((d) => (
-                <li key={d}>{d}</li>
-              ))}
-            </ul>
-          </div>
         </div>
       ) : (
         <p>조회된 유통 이력이 없습니다.</p>

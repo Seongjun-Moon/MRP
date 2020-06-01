@@ -16,8 +16,10 @@ function SidebarContainer(props) {
     console.log(status);
     if (status.data.message) {
       event.preventDefault();
-      cookies.remove("loggedIn", { path: "/" });
-      cookies.remove("userCompanyType", { path: "/" });
+      // cookies.remove("loggedIn", { path: "/" });
+      // cookies.remove("userCompanyType", { path: "/" });
+      cookies.set("loggedIn", false);
+      cookies.set("userCompanyType", null);
       store.dispatch(
         signin({
           isLoggedIn: false,
@@ -71,7 +73,10 @@ function SidebarContainer(props) {
             </li>
 
             <li>
-              <NavLink to="/distribution">유통 이력 조회</NavLink>
+              <NavLink to="/distribution/temp">임시 유통 이력 조회</NavLink>
+            </li>
+            <li>
+              <NavLink to="/distribution/list">유통 이력 조회</NavLink>
             </li>
           </ul>
         </>

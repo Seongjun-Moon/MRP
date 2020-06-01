@@ -16,6 +16,7 @@ function App(props) {
       store.dispatch(
         signin({
           isLoggedIn: true,
+          companyType: cookies.get("userCompanyType"),
         })
       );
     } else {

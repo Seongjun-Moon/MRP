@@ -2,6 +2,8 @@ import UserActionTypes from "./user.types";
 
 const initialState = {
   isLoggedIn: false,
+  companyType: null,
+  companyCode: null,
 };
 
 const signin = (prevState, newState) => {

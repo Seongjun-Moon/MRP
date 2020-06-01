@@ -58,10 +58,11 @@ const search = async (res, req) => {};
 // 바코드 번호, 유통등록 업체 코드, 대상 업체 코드, 상태 , 등록 시간
 const tempDistInfo = async (req, res) => {
   const mediCode = req.body.mediCode;
-
+  const companyCode = req.session.companyCode;
   try {
     const tempDistInfo = await temp.findAll({
       where: {
+        companyCode,
         barcode: { [sequelize.Op.like]: "%" + mediCode + "%" },
       },
     });

@@ -33,6 +33,7 @@ const signIn = async (req, res) => {
     );
     if (comparePassword) {
       req.session.companyType = signIn.companyType;
+      req.session.companyCode = signIn.companyCode;
       res.json({
         message: true,
         companyType: signIn.companyType,

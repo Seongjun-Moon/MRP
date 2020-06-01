@@ -25,6 +25,7 @@ const signIn = async (req, res) => {
       signIn.users[0].password
     );
     if (comparePassword) {
+      req.session.companyType = signIn.companyType;
       res.json({
         message: true,
         companyType: signIn.companyType,

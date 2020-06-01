@@ -65,14 +65,15 @@ function CompanyRegister(props) {
             id="company-code"
             required
             ref={(ref) => (inputCompanyCode = ref)}
+            placeholder="ex) MANU-0123456789"
           />
           업체 이름
           <input
             id="company-name"
             required
             ref={(ref) => (inputCompanyName = ref)}
+            placeholder="ex) (주)MRP제약"
           />
-          <br />
           업체 종류
           <select
             name="type"
@@ -84,7 +85,6 @@ function CompanyRegister(props) {
             <option value="hospital">병원</option>
             <option value="pharmacy">약국</option>
           </select>
-          <br />
           <button type="submit" className="main-btn">
             업체 등록
           </button>
@@ -92,24 +92,36 @@ function CompanyRegister(props) {
       </div>
 
       <div className="company-register_user">
-        <h3>업체 회원 등록</h3>
+        <h3>업체 관리자 정보 등록</h3>
 
         <form onSubmit={(e) => joinSubmit(e)} action="">
           업체 코드
-          <input required ref={(ref) => (inputCompanyCode = ref)} />
+          <input
+            type="text"
+            required
+            ref={(ref) => (inputCompanyCode = ref)}
+            placeholder="ex) MANU-0123456789"
+          />
           아이디
-          <input required ref={(ref) => (inputCompanyId = ref)} />
+          <input
+            type="email"
+            required
+            ref={(ref) => (inputCompanyId = ref)}
+            placeholder="ex) mrp@mrp.com"
+          />
           비밀번호
           <input
             type="password"
             required
             ref={(ref) => (inputCompanyPw = ref)}
+            placeholder="영문, 숫자 포함 8~20자"
           />
           비밀번호 재입력
           <input
             type="password"
             required
             ref={(ref) => (inputCompanyPwCheck = ref)}
+            placeholder="영문, 숫자 포함 8~20자"
           />
           <button type="submit" className="main-btn">
             업체 회원 등록

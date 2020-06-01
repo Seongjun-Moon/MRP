@@ -69,6 +69,7 @@ function MedicinePage(props) {
         <form action="">
           <input
             type="text"
+            className="search-input"
             name="medi-search"
             id="medi-search"
             placeholder="의약품명 검색"

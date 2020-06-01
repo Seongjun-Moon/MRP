@@ -1,5 +1,8 @@
 import React from "react";
-import { Route } from "react-router-dom";
+import { Route, Redirect } from "react-router-dom";
+
+import { connect } from "react-redux";
+
 import UserPage from "./user-page";
 import CompanyPage from "./company-page";
 import MedicinePage from "./medicine-page";
@@ -10,18 +13,46 @@ import CompanyRegister from "./company-register";
 function MainContainer(props) {
   return (
     <section className="main">
-      <Route exact path="/user" component={UserPage}></Route>
-      <Route exact path="/company/list" component={CompanyPage}></Route>
-      <Route exact path="/company/register" component={CompanyRegister}></Route>
-      <Route exact path="/medicine/list" component={MedicinePage}></Route>
-      <Route
-        exact
-        path="/medicine/register"
-        component={MedicineRegister}
-      ></Route>
-      <Route exact path="/distribution" component={DistributionPage}></Route>
+      <Route exact path="/user">
+        {props.companyType !== "oversee" ? <Redirect to="/" /> : <UserPage />}
+      </Route>
+      <Route exact path="/company/list">
+        {props.companyType !== "oversee" ? (
+          <Redirect to="/" />
+        ) : (
+          <CompanyPage />
+        )}
+      </Route>
+      <Route exact path="/company/register">
+        {props.companyType !== "oversee" ? (
+          <Redirect to="/" />
+        ) : (
+          <CompanyRegister />
+        )}
+      </Route>
+      <Route exact path="/medicine/list">
+        {props.companyType !== "oversee" ? (
+          <Redirect to="/dashboard" />
+        ) : (
+          <MedicinePage />
+        )}
+      </Route>
+      <Route exact path="/medicine/register">
+        {props.companyType !== "oversee" ? (
+          <Redirect to="/" />
+        ) : (
+          <MedicineRegister />
+        )}
+      </Route>
+      <Route exact path="/distribution" component={DistributionPage}>
+        <DistributionPage />
+      </Route>
     </section>
   );
 }
 
-export default MainContainer;
+const mapStateToProps = (state) => {
+  return state;
+};
+
+export default connect(mapStateToProps, null)(MainContainer);

@@ -1,4 +1,7 @@
 import React from "react";
+
+import { connect } from "react-redux";
+
 import API from "../API";
 
 function MedicineRegister(props) {
@@ -105,4 +108,8 @@ function MedicineRegister(props) {
   );
 }
 
-export default MedicineRegister;
+const mapStateToProps = (state) => {
+  return state;
+};
+
+export default connect(mapStateToProps, null)(MedicineRegister);

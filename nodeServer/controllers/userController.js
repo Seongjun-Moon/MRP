@@ -2,6 +2,13 @@ const bcrypt = require("bcrypt");
 const company = require("../models").Company;
 const user = require("../models").User;
 
+//로그아웃
+const logout = async (req, res) => {
+  req.session.destroy(() => {
+    res.json({ message: true });
+  });
+};
+
 // 로그인
 const signIn = async (req, res) => {
   const id = req.body.id;
@@ -75,4 +82,4 @@ const signUp = async (req, res) => {
   }
 };
 
-module.exports = { signIn, signUp };
+module.exports = { logout, signIn, signUp };

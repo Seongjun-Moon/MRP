@@ -4,6 +4,7 @@ import Axios from "axios";
 import { Route, Redirect, Link } from "react-router-dom";
 import DistributionPage from "../components/distribution-page";
 
+
 /* Data Type ///
 cancelDate: "2020-05-20T00:00:00.000Z" 
 companyCode: "1" 
@@ -85,6 +86,7 @@ function MedicinePage(props) {
         <form action="">
           <input
             type="text"
+            className="search-input"
             name="medi-search"
             id="medi-search"
             placeholder="의약품명 검색"

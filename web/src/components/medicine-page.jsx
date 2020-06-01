@@ -1,6 +1,5 @@
 import React from "react";
 import API from "../API";
-import Axios from "axios";
 
 /* Data Type ///
 cancelDate: "2020-05-20T00:00:00.000Z" 

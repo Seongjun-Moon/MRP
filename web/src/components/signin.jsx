@@ -19,10 +19,13 @@ function Signin(props) {
     let pw = passwordInput.value;
 
     await API.getUser(id, pw).then((data) => {
+      console.log(data);
       if (data.data.message) {
         store.dispatch(
           signin({
             isLoggedIn: true,
+            companyType: data.data.companyType,
+            companyCode: data.data.companyCode,
           })
         );
         cookies.set("loggedIn", true);

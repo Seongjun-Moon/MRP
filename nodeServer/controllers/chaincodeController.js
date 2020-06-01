@@ -5,7 +5,9 @@ const { FileSystemWallet, X509WalletMixin, Gateway } = require("fabric-network")
 const os = require("os")
 const path = require("path")
 
+const Medicine = require("../models").Medicine
 const Barcode = require("../models").Barcode
+const Temp = require("../models").Temp
 
 const env = process.env
 
@@ -142,24 +144,46 @@ const connect = async (req, res) => {
 
 // ==================  POST Method ==================
 
-// 2. 전문의약품 유통정보 등록 (도매, 병원 및 약국)
-// 기존 블록체인에 등록된 경우에만 정상 수행함
-// front-end에서 barcode, companyCode, targetCompanyCode, state 순으로 인자 전달
-const update = async (req, res) => {
-  const companyType = req.session.companyType
+const insertBarcodeInfo = async (barcode) => {
+  const mediCode = barcode.substring(4, 17)
+  try {
+    const veryifyMediCode = await Medicine.findOne({
+      where: { mediCode },
+    })
+    if (!veryifyMediCode) {
+      return false
+    } else {
+      try {
+        const insertBarcode = await Barcode.create({
+          barcode,
+          mediCode,
+        })
+        return true
+      } catch (err) {
+        console.log(err)
+        return false
+      }
+    }
+  } catch (err) {
+    console.log(err)
+    return false
+  }
+}
+
+const insertBlockchainData = async (tempData, companyType) => {
+  const stringTempData = JSON.stringify(tempData)
   try {
     const userExists = await wallet.exists(companyType)
     if (!userExists) {
       console.log(`An identity for the user ${companyType} does not exist in the wallet`)
-      await res.json({ msg: "연결부터 해주세요" })
-      return
+      return false
     }
     console.log("Start : Update Medicine Info")
     // Create a new gateway for connecting to our peer node.
     const gateway = new Gateway()
     await gateway.connect(ccp, {
       wallet,
-      identity: userWalletID,
+      identity: companyType,
       discovery: { enabled: false },
     })
     // Get the network (channel) our contract is deployed to.
@@ -169,21 +193,46 @@ const update = async (req, res) => {
     const contract = network.getContract(chainCode)
 
     // Evaluate the specified transaction
-    await contract.submitTransaction(
-      "changeMediStatus",
-      `${req.body.barcode}`,
-      `${req.body.companyId}`,
-      `${req.body.targetId}`,
-      `${req.body.state}`
-    )
-    console.log(`Transaction has been evaluated, result is ok`)
-    res.json({
-      code: "1",
-      msg: `${req.body.barcode}가 정상적으로 변경되었습니다`,
-    })
+    const UpdateResult = await contract.submitTransaction("changeMediStatus", stringTempData)
+    if (UpdateResult.toString() == "true") {
+      console.log(`Transaction has been evaluated, result is ok`)
+    } else {
+      console.log("Transaction faile")
+    }
+    return true
   } catch (err) {
     console.log(err)
-    res.json({ code: "0", msg: `${req.body.barcode} 기존 유통내역이 존재하지 않습니다.` })
+    return false
+  }
+}
+
+// 2. 전문의약품 유통정보 등록 (도매, 병원 및 약국)
+const update = async (req, res) => {
+  const companyType = req.session.companyType
+  try {
+    const tempData = await Temp.findAll({
+      attributes: ["barcode", "companyCode", "targetCompanyCode", "state", "description"],
+    })
+    // console.log(tempData)
+    let index = 0
+    while (index < tempData.length) {
+      let varify = await insertBarcodeInfo(tempData[index].barcode)
+      if (varify) {
+        index++
+      } else {
+        tempData.splice(index, 1)
+      }
+    }
+    //tempData.forEach((element) => {await insertBarcodeInfo(element.barcode)})
+    const result = await insertBlockchainData(tempData, companyType)
+    if (result) {
+      res.json({ message: true })
+    } else {
+      res.json({ message: false })
+    }
+  } catch (err) {
+    console.log(err)
+    res.json({ message: false })
   }
 }
 

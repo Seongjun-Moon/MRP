@@ -31,11 +31,7 @@ function MainContainer(props) {
         )}
       </Route>
       <Route exact path="/medicine/list">
-        {props.companyType !== "oversee" ? (
-          <Redirect to="/dashboard" />
-        ) : (
-          <MedicinePage />
-        )}
+        <MedicinePage />
       </Route>
       <Route exact path="/medicine/register">
         {props.companyType !== "oversee" ? (

@@ -18,23 +18,28 @@
 }
 
 .welcome {
-  width: 50rem;
+  display: grid;
+  grid-template-rows: 1fr min-content 1fr;
   margin: 0 auto;
   text-align: center;
 
   header {
     width: 30rem;
-    margin: 0 auto;
-    font-family: $Sanchez;
-    font-size: 3rem;
-    font-weight: 700;
+    margin: 2rem auto;
+
+    h1 {
+      margin: 1rem auto;
+      font-size: 4rem;
+      font-weight: 700;
+      font-family: $Sanchez;
+    }
   }
 
   input {
-    margin: 0 auto;
+    margin: 1rem auto;
   }
 
   button {
-    margin: 0 auto;
+    margin: 1rem auto;
   }
 }

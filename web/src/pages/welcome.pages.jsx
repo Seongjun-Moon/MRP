@@ -20,20 +20,23 @@ class Welcome extends React.Component {
   render() {
     return (
       <section className="welcome">
-        <header>MRP</header>
+        <header>
+          <h1>MRP</h1>
+          <h3>블록체인 기반 전문의약품 유통 및 추적 서비스</h3>
+        </header>
         <article className="login-container">
           {this.state.sign ? (
             <>
               <Signin />
               <button className="sub-btn" onClick={this.signupButton}>
-                회원가입하기
+                회원가입
               </button>
             </>
           ) : (
             <>
               <Signup toggleSignin={this.signupButton} />
               <button className="sub-btn" onClick={this.signupButton}>
-                로그인하기
+                로그인
               </button>
             </>
           )}

@@ -10,16 +10,11 @@ const Barcode = require("../models").Barcode
 const env = process.env
 
 // 소속 식별을 위한 변수들
-let connectionConfig
-let companyMSP
-let companyAffiliation
+let connectionConfig = "connection-org4.json"
+let companyMSP = ""
+let companyAffiliation = ""
 
-const ccpPath = path.resolve(
-  __dirname,
-  "..",
-  `${env.NETWORK_CONFIG}`,
-  `${connectionConfig}` // connection-org1.json
-)
+const ccpPath = path.resolve(__dirname, "..", `${env.NETWORK_CONFIG}`, `${connectionConfig}`)
 const ccpJSON = fs.readFileSync(ccpPath, "utf8")
 const ccp = JSON.parse(ccpJSON)
 

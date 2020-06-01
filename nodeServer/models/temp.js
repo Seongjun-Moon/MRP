@@ -4,7 +4,6 @@ module.exports = (sequelize, DataTypes) => {
     {
       barcode: {
         type: DataTypes.STRING(30),
-        primaryKey: true,
         allowNull: true,
         unique: true,
       },
@@ -16,6 +15,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING(20),
         allowNull: true,
       },
+      description: {
+        type: DataTypes.STRING(50),
+        allowNull: true,
+      },
     },
     {
       charset: "utf8",
@@ -23,5 +26,5 @@ module.exports = (sequelize, DataTypes) => {
       timestamps: true,
       paranoid: true,
     }
-  );
-};
+  )
+}

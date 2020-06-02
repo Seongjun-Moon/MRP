@@ -39,7 +39,7 @@
   },
   "certificateAuthorities": {
     "ca3.example.com": {
-      "url": "http://localhost:7054",
+      "url": "http://localhost:9054",
       "caName": "ca3.example.com"
     }
   }

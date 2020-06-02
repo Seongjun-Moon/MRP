@@ -1,7 +1,14 @@
 const express = require("express");
 const router = express.Router();
-const { logout, signIn, signUp } = require("../controllers/userController");
+const {
+  userInfo,
+  logout,
+  signIn,
+  signUp,
+} = require("../controllers/userController");
 
+//유저 정보 조회
+router.post("/userInfo", userInfo);
 //로그아웃
 router.get("/logout", logout);
 // 로그인

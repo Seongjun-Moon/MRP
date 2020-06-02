@@ -13,10 +13,9 @@ const automationDB = require("./middlewares/automationDB");
 
 // 라우터
 const chaincodeRouter = require("./routers/chaincodeRouter");
-const distributorRouter = require("./routers/distributorRouter");
-const hospitalRouter = require("./routers/hospitalRouter");
-const manufacturerRouter = require("./routers/manufacturerRouter");
-const overseeRouter = require("./routers/overseeRouter");
+const distributionRouter = require("./routers/distributionRouter");
+const companyRouter = require("./routers/companyRouter");
+const medicineRouter = require("./routers/medicineRouter");
 const userRouter = require("./routers/userRouter");
 
 // 상수, 변수 선언
@@ -49,10 +48,9 @@ app.use(
 );
 
 app.use("/user", userRouter);
-app.use("/distributor", distributorRouter);
-app.use("/hospital", hospitalRouter);
-app.use("/manufacture", manufacturerRouter);
-app.use("/oversee", overseeRouter);
+app.use("/distribution", distributionRouter);
+app.use("/company", companyRouter);
+app.use("/medicine", medicineRouter);
 app.use("/chaincode", chaincodeRouter);
 
 app.listen(env.PORT, () => {

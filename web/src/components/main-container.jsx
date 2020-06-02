@@ -61,7 +61,13 @@ function MainContainer(props) {
         {props.companyType === "oversee" ? (
           <Redirect to="/" />
         ) : (
-          <TempDistributionPage />
+          <>
+            {props.medicine.mediCode ? (
+              <TempDistributionPage requested={true} />
+            ) : (
+              <TempDistributionPage />
+            )}
+          </>
         )}
       </Route>
     </section>

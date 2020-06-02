@@ -1,12 +1,11 @@
 import React, { Component } from "react";
 import API from "../API";
-import Axios from "axios";
-import DistributionPage from "../components/distribution-page";
 
 import store from "../redux/store";
 import senddata from "../redux/medicine/medicine.action";
 
 import { connect } from "react-redux";
+import { NavLink } from "react-router-dom";
 
 /* Data Type ///
 cancelDate: "2020-05-20T00:00:00.000Z" 
@@ -50,13 +49,12 @@ function MedicinePage(props) {
   };
 
   const sendLink = (mediCode) => {
-    alert(mediCode);
     store.dispatch(
       senddata({
-        datadata: mediCode,
+        mediCode: mediCode,
       })
     );
-    window.location.replace("../../distribution");
+    // window.location.replace("../../distribution/temp");
   };
 
   const mediDataRender = () => {
@@ -67,12 +65,15 @@ function MedicinePage(props) {
     return renderData.map((medi) => {
       return (
         <tr key={medi.mediCode}>
-          <td
-            onClick={() => {
-              sendLink(medi.mediCode);
-            }}
-          >
-            {medi.mediCode}
+          <td>
+            <NavLink
+              to="/distribution/temp"
+              onClick={() => {
+                sendLink(medi.mediCode);
+              }}
+            >
+              {medi.mediCode}
+            </NavLink>
           </td>
           <td>{medi.companyCode}</td>
           <td>{medi.mediName}</td>

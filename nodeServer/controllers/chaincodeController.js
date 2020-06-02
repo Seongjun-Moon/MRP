@@ -153,6 +153,7 @@ const insertBarcodeInfo = async (barcode) => {
     const veryifyMediCode = await Medicine.findOne({
       where: { mediCode },
     })
+    console.log(veryifyMediCode)
     if (!veryifyMediCode) {
       return false
     } else {
@@ -164,7 +165,7 @@ const insertBarcodeInfo = async (barcode) => {
         return true
       } catch (err) {
         //console.log(err)
-        return false
+        return true
       }
     }
   } catch (err) {
@@ -175,6 +176,8 @@ const insertBarcodeInfo = async (barcode) => {
 
 const insertBlockchainData = async (tempData, companyType) => {
   const stringTempData = JSON.stringify(tempData)
+  const re = JSON.parse(stringTempData)
+  console.log(re[0])
   try {
     const userExists = await wallet.exists(companyType)
     if (!userExists) {
@@ -189,11 +192,13 @@ const insertBlockchainData = async (tempData, companyType) => {
       identity: companyType,
       discovery: { enabled: false },
     })
+    console.log("created gateway")
     // Get the network (channel) our contract is deployed to.
     const network = await gateway.getNetwork(channel)
-
+    console.log("created network")
     // Get the contract from the network.
     const contract = network.getContract(chainCode)
+    console.log("created contract")
 
     // Evaluate the specified transaction
     const UpdateResult = await contract.submitTransaction("changeMediStatus", stringTempData)
@@ -204,14 +209,14 @@ const insertBlockchainData = async (tempData, companyType) => {
     }
     return true
   } catch (err) {
-    console.log(err)
+    //console.log(err)
     return false
   }
 }
 
 // 2. 전문의약품 유통정보 등록 (도매, 병원 및 약국)
 const update = async (req, res) => {
-//  const companyType = req.session.companyType
+  //  const companyType = req.session.companyType
   const companyType = "oversee"
   try {
     const tempData = await Temp.findAll({
@@ -219,8 +224,8 @@ const update = async (req, res) => {
     })
     // console.log(tempData)
     let index = 0
-    console.log("===============================================================================");
-    console.log("temp data:" + tempData[0]);
+    console.log("===============================================================================")
+    console.log(tempData)
     while (index < tempData.length) {
       let varify = await insertBarcodeInfo(tempData[index].dataValues.barcode)
       if (varify) {
@@ -230,7 +235,8 @@ const update = async (req, res) => {
       }
     }
     //tempData.forEach((element) => {await insertBarcodeInfo(element.barcode)})
-    console.log("block : " + tempData);
+    console.log("block : " + tempData)
+    console.log(tempData[0].dataValues.barcode)
     const result = await insertBlockchainData(tempData, companyType)
     if (result) {
       res.json({ message: true })
@@ -260,7 +266,7 @@ const getBarcode = async (req, res) => {
     const gateway = new Gateway()
     await gateway.connect(ccp, {
       wallet,
-      identity: userWalletID,
+      identity: companyType,
       discovery: { enabled: false },
     })
 
@@ -325,7 +331,7 @@ const showBarcodes = async (arr) => {
     const gateway = new Gateway()
     await gateway.connect(ccp, {
       wallet,
-      identity: userWalletID,
+      identity: companyType,
       discovery: { enabled: false },
     })
     // Get the network (channel) our contract is deployed to.
@@ -361,7 +367,7 @@ const history = async (req, res) => {
     const gateway = new Gateway()
     await gateway.connect(ccp, {
       wallet,
-      identity: userWalletID,
+      identity: companyType,
       discovery: { enabled: false },
     })
 

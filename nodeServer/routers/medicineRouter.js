@@ -10,7 +10,7 @@ const {
 // 의약품 상세 조회
 router.post("/mediDetail", mediDetail);
 //
-router.post("/searchMediInfo", searchedMediInfo);
+router.post("/searchedMediInfo", searchedMediInfo);
 // 의약품 등록
 router.post("/mediEnroll", mediEnroll);
 // 의약품 조회

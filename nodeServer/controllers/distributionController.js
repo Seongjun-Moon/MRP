@@ -9,6 +9,7 @@ const productEnroll = async (req, res) => {
   const companyCode = req.body.data.companyCode;
   const targetCompanyCode = req.body.data.targetCompanyCode;
   const state = req.body.data.state;
+  const description = req.body.data.description;
 
   try {
     const getCompanyCode = await company.findOne({
@@ -31,6 +32,7 @@ const productEnroll = async (req, res) => {
               companyCode,
               targetCompanyCode,
               state,
+              description,
             });
 
             console.log(productEnroll);

@@ -1,15 +1,18 @@
 import React from "react";
 import API from "../API";
 
+import { connect } from "react-redux";
 function TempDistributionPage(props) {
   let distSearchInput;
   const [distData, setDistData] = React.useState(null);
-  const [delData, setDelData] = React.useState([]);
 
-  React.useEffect(() => {}, []);
+  React.useEffect(() => {
+    if (props.medicine.mediCode) {
+      getTempDistInfo(props.medicine.mediCode);
+    }
+  }, []);
 
-  const getTempDistInfo = async (event, mediCode) => {
-    event.preventDefault();
+  const getTempDistInfo = async (mediCode) => {
     const data = await API.getTempDistInfo(mediCode).then((data) => data.data);
     console.log(data);
     if (data) {
@@ -27,26 +30,6 @@ function TempDistributionPage(props) {
     }
   };
 
-  //   const delStateInfo = (deleteCode) => {
-  //     let dataArr = [...delData];
-  //     if (dataArr.includes(deleteCode)) {
-  //       dataArr = dataArr.filter((data) => data !== deleteCode);
-  //     } else {
-  //       dataArr.push(deleteCode);
-  //     }
-
-  //     setDelData(dataArr);
-  //   };
-
-  //   const deleteDistInfo = async (event, code) => {
-  //     const answer = window.confirm("삭제하시겠습니까?");
-  //     if (answer === true) {
-  //       delStateInfo(code);
-  //     } else {
-  //       alert("취소했습니다.");
-  //     }
-  //   };
-
   const handleSubmitBtn = (event) => {
     event.preventDefault();
     alert("확인 후 서버로 전송");
@@ -56,12 +39,13 @@ function TempDistributionPage(props) {
   return (
     <article className="temp-distribution">
       <h3>임시 유통 이력 조회</h3>
-      <p>
-        // 해당 회사 (제조사, 유통사, 병원 등)에 해당하는 이력만 넘어와야함'ㅅ'
-        //
-      </p>
 
-      <form onSubmit={(event) => getTempDistInfo(event, distSearchInput.value)}>
+      <form
+        onSubmit={(event) => {
+          event.preventDefault();
+          getTempDistInfo(distSearchInput.value);
+        }}
+      >
         <input
           type="text"
           name="medi-search"
@@ -97,20 +81,6 @@ function TempDistributionPage(props) {
                     <td>{dist.state}</td>
                     <td>{dist.createdAt}</td>
                     <td>비고</td>
-                    {/* <td>
-                      <button
-                        className={
-                          delData.includes(dist.barcode)
-                            ? "del-btn"
-                            : "default-btn"
-                        }
-                        onClick={(event) => {
-                          deleteDistInfo(event, dist.barcode);
-                        }}
-                      >
-                        {delData.includes(dist.barcode) ? "삭제됨" : "삭제하기"}
-                      </button>
-                    </td> */}
                   </tr>
                 );
               })}
@@ -123,15 +93,6 @@ function TempDistributionPage(props) {
           >
             확인
           </button>
-
-          {/* <div>
-            <h3>오류 데이터 목록</h3>
-            <ul>
-              {delData.map((d) => (
-                <li key={d}>{d}</li>
-              ))}
-            </ul>
-          </div> */}
         </div>
       ) : (
         <p>조회된 임시 유통 이력이 없습니다.</p>
@@ -140,4 +101,8 @@ function TempDistributionPage(props) {
   );
 }
 
-export default TempDistributionPage;
+const mapStateToProps = (state) => {
+  return state;
+};
+
+export default connect(mapStateToProps, null)(TempDistributionPage);

@@ -1,7 +1,7 @@
 import MedicineActionTypes from "./medicine.types";
 
 const initialState = {
-  datadata: null,
+  mediCode: null,
 };
 
 const senddata = (prevState, newState) => {

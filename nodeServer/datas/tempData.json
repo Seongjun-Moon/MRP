@@ -10,5 +10,11 @@
     "companyCode": "DIST-0000000003",
     "targetCompanyCode": "MANU-0000000001",
     "state": "input"
+  },
+  {
+    "barcode": "(02)1106587000202(22)23456781",
+    "companyCode": "DIST-0000000003",
+    "targetCompanyCode": "MANU-0000000001",
+    "state": "input"
   }
 ]

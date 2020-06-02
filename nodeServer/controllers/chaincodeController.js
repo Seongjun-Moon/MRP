@@ -12,7 +12,7 @@ const Temp = require("../models").Temp
 const env = process.env
 
 // 소속 식별을 위한 변수들
-let connectionConfig = "connection-org4.json"
+let connectionConfig = "connection-org1.json"
 let companyMSP = ""
 let companyAffiliation = ""
 
@@ -47,6 +47,7 @@ const IdentifyOrg = (companyType) => {
         ;(connectionConfig = "connection-org1.json"),
           (companyMSP = "Org1MSP"),
           (companyAffiliation = "org1.department1")
+
         resolve()
         break
       case "manufacturer":
@@ -77,8 +78,10 @@ const IdentifyOrg = (companyType) => {
 }
 
 const connect = async (req, res) => {
-  const companyType = req.session.companyType
+  //const companyType = req.session.companyType
+  const companyType = "oversee"
   await IdentifyOrg(companyType)
+  console.log(connectionConfig)
   try {
     console.log(`Wallet path: ${walletPath}`)
     // Check to see if we've already enrolled the admin user.
@@ -90,7 +93,7 @@ const connect = async (req, res) => {
         enrollmentSecret: `${env.ENROLLMENT_SECRET}`,
       })
       const identity = X509WalletMixin.createIdentity(
-        OrgMSP, // session vriable
+        companyMSP, // session vriable
         enrollment.certificate,
         enrollment.key.toBytes()
       )
@@ -99,7 +102,7 @@ const connect = async (req, res) => {
     }
 
     // Check to see if we've already enrolled the user.
-    const userExists = await wallet.exists(companyTpye) // session company type
+    const userExists = await wallet.exists(companyType) // session company type
     if (!userExists) {
       // Create a new gateway for connecting to our peer node.
       const gateway = new Gateway()
@@ -123,7 +126,7 @@ const connect = async (req, res) => {
         adminIdentity
       )
       const enrollment = await ca.enroll({
-        enrollmentID: userWalletID, // session companyType
+        enrollmentID: companyType, // session companyType
         enrollmentSecret: secret,
       })
       const userIdentity = X509WalletMixin.createIdentity(
@@ -131,7 +134,7 @@ const connect = async (req, res) => {
         enrollment.certificate,
         enrollment.key.toBytes()
       )
-      await wallet.import(userWalletID, userIdentity)
+      await wallet.import(companyType, userIdentity)
       console.log(
         `Successfully registered and enrolled admin user ${companyType} and imported it into the wallet`
       )
@@ -155,17 +158,17 @@ const insertBarcodeInfo = async (barcode) => {
     } else {
       try {
         const insertBarcode = await Barcode.create({
-          barcode,
+          barcodeName: barcode,
           mediCode,
         })
         return true
       } catch (err) {
-        console.log(err)
+        //console.log(err)
         return false
       }
     }
   } catch (err) {
-    console.log(err)
+    //console.log(err)
     return false
   }
 }
@@ -208,15 +211,18 @@ const insertBlockchainData = async (tempData, companyType) => {
 
 // 2. 전문의약품 유통정보 등록 (도매, 병원 및 약국)
 const update = async (req, res) => {
-  const companyType = req.session.companyType
+//  const companyType = req.session.companyType
+  const companyType = "oversee"
   try {
     const tempData = await Temp.findAll({
       attributes: ["barcode", "companyCode", "targetCompanyCode", "state", "description"],
     })
     // console.log(tempData)
     let index = 0
+    console.log("===============================================================================");
+    console.log("temp data:" + tempData[0]);
     while (index < tempData.length) {
-      let varify = await insertBarcodeInfo(tempData[index].barcode)
+      let varify = await insertBarcodeInfo(tempData[index].dataValues.barcode)
       if (varify) {
         index++
       } else {
@@ -224,6 +230,7 @@ const update = async (req, res) => {
       }
     }
     //tempData.forEach((element) => {await insertBarcodeInfo(element.barcode)})
+    console.log("block : " + tempData);
     const result = await insertBlockchainData(tempData, companyType)
     if (result) {
       res.json({ message: true })

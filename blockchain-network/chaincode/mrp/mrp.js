@@ -72,11 +72,17 @@ let Chaincode = class {
     }
     let updateList = JSON.parse(args[0])
     for(let i=0; i<updateList.length; i++){
-	let barcode = updateList[i].barcode;
-	delete updateList[i].barcode;
-	updateList.time = new Date().toLocaleString();
-	console.info(JSON.stringify(updateList[i]));
-	await stub.putState(barcode, Buffer.from(JSON.stringify(updateList[i])));	
+	let data = updateList[i].dataValues;
+	let barcode = updateList[i].dataValues.barcode;
+	const medi={
+	    companyCode : data.companyCode,
+	    targetCompanyCode : data.targetCompanyCode,
+	    state : data.state,
+	    description : data.description,
+	    time : new Date().toLocaleString()
+	}
+	console.info(JSON.stringify(medi));
+	await stub.putState(barcode, Buffer.from(JSON.stringify(mdei)));	
     }
     console.info('============= END : update Medicine Status ===========');
     return Buffer.from("true");

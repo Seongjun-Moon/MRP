@@ -29,7 +29,7 @@
                 "peer0.org2.example.com"
             ],
             "certificateAuthorities": [
-                "ca.example.com"
+                "ca2.example.com"
             ]
         }
     },
@@ -44,9 +44,9 @@
         }
     },
     "certificateAuthorities": {
-        "ca.example.com": {
-            "url": "http://localhost:7054",
-            "caName": "ca.example.com"
+        "ca2.example.com": {
+            "url": "http://localhost:8054",
+            "caName": "ca2.example.com"
         }
     }
 }

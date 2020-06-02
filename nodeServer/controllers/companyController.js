@@ -6,15 +6,15 @@ const searchCompanyByName = async (req, res) => {
   const keyword = req.body.keyword;
 
   try {
-    const company = await company.findAll({
+    const companyInfo = await company.findAll({
       where: {
-        barcode: { [sequelize.Op.like]: "%" + keyword + "%" },
+        companyName: { [sequelize.Op.like]: "%" + keyword + "%" },
       },
       attributes: ["companyName", "companyCode", "companyType"],
     });
 
     console.log(company);
-    res.json({ message: true, company });
+    res.json({ message: true, companyInfo });
   } catch (err) {
     console.log(err);
     res.json({ message: false });

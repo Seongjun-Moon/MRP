@@ -1,14 +1,18 @@
 import React from "react";
 import API from "../API";
 
+import { connect } from "react-redux";
 function TempDistributionPage(props) {
   let distSearchInput;
   const [distData, setDistData] = React.useState(null);
 
-  React.useEffect(() => {}, []);
+  React.useEffect(() => {
+    if (props.medicine.mediCode) {
+      getTempDistInfo(props.medicine.mediCode);
+    }
+  }, []);
 
-  const getTempDistInfo = async (event, mediCode) => {
-    event.preventDefault();
+  const getTempDistInfo = async (mediCode) => {
     const data = await API.getTempDistInfo(mediCode).then((data) => data.data);
     console.log(data);
     if (data && data.tempDistInfo.length > 0) {
@@ -40,7 +44,12 @@ function TempDistributionPage(props) {
     <article className="temp-distribution">
       <h3>임시 유통 이력 조회</h3>
 
-      <form onSubmit={(event) => getTempDistInfo(event, distSearchInput.value)}>
+      <form
+        onSubmit={(event) => {
+          event.preventDefault();
+          getTempDistInfo(distSearchInput.value);
+        }}
+      >
         <input
           type="text"
           name="medi-search"
@@ -96,4 +105,8 @@ function TempDistributionPage(props) {
   );
 }
 
-export default TempDistributionPage;
+const mapStateToProps = (state) => {
+  return state;
+};
+
+export default connect(mapStateToProps, null)(TempDistributionPage);

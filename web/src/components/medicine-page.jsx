@@ -1,7 +1,11 @@
 import React from "react";
 import API from "../API";
-import { Route, Redirect, Link } from "react-router-dom";
-import DistributionPage from "../components/distribution-page";
+
+import store from "../redux/store";
+import senddata from "../redux/medicine/medicine.action";
+
+import { connect } from "react-redux";
+import { NavLink } from "react-router-dom";
 
 /* Data Type ///
 cancelDate: "2020-05-20T00:00:00.000Z" 
@@ -44,12 +48,14 @@ function MedicinePage(props) {
     setSearchedMediData(data.data);
   };
 
-  // const sendLink = (event) => {
-  //   alert(event);
-  //   window.location.replace("../../distribution");
-  //   //return <Redirect Component={DistributionPage} />;
-  //   //<Route exact path="/medicine/list" component={MedicinePage}></Route>
-  // };
+  const sendLink = (mediCode) => {
+    store.dispatch(
+      senddata({
+        mediCode: mediCode,
+      })
+    );
+    // window.location.replace("../../distribution/temp");
+  };
 
   const mediDataRender = () => {
     let renderData;
@@ -59,12 +65,15 @@ function MedicinePage(props) {
     return renderData.map((medi) => {
       return (
         <tr key={medi.mediCode}>
-          <td
-            onClick={() => {
-              // sendLink(medi.mediCode);
-            }}
-          >
-            {medi.mediCode}
+          <td>
+            <NavLink
+              to="/distribution/temp"
+              onClick={() => {
+                sendLink(medi.mediCode);
+              }}
+            >
+              {medi.mediCode}
+            </NavLink>
           </td>
           <td>{medi.companyCode}</td>
           <td>{medi.mediName}</td>
@@ -118,4 +127,8 @@ function MedicinePage(props) {
   );
 }
 
-export default MedicinePage;
+const mapStateToProps = (state) => {
+  return state;
+};
+
+export default connect(mapStateToProps, null)(MedicinePage);

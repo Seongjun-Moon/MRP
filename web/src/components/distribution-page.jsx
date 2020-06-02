@@ -1,11 +1,15 @@
 import React from "react";
 import API from "../API";
 
+import { connect } from "react-redux";
+
 function DistributionPage(props) {
   let distSearchInput;
   const [distData, setDistData] = React.useState(null);
 
-  React.useEffect(() => {}, []);
+  React.useEffect(() => {
+    console.log(props.medicine);
+  }, []);
 
   const getDistInfo = async (event, mediCode) => {
     event.preventDefault();
@@ -67,4 +71,8 @@ function DistributionPage(props) {
   );
 }
 
-export default DistributionPage;
+const mapStateToProps = (state) => {
+  return state;
+};
+
+export default connect(mapStateToProps, null)(DistributionPage);

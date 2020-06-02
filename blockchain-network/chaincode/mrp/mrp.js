@@ -13,7 +13,7 @@ let Chaincode = class {
   // The Init method is called when the Smart Contract 'fabcar' is instantiated by the blockchain network
   // Best practice is to have any Ledger initialization in separate function -- see initLedger()
   async Init(stub) {
-    console.info('=========== Instantiated fabcar chaincode ===========');
+    console.info('=========== Instantiated mrp chaincode ===========');
     return shim.success();
   }
 
@@ -72,9 +72,10 @@ let Chaincode = class {
     }
     let updateList = JSON.parse(args[0])
     for(let i=0; i<updateList.length; i++){
+	console.log(updateList[i]);
 	let barcode = updateList[i].barcode;
 	delete updateList[i].barcode;
-	updateList.time = new Date().toLocaleString();
+	updateList[i].time = new Date().toLocaleString()
 	console.info(JSON.stringify(updateList[i]));
 	await stub.putState(barcode, Buffer.from(JSON.stringify(updateList[i])));	
     }

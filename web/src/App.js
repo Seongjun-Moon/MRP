@@ -28,7 +28,7 @@ function App(props) {
     }
   }, []);
 
-  return <div>{props.isLoggedIn ? <Main /> : <Welcome />}</div>;
+  return <div>{props.user.isLoggedIn ? <Main /> : <Welcome />}</div>;
 }
 
 const mapStateToProps = (state) => {

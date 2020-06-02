@@ -1,4 +1,5 @@
 const medicine = require("../models").Medicine;
+const sequelize = require("sequelize");
 
 // 의약품 세부내용 조회
 const mediDetail = async (req, res) => {

@@ -1,14 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const {
-  search,
   companyEnroll,
   companyInfo,
-} = require("../controllers/manufacturerController");
+} = require("../controllers/companyController");
 
-// 의약품 유통이력 조회
-router.post("/search", search);
-// 업체 등록
+//업체 등록
 router.post("/companyEnroll", companyEnroll);
 // 업체 정보 조회
 router.post("/companyInfo", companyInfo);

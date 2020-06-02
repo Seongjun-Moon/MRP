@@ -2,6 +2,29 @@ const bcrypt = require("bcrypt");
 const company = require("../models").Company;
 const user = require("../models").User;
 
+// user 정보 조회
+
+const userInfo = async (req, res) => {
+  try {
+    const userInfo = await user.findAll({
+      attributes: ["id", "companyCode"],
+      include: {
+        model: company,
+        attributes: ["companyType", "companyName"],
+      },
+    });
+    console.log(userInfo);
+
+    res.json({
+      message: true,
+      userInfo,
+    });
+  } catch (err) {
+    console.log(err);
+    res.json({ message: false });
+  }
+};
+
 //로그아웃
 const logout = async (req, res) => {
   req.session.destroy(() => {
@@ -83,4 +106,4 @@ const signUp = async (req, res) => {
   }
 };
 
-module.exports = { logout, signIn, signUp };
+module.exports = { userInfo, logout, signIn, signUp };

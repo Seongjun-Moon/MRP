@@ -1,8 +1,5 @@
 const company = require("../models").Company;
 
-// 의약품 유통이력 조회
-const search = async (res, req) => {};
-
 //업체 등록
 const companyEnroll = async (req, res) => {
   const companyCode = req.body.companyCode;
@@ -40,4 +37,4 @@ const companyInfo = async (req, res) => {
   }
 };
 
-module.exports = { search, companyEnroll, companyInfo };
+module.exports = { companyEnroll, companyInfo };

@@ -20,7 +20,7 @@ organizations:
         peers:
         - peer0.org3.example.com
         certificateAuthorities:
-        - ca.example.com
+        - ca3.example.com
 orderers:
     orderer.example.com:
         url: grpc://localhost:7050
@@ -28,6 +28,6 @@ peers:
     peer0.org3.example.com:
         url: grpc://localhost:7051
 certificateAuthorities:
-    ca.example.com:
-        url: http://localhost:7054
-        caName: ca.example.com
+    ca3.example.com:
+        url: http://localhost:9054
+        caName: ca3.example.com

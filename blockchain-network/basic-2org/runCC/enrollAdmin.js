@@ -10,13 +10,13 @@ const {
 const ccpPath = path.resolve(
   __dirname,
   '..',
-  'connection-org1.json'
+  'connection-org2.json'
 );
 const ccpJSON = fs.readFileSync(ccpPath, 'utf8');
 const ccp = JSON.parse(ccpJSON);
 
 // 인증기관과 통신할 수 있는 객체 생성
-const caURL = ccp.certificateAuthorities['ca.example.com'].url;
+const caURL = ccp.certificateAuthorities['ca2.example.com'].url;
 const ca = new FabricCAServices(caURL);
 
 // 신원 증명서를 저장할 wallet 생성
@@ -53,7 +53,7 @@ try {
     }
 
     // Check to see if we've already enrolled the user.
-    const userExists = await wallet.exists('user1');
+    const userExists = await wallet.exists('user2');
     if (!userExists) {
       // Create a new gateway for connecting to our peer node.
       const gateway = new Gateway();
@@ -70,22 +70,22 @@ try {
       // Register the user, enroll the user, and import the new identity into the wallet.
       const secret = await ca.register(
         {
-          affiliation: 'org1.department1',
-          enrollmentID: 'user1',
+          affiliation: 'org2.department1',
+          enrollmentID: 'user2',
           role: 'client',
         },
         adminIdentity
       );
       const enrollment = await ca.enroll({
-        enrollmentID: 'user1',
+        enrollmentID: 'user2',
         enrollmentSecret: secret,
       });
       const userIdentity = X509WalletMixin.createIdentity(
-        'Org1MSP',
+        'Org2MSP',
         enrollment.certificate,
         enrollment.key.toBytes()
       );
-      wallet.import('user1', userIdentity);
+      wallet.import('user2', userIdentity);
       console.log(
         'Successfully registered and enrolled admin user "user1" and imported it into the wallet'
       );

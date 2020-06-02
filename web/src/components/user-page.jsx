@@ -11,6 +11,25 @@ function UserPage(props) {
 
   const getUserInfo = async () => {
     const data = await API.getUserInfo().then((data) => data.data);
+    data.userInfo.map((user) => {
+      switch (user.company.companyType) {
+        case "manufacturer":
+          user.company.companyType = "제조사";
+          break;
+        case "distributor":
+          user.company.companyType = "유통사";
+          break;
+        case "hospital":
+          user.company.companyType = "병원";
+          break;
+        case "pharmacy":
+          user.company.companyType = "약국";
+          break;
+        case "oversee":
+          user.company.companyType = "심사평가원";
+          break;
+      }
+    });
     setUserData(data.userInfo);
   };
 

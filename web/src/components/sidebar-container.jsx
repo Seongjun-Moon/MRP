@@ -50,7 +50,7 @@ function SidebarContainer(props) {
             </li>
 
             <li>
-              <NavLink to="/distribution">유통 이력 조회</NavLink>
+              <NavLink to="/distribution/list">유통 이력 조회</NavLink>
             </li>
           </ul>
 

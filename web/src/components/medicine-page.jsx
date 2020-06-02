@@ -1,8 +1,12 @@
 import React, { Component } from "react";
 import API from "../API";
 import Axios from "axios";
-import { Route, Redirect, Link } from "react-router-dom";
 import DistributionPage from "../components/distribution-page";
+
+import store from "../redux/store";
+import senddata from "../redux/medicine/medicine.action";
+
+import { connect } from "react-redux";
 
 /* Data Type ///
 cancelDate: "2020-05-20T00:00:00.000Z" 
@@ -45,12 +49,15 @@ function MedicinePage(props) {
     setSearchedMediData(data.data);
   };
 
-  // const sendLink = (event) => {
-  //   alert(event);
-  //   window.location.replace("../../distribution");
-  //   //return <Redirect Component={DistributionPage} />;
-  //   //<Route exact path="/medicine/list" component={MedicinePage}></Route>
-  // };
+  const sendLink = (mediCode) => {
+    alert(mediCode);
+    store.dispatch(
+      senddata({
+        datadata: mediCode,
+      })
+    );
+    window.location.replace("../../distribution");
+  };
 
   const mediDataRender = () => {
     let renderData;
@@ -62,7 +69,7 @@ function MedicinePage(props) {
         <tr key={medi.mediCode}>
           <td
             onClick={() => {
-              // sendLink(medi.mediCode);
+              sendLink(medi.mediCode);
             }}
           >
             {medi.mediCode}
@@ -119,4 +126,8 @@ function MedicinePage(props) {
   );
 }
 
-export default MedicinePage;
+const mapStateToProps = (state) => {
+  return state;
+};
+
+export default connect(mapStateToProps, null)(MedicinePage);

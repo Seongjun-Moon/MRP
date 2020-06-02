@@ -1,4 +1,25 @@
 const company = require("../models").Company;
+const sequelize = require("sequelize");
+
+//React Native에서 회사명 검색
+const searchCompanyByName = async (req, res) => {
+  const keyword = req.body.keyword;
+
+  try {
+    const company = await company.findAll({
+      where: {
+        barcode: { [sequelize.Op.like]: "%" + keyword + "%" },
+      },
+      attributes: ["companyName", "companyCode", "companyType"],
+    });
+
+    console.log(company);
+    res.json({ message: true, company });
+  } catch (err) {
+    console.log(err);
+    res.json({ message: false });
+  }
+};
 
 //업체 등록
 const companyEnroll = async (req, res) => {
@@ -37,4 +58,4 @@ const companyInfo = async (req, res) => {
   }
 };
 
-module.exports = { companyEnroll, companyInfo };
+module.exports = { searchCompanyByName, companyEnroll, companyInfo };

@@ -4,7 +4,6 @@ import API from "../API";
 function DistributionPage(props) {
   let distSearchInput;
   const [distData, setDistData] = React.useState(null);
-  const [delData, setDelData] = React.useState([]);
 
   React.useEffect(() => {}, []);
 

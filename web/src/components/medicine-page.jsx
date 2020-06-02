@@ -1,6 +1,5 @@
-import React, { Component } from "react";
+import React from "react";
 import API from "../API";
-import Axios from "axios";
 import { Route, Redirect, Link } from "react-router-dom";
 import DistributionPage from "../components/distribution-page";
 

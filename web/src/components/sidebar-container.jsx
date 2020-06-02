@@ -1,8 +1,6 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
-
+import { NavLink, useHistory } from "react-router-dom";
 import { connect } from "react-redux";
-
 import store from "../redux/store";
 import signin from "../redux/user/user.action";
 
@@ -11,13 +9,12 @@ import API from "../API";
 const cookies = new Cookies();
 
 function SidebarContainer(props) {
+  let history = useHistory();
+
   const logout = async (event) => {
+    event.preventDefault();
     const status = await API.logout();
-    console.log(status);
     if (status.data.message) {
-      event.preventDefault();
-      // cookies.remove("loggedIn", { path: "/" });
-      // cookies.remove("userCompanyType", { path: "/" });
       cookies.set("loggedIn", false);
       cookies.set("userCompanyType", null);
       store.dispatch(
@@ -25,6 +22,8 @@ function SidebarContainer(props) {
           isLoggedIn: false,
         })
       );
+      //URL만 어떻게 바꾸지...?
+      history.push("/");
     } else {
       alert("로그아웃에 실패했습니다.");
     }

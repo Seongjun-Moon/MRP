@@ -16,9 +16,18 @@ let connectionConfig = "connection-org1.json"
 let companyMSP = ""
 let companyAffiliation = ""
 
-// 신원 증명서를 저장할 wallet 생성
+let ccpPath
+let ccpJSON
+let ccp
 
+// 인증기관과 통신할 수 있는 객체 생성
+let caURL
+let ca
+
+// 신원 증명서를 저장할 wallet 생성
+const walletPath = path.join(os.homedir(), "wallet")
 // const walletPath = path.join(process.cwd(), "wallet")
+const wallet = new FileSystemWallet(walletPath)
 
 // 체인코드
 const chainCode = `${env.CHAINCODE_NAME}`
@@ -31,111 +40,160 @@ dotenv.config()
 // 1. MRP 블록체인 네트워크 연결 시도
 
 // 소속 식별 변수들 주입
-const IdentifyOrg = (i) => {
+const IdentifyOrg = (companyType) => {
   return new Promise((resolve, reject) => {
-    switch (i) {
-      case 1:
-        ;(companyMSP = "Org1MSP"), (companyAffiliation = "org1.department1"), resolve()
+    switch (companyType) {
+      case "oversee":
+        ;(companyMSP = "Org1MSP"),
+          (companyAffiliation = "org1.department1"),
+          (ccpPath = path.resolve(
+            __dirname,
+            "..",
+            `${env.NETWORK_CONFIG}`,
+            "connection-org1.json"
+          )),
+          (ccpJSON = fs.readFileSync(ccpPath, "utf8")),
+          (ccp = JSON.parse(ccpJSON)),
+          (caURL = ccp.certificateAuthorities[`${env.CA1}`].url),
+          (ca = new FabricCAServices(caURL))
+        console.log("ca1")
+        resolve()
         break
-      case 2:
-        ;(companyMSP = "Org2MSP"), (companyAffiliation = "org2.department1"), resolve()
+      case "manufacturer":
+        ;(companyMSP = "Org2MSP"),
+          (companyAffiliation = "org2.department1"),
+          (ccpPath = path.resolve(
+            __dirname,
+            "..",
+            `${env.NETWORK_CONFIG}`,
+            "connection-org2.json"
+          )),
+          (ccpJSON = fs.readFileSync(ccpPath, "utf8")),
+          (ccp = JSON.parse(ccpJSON)),
+          (caURL = ccp.certificateAuthorities[`${env.CA2}`].url),
+          (ca = new FabricCAServices(caURL))
+        console.log("ca2")
+        resolve()
         break
-      case 3:
-        ;(companyMSP = "Org3MSP"), (companyAffiliation = "org3.department1"), resolve()
+      case "distributor":
+        ;(companyMSP = "Org3MSP"),
+          (companyAffiliation = "org3.department1"),
+          (ccpPath = path.resolve(
+            __dirname,
+            "..",
+            `${env.NETWORK_CONFIG}`,
+            "connection-org3.json"
+          )),
+          (ccpJSON = fs.readFileSync(ccpPath, "utf8")),
+          (ccp = JSON.parse(ccpJSON)),
+          (caURL = ccp.certificateAuthorities[`${env.CA3}`].url),
+          (ca = new FabricCAServices(caURL))
+        resolve()
         break
-      case 4:
-        ;(companyMSP = "Org4MSP"), (companyAffiliation = "org4.department1"), resolve()
+      case "hospital":
+        ;(companyMSP = "Org4MSP"),
+          (companyAffiliation = "org4.department1"),
+          (ccpPath = path.resolve(
+            __dirname,
+            "..",
+            `${env.NETWORK_CONFIG}`,
+            "connection-org4.json"
+          )),
+          (ccpJSON = fs.readFileSync(ccpPath, "utf8")),
+          (ccp = JSON.parse(ccpJSON)),
+          (caURL = ccp.certificateAuthorities[`${env.CA4}`].url),
+          (ca = new FabricCAServices(caURL))
+        resolve()
         break
       default:
-        ;(companyMSP = "Org4MSP"), (companyAffiliation = "org4.department1"), resolve()
+        ;(companyMSP = "Org4MSP"),
+          (companyAffiliation = "org4.department1"),
+          (ccpPath = path.resolve(
+            __dirname,
+            "..",
+            `${env.NETWORK_CONFIG}`,
+            "connection-org4.json"
+          )),
+          (ccpJSON = fs.readFileSync(ccpPath, "utf8")),
+          (ccp = JSON.parse(ccpJSON)),
+          (caURL = ccp.certificateAuthorities[`${env.CA4}`].url),
+          (ca = new FabricCAServices(caURL))
+        resolve()
     }
   })
 }
 
 const connect = async (req, res) => {
   //const companyType = req.session.companyType
-  //const companyType = "oversee"
-  for (let i = 1; i <= 4; i++) {
-    await IdentifyOrg(i)
-    try {
-      const walletPath = path.join(os.homedir(), "wallet" + i)
-      const wallet = new FileSystemWallet(walletPath)
-      console.log(`Wallet path: ${walletPath}`)
-      ccpPath = path.resolve(
-        __dirname,
-        "..",
-        `${env.NETWORK_CONFIG}`,
-        "connection-org" + i + ".json"
+  const companyType = "oversee"
+  await IdentifyOrg(companyType)
+
+  try {
+    console.log(`Wallet path: ${walletPath}`)
+    // Check to see if we've already enrolled the admin user.
+    const adminExists = await wallet.exists("admin")
+    if (!adminExists) {
+      // Enroll the admin user, and import the new identity into the wallet.
+      const enrollment = await ca.enroll({
+        enrollmentID: `${env.ENROLLMENT_ID}`,
+        enrollmentSecret: `${env.ENROLLMENT_SECRET}`,
+      })
+      const identity = X509WalletMixin.createIdentity(
+        companyMSP, // session vriable
+        enrollment.certificate,
+        enrollment.key.toBytes()
       )
-      const ccpJSON = fs.readFileSync(ccpPath, "utf8")
-      const ccp = JSON.parse(ccpJSON)
-      const caURL = ccp.certificateAuthorities["ca" + i + ".example.com"].url
-      const ca = new FabricCAServices(caURL)
-      // Check to see if we've already enrolled the admin user.
-      const adminExists = await wallet.exists("admin")
-      if (!adminExists) {
-        // Enroll the admin user, and import the new identity into the wallet.
-        const enrollment = await ca.enroll({
-          enrollmentID: `${env.ENROLLMENT_ID}`,
-          enrollmentSecret: `${env.ENROLLMENT_SECRET}`,
-        })
-        const identity = X509WalletMixin.createIdentity(
-          companyMSP, // session vriable
-          enrollment.certificate,
-          enrollment.key.toBytes()
-        )
-        await wallet.import("admin", identity)
-        console.log('Successfully enrolled admin user "admin" and imported it into the wallet')
-      }
-
-      // Check to see if we've already enrolled the user.
-      const userExists = await wallet.exists("user1") // session company type
-      if (!userExists) {
-        // Create a new gateway for connecting to our peer node.
-        const gateway = new Gateway()
-        await gateway.connect(ccp, {
-          wallet,
-          identity: "admin",
-          discovery: { enabled: false },
-        })
-
-        // Get the CA client object from the gateway for interacting with the CA.
-        const caR = gateway.getClient().getCertificateAuthority()
-        const adminIdentity = gateway.getCurrentIdentity()
-
-        // Register the user, enroll the user, and import the new identity into the wallet.
-        const secret = await caR.register(
-          {
-            affiliation: companyAffiliation, // session vriable
-            enrollmentID: "user1", // session companyType
-            role: "client", //
-          },
-          adminIdentity
-        )
-        const enrollment = await caR.enroll({
-          enrollmentID: "user1", // session companyType
-          enrollmentSecret: secret,
-        })
-        const userIdentity = X509WalletMixin.createIdentity(
-          companyMSP, // session MSP
-          enrollment.certificate,
-          enrollment.key.toBytes()
-        )
-        await wallet.import("user1", userIdentity)
-        console.log(
-          `Successfully registered and enrolled admin user "user1" and imported it into the wallet`
-        )
-      }
-    } catch (err) {
-      console.log(err)
+      await wallet.import("admin", identity)
+      console.log('Successfully enrolled admin user "admin" and imported it into the wallet')
     }
+
+    // Check to see if we've already enrolled the user.
+    const userExists = await wallet.exists(companyType) // session company type
+    if (!userExists) {
+      // Create a new gateway for connecting to our peer node.
+      const gateway = new Gateway()
+      await gateway.connect(ccp, {
+        wallet,
+        identity: "admin",
+        discovery: { enabled: false },
+      })
+
+      // Get the CA client object from the gateway for interacting with the CA.
+      const ca = gateway.getClient().getCertificateAuthority()
+      const adminIdentity = gateway.getCurrentIdentity()
+
+      // Register the user, enroll the user, and import the new identity into the wallet.
+      const secret = await ca.register(
+        {
+          affiliation: companyAffiliation, // session vriable
+          enrollmentID: companyType, // session companyType
+          role: "client", //
+        },
+        adminIdentity
+      )
+      const enrollment = await ca.enroll({
+        enrollmentID: companyType, // session companyType
+        enrollmentSecret: secret,
+      })
+      const userIdentity = X509WalletMixin.createIdentity(
+        companyMSP, // session MSP
+        enrollment.certificate,
+        enrollment.key.toBytes()
+      )
+      await wallet.import(companyType, userIdentity)
+      console.log(
+        `Successfully registered and enrolled admin user ${companyType} and imported it into the wallet`
+      )
+    }
+    res.json({ message: true })
+  } catch (err) {
+    console.log(err)
   }
-  res.json({ message: true })
 }
 
 // ==================  POST Method ==================
 
-const sendDB = async (barcode) => {
+const insertBarcodeInfo = async (barcode) => {
   const mediCode = barcode.substring(4, 17)
   try {
     const veryifyMediCode = await Medicine.findOne({
@@ -162,8 +220,7 @@ const sendDB = async (barcode) => {
   }
 }
 
-const sendBlockchain = async (tempData, companyType) => {
-  await selectWallet(companyType)
+const insertBlockchainData = async (tempData, companyType) => {
   const stringTempData = JSON.stringify(tempData)
   const re = JSON.parse(stringTempData)
   console.log(re[0])
@@ -203,31 +260,6 @@ const sendBlockchain = async (tempData, companyType) => {
   }
 }
 
-const selectWallet = (companyName) => {
-  return new Promise((resolve, reject) => {
-    switch (companyName) {
-      case "oversee":
-        companyType = "wallet1"
-        resolve()
-        break
-      case "manufacturer":
-        companyType = "wallet2"
-        resolve()
-        break
-      case "distributor":
-        companyType = "wallet3"
-        resolve()
-        break
-      case "hospital":
-        companyType = "wallet4"
-        break
-      default:
-        companyType = "wallet4"
-        resolve()
-    }
-  })
-}
-
 // 2. 전문의약품 유통정보 등록 (도매, 병원 및 약국)
 const update = async (req, res) => {
   //  const companyType = req.session.companyType
@@ -241,17 +273,17 @@ const update = async (req, res) => {
     console.log("===============================================================================")
     console.log(tempData)
     while (index < tempData.length) {
-      let varify = await sendDB(tempData[index].dataValues.barcode)
+      let varify = await insertBarcodeInfo(tempData[index].dataValues.barcode)
       if (varify) {
         index++
       } else {
         tempData.splice(index, 1)
       }
     }
-    //tempData.forEach((element) => {await sendDB(element.barcode)})
+    //tempData.forEach((element) => {await insertBarcodeInfo(element.barcode)})
     console.log("block : " + tempData)
     console.log(tempData[0].dataValues.barcode)
-    const result = await sendBlockchain(tempData, companyType)
+    const result = await insertBlockchainData(tempData, companyType)
     if (result) {
       res.json({ message: true })
     } else {

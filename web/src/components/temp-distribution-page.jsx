@@ -12,17 +12,19 @@ function TempDistributionPage(props) {
     event.preventDefault();
     const data = await API.getTempDistInfo(mediCode).then((data) => data.data);
     console.log(data);
-    data.tempDistInfo.map((info) => {
-      switch (info.state) {
-        case "input":
-          info.state = "입고";
-          break;
-        case "output":
-          info.state = "출고";
-          break;
-      }
-    });
-    setDistData(data.tempDistInfo);
+    if (data) {
+      data.tempDistInfo.map((info) => {
+        switch (info.state) {
+          case "input":
+            info.state = "입고";
+            break;
+          case "output":
+            info.state = "출고";
+            break;
+        }
+      });
+      setDistData(data.tempDistInfo);
+    }
   };
 
   //   const delStateInfo = (deleteCode) => {

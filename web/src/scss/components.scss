@@ -29,7 +29,10 @@
 
 .company-register {
   display: flex;
-  justify-content: space-evenly;
+  div {
+    margin: 0 3rem;
+  }
+  // justify-content: space-between;
 }
 
 .distribution {

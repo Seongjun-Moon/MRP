@@ -11,11 +11,11 @@ const url = "70.12.113.180:9090";
 
 /* 유저 페이지 조회 (링크는 아직 안맞춤)*/
 const getUserInfo = () => {
-  return axios.post(`http://${url}/oversee/userInfo`, {});
+  return axios.post(`http://${url}/user/userInfo`, {});
 };
 
 const createCompanyInfo = (companyCode, companyName, companyType) => {
-  return axios.post(`http://${url}/manufacture/companyEnroll`, {
+  return axios.post(`http://${url}/company/companyEnroll`, {
     companyCode,
     companyName,
     companyType,
@@ -24,7 +24,7 @@ const createCompanyInfo = (companyCode, companyName, companyType) => {
 
 /* 업체 회원 등록 (링크는 아직 안맞춤) */
 const createCompanyUserInfo = (companyCode, companyId, companyPw) => {
-  return axios.post(`http://${url}/manufacture/companyEnroll`, {
+  return axios.post(`http://${url}/user/companyUserEnroll`, {
     companyCode,
     companyId,
     companyPw,
@@ -32,7 +32,7 @@ const createCompanyUserInfo = (companyCode, companyId, companyPw) => {
 };
 
 const getCompanyInfo = () => {
-  return axios.post(`http://${url}/manufacture/companyInfo`, {});
+  return axios.post(`http://${url}/company/companyInfo`, {});
 };
 
 /* 로그인 */
@@ -70,7 +70,7 @@ const createMedicineInfo = (
   permissionDate,
   cancelDate
 ) => {
-  return axios.post(`http://${url}/oversee/mediEnroll`, {
+  return axios.post(`http://${url}/medicine/mediEnroll`, {
     mediCode,
     companyCode,
     mediName,
@@ -82,11 +82,11 @@ const createMedicineInfo = (
 };
 
 const getMedicineInfo = () => {
-  return axios.post(`http://${url}/oversee/mediInfo`, {});
+  return axios.post(`http://${url}/medicine/mediInfo`, {});
 };
 
 const getSearchedMedicineInfo = (keyword) => {
-  return axios.post(`http://${url}/oversee/searchedMediInfo`, { keyword });
+  return axios.post(`http://${url}/medicine/searchedMediInfo`, { keyword });
 };
 
 /*
@@ -95,14 +95,14 @@ const getSearchedMedicineInfo = (keyword) => {
 
 /* 유통 조회 */
 const getTempDistInfo = (mediCode) => {
-  return axios.post(`http://${url}/distributor/tempDistInfo`, { mediCode });
+  return axios.post(`http://${url}/distribution/tempDistInfo`, { mediCode });
 };
 
 /*
  * 유통 이력
  */
 const getDistInfo = (mediCode) => {
-  // return axios.post(`http://${url}/distributor/tempDistInfo`, { mediCode });
+  // return axios.post(`http://${url}/distribution/tempDistInfo`, { mediCode });
 };
 
 export default {

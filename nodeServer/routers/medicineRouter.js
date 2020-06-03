@@ -5,6 +5,7 @@ const {
   searchedMediInfo,
   mediEnroll,
   mediInfo,
+  getMediName
 } = require("../controllers/medicineController");
 
 // 의약품 상세 조회
@@ -15,5 +16,7 @@ router.post("/searchedMediInfo", searchedMediInfo);
 router.post("/mediEnroll", mediEnroll);
 // 의약품 조회
 router.post("/mediInfo", mediInfo);
+
+router.post("/getMediName", getMediName);
 
 module.exports = router;

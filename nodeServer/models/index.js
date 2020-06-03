@@ -67,4 +67,13 @@ db.Temp.belongsTo(db.Company, {
   sourceKey: "companyCode",
 });
 
+db.Medicine.hasMany(db.Temp, {
+  foreignKey: "mediCode",
+  sourceKey: "mediCode",
+});
+db.Temp.belongsTo(db.Medicine, {
+  foreignKey: "mediCode",
+  sourceKey: "mediCode",
+});
+
 module.exports = db;

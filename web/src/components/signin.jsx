@@ -26,10 +26,13 @@ function Signin(props) {
             isLoggedIn: true,
             companyType: data.data.companyType,
             companyCode: data.data.companyCode,
+            userId: id,
           })
         );
         cookies.set("loggedIn", true);
         cookies.set("userCompanyType", data.data.companyType);
+        cookies.set("userCompanyCode", data.data.companyCode);
+        cookies.set("userId", id);
 
         // 체인코드
         const chaincodeLogin = await API.chaincodeConnect();

@@ -119,6 +119,10 @@ const getMedicineName = (barcode) => {
   return axios.post(`http://${url}/medicine/getMediName`, { barcode });
 };
 
+/* 마이 페이지 비밀번호 변경*/
+const changeUserInfo = (id, changePw) => {
+  return axios.post(`http://${url}/user/myPage`, { id, changePw });
+};
 export default {
   createCompanyInfo,
   getCompanyInfo,
@@ -130,6 +134,7 @@ export default {
   getMedicineInfo,
   getSearchedMedicineInfo,
   getTempDistInfo,
+  changeUserInfo,
   chaincodeConnect,
   createDistInfo,
   getDistLatestInfo,

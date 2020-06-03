@@ -18,7 +18,7 @@ function Signin(props) {
     let id = emailInput.value;
     let pw = passwordInput.value;
 
-    await API.getUser(id, pw).then((data) => {
+    await API.getUser(id, pw).then(async (data) => {
       console.log(data);
       if (data.data.message) {
         store.dispatch(
@@ -30,8 +30,17 @@ function Signin(props) {
         );
         cookies.set("loggedIn", true);
         cookies.set("userCompanyType", data.data.companyType);
+
+        // 체인코드
+        const chaincodeLogin = await API.chaincodeConnect();
+        console.log(chaincodeLogin);
+        if (chaincodeLogin.data.message) {
+          alert("블록체인 네트워크에 접속되었습니다.");
+        } else {
+          alert("블록체인 네트워크 접속에 실패하였습니다.");
+        }
       } else {
-        alert("아이디 혹은 비밀번호가 일치 하지 않습니다.");
+        alert("아이디 혹은 비밀번호가 일치하지 않습니다.");
         emailInput.value = "";
         passwordInput.value = "";
       }

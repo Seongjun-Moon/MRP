@@ -34,10 +34,11 @@ function TempDistributionPage(props) {
     }
   };
 
-  const handleSubmitBtn = (event) => {
+  const handleSubmitBtn = async (event) => {
     event.preventDefault();
-    alert("확인 후 서버로 전송");
-    // {companyCode: "", mediCode: ""}
+    alert("현재 유통 이력이 블록체인에 저장됩니다.");
+    const data = await API.createDistInfo();
+    console.log(data);
   };
 
   return (

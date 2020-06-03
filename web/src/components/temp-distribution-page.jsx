@@ -15,6 +15,9 @@ function TempDistributionPage(props) {
   const getTempDistInfo = async (mediCode) => {
     const data = await API.getTempDistInfo(mediCode).then((data) => data.data);
     console.log(data);
+    // data.getTargetName[0].company.companyName = targetCompanyName
+    // data.tempDistInfo[0].company.companyName = companyName
+    // data.tempDistInfo[0].medicine.mediName = mediName
     if (data && data.tempDistInfo.length > 0) {
       data.tempDistInfo.map((info) => {
         switch (info.state) {
@@ -26,7 +29,21 @@ function TempDistributionPage(props) {
             break;
         }
       });
-      setDistData(data.tempDistInfo);
+      /*
+       const combinedDistData = data.resultArr.map((dataObj, index) => {
+      return (dataObj = Object.assign(dataObj, {
+        barcode: data.barcodeList[index],
+      }));
+    });
+    */
+
+      const combinedTempDistInfo = data.tempDistInfo.map((dataObj, index) => {
+        return (dataObj = Object.assign(dataObj, {
+          targetCompanyName: data.getTargetName[index].company.companyName,
+        }));
+      });
+
+      setDistData(combinedTempDistInfo);
     } else if (data && data.tempDistInfo.length === 0) {
       alert("해당 코드로 조회된 결과가 없습니다.");
     } else {
@@ -68,8 +85,9 @@ function TempDistributionPage(props) {
           <table>
             <thead>
               <tr>
+                <td>의약품 명</td>
                 <td>바코드 번호</td>
-                <td>유통 등록 업체 코드</td>
+                <td>대상 업체 명</td>
                 <td>대상 업체 코드</td>
                 <td>상태</td>
                 <td>등록 시간</td>
@@ -80,11 +98,12 @@ function TempDistributionPage(props) {
               {distData.map((dist, index) => {
                 return (
                   <tr key={dist.barcode}>
+                    <td>{dist.medicine.mediName}</td>
                     <td>{dist.barcode}</td>
-                    <td>{dist.companyCode}</td>
+                    <td>{dist.targetCompanyName}</td>
                     <td>{dist.targetCompanyCode}</td>
                     <td>{dist.state}</td>
-                    <td>{dist.createdAt}</td>
+                    <td>{dist.createdAt.slice(0, 10)}</td>
                     <td>{dist.description ? dist.description : null}</td>
                   </tr>
                 );

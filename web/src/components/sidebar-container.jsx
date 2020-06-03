@@ -31,7 +31,7 @@ function SidebarContainer(props) {
 
   return (
     <aside className="sidebar">
-      {props.companyType === "oversee" ? (
+      {props.user.companyType === "oversee" ? (
         <>
           <h3>조회</h3>
           <ul className="sidebar-menu_list">
@@ -49,7 +49,14 @@ function SidebarContainer(props) {
             </li>
 
             <li>
-              <NavLink to="/distribution/list">유통 이력 조회</NavLink>
+              <NavLink to="/distribution/latest">
+                의약품별 최신 유통 이력 조회
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="/distribution/history">
+                바코드별 유통 이력 조회
+              </NavLink>
             </li>
           </ul>
 
@@ -75,7 +82,14 @@ function SidebarContainer(props) {
               <NavLink to="/distribution/temp">임시 유통 이력 조회</NavLink>
             </li>
             <li>
-              <NavLink to="/distribution/list">유통 이력 조회</NavLink>
+              <NavLink to="/distribution/latest">
+                의약품별 최신 유통 이력 조회
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="/distribution/history">
+                바코드별 유통 이력 조회
+              </NavLink>
             </li>
           </ul>
         </>

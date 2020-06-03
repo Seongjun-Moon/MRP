@@ -119,3 +119,7 @@ export default {
   getTempDistInfo,
   getDistInfo,
 };
+
+/*
+ * 체인코드
+ */

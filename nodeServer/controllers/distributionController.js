@@ -67,8 +67,8 @@ const tempDistInfo = async (req, res) => {
   try {
     const tempDistInfo = await temp.findAll({
       where: {
-        //companyCode,
-        //barcode: { [sequelize.Op.like]: "%" + mediCode + "%" },
+        companyCode,
+        barcode: { [sequelize.Op.like]: "%" + mediCode + "%" },
       },
       include: [
         {
@@ -99,12 +99,29 @@ const tempDistInfo = async (req, res) => {
         },
       ],*/
     });
+    const getTargetName = await temp.findAll({
+      where: { companyCode },
+      attributes: ["targetCompanyCode"],
+      include: [
+        {
+          model: company,
+          on: {
+            col1: sequelize.where(
+              sequelize.col("temp.targetCompanyCode"),
+              "=",
+              sequelize.col("company.companyCode")
+            ),
+          },
+          attributes: ["companyName"],
+        },
+      ],
+    });
     console.log(tempDistInfo);
     console.log("::::::::::::");
-    console.log(tempDistInfo.data);
+    console.log(getTargetName);
     console.log("::::::::::::");
-    res.json({ message: true, tempDistInfo });
-    if (!tempDistInfo) {
+    res.json({ message: true, tempDistInfo, getTargetName });
+    /* if (!tempDistInfo) {
       res.json({ message: false });
     } else {
       try {
@@ -131,16 +148,16 @@ const tempDistInfo = async (req, res) => {
             // where: { companyCode: tempDistInfo[i].targetCompanyCode },
           },
           // where: { targetCompanyCode },
-        });
+        }); */
 
-        /* console.log(";;;;;;;;;;;;");
+    /* console.log(";;;;;;;;;;;;");
         console.log(getMediName);
         console.log(";;;;;;;;;;;;");
         console.log(getTargetName);
         console.log(";;;;;;;;;;;;");
         res.json({ message: true, getMediName, getTargetName }); */
-        // for (let i = 0; tempDistInfo.length; i++)
-        /* const companyNameInfo = await medicine.findAll({
+    // for (let i = 0; tempDistInfo.length; i++)
+    /* const companyNameInfo = await medicine.findAll({
             where: { mediCode: tempDistInfo[i].barcode.substring(4, 17) },
             attributes: ["mediName"],
             include: {
@@ -167,11 +184,11 @@ const tempDistInfo = async (req, res) => {
           message: true,
           Info,
         }); */
-      } catch (err) {
+    /* } catch (err) {
         console.log(err);
         res.json({ message: false });
       }
-    }
+    } */
     /*  const getBarCode = await temp.findAll({
       attributes: ["barcode"],
     });

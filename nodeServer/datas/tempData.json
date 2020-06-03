@@ -6,6 +6,12 @@
     "state": "output"
   },
   {
+    "barcode": "(01)8806920000104(21)12355533",
+    "companyCode": "MANU-0000000001",
+    "targetCompanyCode": "DIST-0000000002",
+    "state": "output"
+  },
+  {
     "barcode": "(02)8806587000202(22)23456781",
     "companyCode": "DIST-0000000003",
     "targetCompanyCode": "MANU-0000000001",

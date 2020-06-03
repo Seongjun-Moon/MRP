@@ -16,12 +16,16 @@ function MainContainer(props) {
     <section className="main">
       {/* 업체 관리자 조회 */}
       <Route exact path="/user">
-        {props.companyType !== "oversee" ? <Redirect to="/" /> : <UserPage />}
+        {props.user.companyType !== "oversee" ? (
+          <Redirect to="/" />
+        ) : (
+          <UserPage />
+        )}
       </Route>
 
       {/* 업체 조회 */}
       <Route exact path="/company/list">
-        {props.companyType !== "oversee" ? (
+        {props.user.companyType !== "oversee" ? (
           <Redirect to="/" />
         ) : (
           <CompanyPage />
@@ -30,7 +34,7 @@ function MainContainer(props) {
 
       {/* 업체 등록 */}
       <Route exact path="/company/register">
-        {props.companyType !== "oversee" ? (
+        {props.user.companyType !== "oversee" ? (
           <Redirect to="/" />
         ) : (
           <CompanyRegister />
@@ -44,21 +48,26 @@ function MainContainer(props) {
 
       {/* 전문의약품 등록 */}
       <Route exact path="/medicine/register">
-        {props.companyType !== "oversee" ? (
+        {props.user.companyType !== "oversee" ? (
           <Redirect to="/" />
         ) : (
           <MedicineRegister />
         )}
       </Route>
 
-      {/* 유통 이력 */}
-      <Route exact path="/distribution/list">
+      {/* 의약품별 유통 이력 */}
+      <Route exact path="/distribution/latest">
+        <DistributionPage />
+      </Route>
+
+      {/* 바코드별 유통 이력 */}
+      <Route exact path="/distribution/history">
         <DistributionPage />
       </Route>
 
       {/* 임시 유통 이력 */}
       <Route exact path="/distribution/temp">
-        {props.companyType === "oversee" ? (
+        {props.user.companyType === "oversee" ? (
           <Redirect to="/" />
         ) : (
           <>

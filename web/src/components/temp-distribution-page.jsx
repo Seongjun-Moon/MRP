@@ -84,7 +84,7 @@ function TempDistributionPage(props) {
                     <td>{dist.targetCompanyCode}</td>
                     <td>{dist.state}</td>
                     <td>{dist.createdAt}</td>
-                    <td>비고</td>
+                    <td>{dist.description ? dist.description : null}</td>
                   </tr>
                 );
               })}

@@ -20,7 +20,7 @@ function DistributionPage(props) {
 
   return (
     <article className="distribution">
-      <h3>유통 이력 조회</h3>
+      <h3>의약품별 유통 이력 조회</h3>
 
       <form onSubmit={(event) => getDistInfo(event, distSearchInput.value)}>
         <input

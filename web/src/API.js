@@ -9,7 +9,7 @@ const url = "70.12.113.180:9090";
  *  업체 CRUD
  */
 
-/* 유저 페이지 조회 (링크는 아직 안맞춤)*/
+/* 유저 페이지 조회 */
 const getUserInfo = () => {
   return axios.post(`http://${url}/user/userInfo`, {});
 };

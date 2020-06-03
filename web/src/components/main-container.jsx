@@ -10,6 +10,7 @@ import MedicineRegister from "./medicine-register";
 import DistributionPage from "./distribution-page";
 import TempDistributionPage from "./temp-distribution-page";
 import CompanyRegister from "./company-register";
+import DistributionHistory from "./distribution-history";
 
 function MainContainer(props) {
   return (
@@ -62,7 +63,7 @@ function MainContainer(props) {
 
       {/* 바코드별 유통 이력 */}
       <Route exact path="/distribution/history">
-        <DistributionPage />
+        <DistributionHistory />
       </Route>
 
       {/* 임시 유통 이력 */}

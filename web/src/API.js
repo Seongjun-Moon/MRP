@@ -2,14 +2,15 @@ import axios from "axios";
 
 axios.defaults.withCredentials = true;
 
-const url = "70.12.113.180:9090";
+// const url = "70.12.113.180:9090";
+const url = "70.12.227.32:9090";
 // const url = "localhost:9090";
 
 /*
  *  업체 CRUD
  */
 
-/* 유저 페이지 조회 (링크는 아직 안맞춤)*/
+/* 유저 페이지 조회 */
 const getUserInfo = () => {
   return axios.post(`http://${url}/user/userInfo`, {});
 };
@@ -19,15 +20,6 @@ const createCompanyInfo = (companyCode, companyName, companyType) => {
     companyCode,
     companyName,
     companyType,
-  });
-};
-
-/* 업체 회원 등록 (링크는 아직 안맞춤) */
-const createCompanyUserInfo = (companyCode, companyId, companyPw) => {
-  return axios.post(`http://${url}/user/companyUserEnroll`, {
-    companyCode,
-    companyId,
-    companyPw,
   });
 };
 
@@ -99,19 +91,40 @@ const getTempDistInfo = (mediCode) => {
 };
 
 /*
- * 유통 이력
+ * 체인코드
  */
-const getDistInfo = (mediCode) => {
-  // return axios.post(`http://${url}/distribution/tempDistInfo`, { mediCode });
+
+/* 지갑 생성 */
+const chaincodeConnect = () => {
+  return axios.post(`http://${url}/chaincode/connect`, {});
 };
 
-/* 마이 페이지 비밀번호 변경 url아직 설정 안함*/
+/* 임시 유통이력을 블록체인 서버로 전송 */
+const createDistInfo = () => {
+  return axios.post(`http://${url}/chaincode/update`, {});
+};
+
+/* 의약품별 최신 유통 이력 목록 */
+const getDistLatestInfo = (mediCode) => {
+  return axios.post(`http://${url}/chaincode/barcodeList`, { mediCode });
+};
+
+/* 바코드별 유통 이력 목록 */
+const getDistHistory = (barcode) => {
+  return axios.post(`http://${url}/chaincode/history`, { barcode });
+};
+
+/* 바코드의 의약품명 조회 */
+const getMedicineName = (barcode) => {
+  return axios.post(`http://${url}/medicine/getMediName`, { barcode });
+};
+
+/* 마이 페이지 비밀번호 변경*/
 const changeUserInfo = (id, changePw) => {
-  return axios.post(`http://${url}/`, { id, changePw });
+  return axios.post(`http://${url}/user/myPage`, { id, changePw });
 };
 export default {
   createCompanyInfo,
-  createCompanyUserInfo,
   getCompanyInfo,
   getUser,
   logout,
@@ -121,10 +134,10 @@ export default {
   getMedicineInfo,
   getSearchedMedicineInfo,
   getTempDistInfo,
-  getDistInfo,
   changeUserInfo,
+  chaincodeConnect,
+  createDistInfo,
+  getDistLatestInfo,
+  getMedicineName,
+  getDistHistory,
 };
-
-/*
- * 체인코드
- */

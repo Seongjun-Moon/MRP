@@ -91,4 +91,18 @@ const mediInfo = async (req, res) => {
   }
 };
 
-module.exports = { mediDetail, searchedMediInfo, mediEnroll, mediInfo };
+const getMediName = async (req, res) => {
+  const barcode = req.body.barcode
+  const mediCode = barcode.substring(4, 17);
+  try {
+    const medicineData = await medicine.findOne({
+      attributes: ["mediName"],
+      where: {mediCode}
+    })
+    res.json({message : true, medicineData})
+  } catch (err) {
+    res.json({message : false})
+  }
+}
+
+module.exports = { mediDetail, searchedMediInfo, mediEnroll, mediInfo, getMediName };

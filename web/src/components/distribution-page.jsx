@@ -6,29 +6,62 @@ import { connect } from "react-redux";
 function DistributionPage(props) {
   let distSearchInput;
   const [distData, setDistData] = React.useState(null);
+  const [barcodeData, setBarcodeData] = React.useState(null);
+  const [distSearchValue, setDistSearchValue] = React.useState(null);
 
   React.useEffect(() => {
     console.log(props.medicine);
   }, []);
 
-  const getDistInfo = async (event, mediCode) => {
-    event.preventDefault();
-    // const data = await API.getDistInfo(mediCode).then((data) => data.data);
+  const getDistLatestInfo = async (mediCode) => {
+    setDistSearchValue(mediCode);
+    const data = await API.getDistLatestInfo(mediCode).then(
+      (data) => data.data
+    );
+    // medicode 빈값이면 안됨
+    // console.log(data);
+    console.log(data.resultArr);
+    console.log(data.barcodeList);
 
-    // setDistData(data.tempDistInfo);
+    const combinedDistData = data.resultArr.map((dataObj, index) => {
+      return (dataObj = Object.assign(dataObj, {
+        barcode: data.barcodeList[index],
+      }));
+    });
+
+    combinedDistData.map((info) => {
+      switch (info.state) {
+        case "input":
+          info.state = "입고";
+          break;
+        case "output":
+          info.state = "출고";
+          break;
+      }
+    });
+
+    console.log(combinedDistData);
+    setDistData(combinedDistData);
+    // setBarcodeData(data.barcodeList);
   };
 
   return (
     <article className="distribution">
-      <h3>유통 이력 조회</h3>
+      <h3>의약품별 유통 이력 조회</h3>
 
-      <form onSubmit={(event) => getDistInfo(event, distSearchInput.value)}>
+      <form
+        onSubmit={(event) => {
+          event.preventDefault();
+          getDistLatestInfo(distSearchInput.value);
+        }}
+      >
         <input
           type="text"
           name="company-search"
           className="medi-search"
           placeholder="의약품 코드로 검색"
           ref={(ref) => (distSearchInput = ref)}
+          required
         />
         <button className="main-btn search-btn" type="submit">
           검색
@@ -37,6 +70,7 @@ function DistributionPage(props) {
 
       {distData ? (
         <div className="distribution-list">
+          <h3>{distSearchValue}</h3>
           <table>
             <thead>
               <tr>
@@ -51,13 +85,13 @@ function DistributionPage(props) {
             <tbody>
               {distData.map((dist, index) => {
                 return (
-                  <tr key={dist.barcode}>
+                  <tr key={index}>
                     <td>{dist.barcode}</td>
                     <td>{dist.companyCode}</td>
                     <td>{dist.targetCompanyCode}</td>
                     <td>{dist.state}</td>
-                    <td>{dist.createdAt}</td>
-                    <td>비고</td>
+                    <td>{dist.time}</td>
+                    <td>{dist.description}</td>
                   </tr>
                 );
               })}

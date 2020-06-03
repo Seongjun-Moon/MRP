@@ -15,8 +15,9 @@ const env = process.env
 let companyMSP = ""
 
 // 신원 증명서를 저장할 wallet 생성
-let walletPath=""
-let ccpPath=""
+let walletPath = ""
+let wallet
+let ccpPath = ""
 // const walletPath = path.join(process.cwd(), "wallet")
 
 // 체인코드
@@ -52,8 +53,6 @@ const IdentifyOrg = (i) => {
 }
 
 const connect = async (req, res) => {
-  //const companyType = req.session.companyType
-  //const companyType = "oversee"
   for (let i = 1; i <= 4; i++) {
     await IdentifyOrg(i)
     try {
@@ -89,7 +88,7 @@ const connect = async (req, res) => {
 
       // Check to see if we've already enrolled the user.
       const userExists = await wallet.exists("user1") // session company type
-	console.log(userExists);
+      console.log(userExists)
       if (!userExists) {
         // Create a new gateway for connecting to our peer node.
         const gateway = new Gateway()
@@ -98,13 +97,13 @@ const connect = async (req, res) => {
           identity: "admin",
           discovery: { enabled: false },
         })
-	console.log("setting gateway");
+        console.log("setting gateway")
         // Get the CA client object from the gateway for interacting with the CA.
         const caR = gateway.getClient().getCertificateAuthority()
         const adminIdentity = gateway.getCurrentIdentity()
 
         // Register the user, enroll the user, and import the new identity into the wallet.
-	console.log("setting caR");
+        console.log("setting caR")
         const secret = await caR.register(
           {
             //affiliation: companyAffiliation, // session vriable
@@ -113,18 +112,18 @@ const connect = async (req, res) => {
           },
           adminIdentity
         )
-	console.log("setting sercet");
+        console.log("setting sercet")
         const enrollment = await caR.enroll({
           enrollmentID: "user1", // session companyType
           enrollmentSecret: secret,
         })
-	console.log("enrollment");
+        console.log("enrollment")
         const userIdentity = X509WalletMixin.createIdentity(
           companyMSP, // session MSP
           enrollment.certificate,
           enrollment.key.toBytes()
         )
-	console.log("setting userIdentity")
+        console.log("setting userIdentity")
         await wallet.import("user1", userIdentity)
         console.log(
           `Successfully registered and enrolled admin user "user1" and imported it into the wallet`
@@ -132,6 +131,7 @@ const connect = async (req, res) => {
       }
     } catch (err) {
       console.log(err)
+      res.json({ message: false })
     }
   }
   res.json({ message: true })
@@ -145,15 +145,16 @@ const sendDB = async (barcode) => {
     const veryifyMediCode = await Medicine.findOne({
       where: { mediCode },
     })
-    console.log(veryifyMediCode)
     if (!veryifyMediCode) {
+      console.log("isn't registered")
       return false
     } else {
       try {
-        const insertBarcode = await Barcode.create({
+        await Barcode.create({
           barcodeName: barcode,
           mediCode,
         })
+        console.log("insert barcode")
         return true
       } catch (err) {
         //console.log(err)
@@ -167,7 +168,6 @@ const sendDB = async (barcode) => {
 }
 
 const sendBlockchain = async (tempData, companyType) => {
-  
   const stringTempData = JSON.stringify(tempData)
   try {
     await selectWallet(companyType)
@@ -212,59 +212,34 @@ const selectWallet = (companyName) => {
     switch (companyName) {
       case "oversee":
         //companyType = "wallet1"
-	walletPath = path.join(os.homedir(), "wallet1")
-	
-	console.log(`Wallet path: ${walletPath}`)
-        ccpPath = path.resolve(
-        __dirname,
-        "..",
-        `${env.NETWORK_CONFIG}`,
-        "connection-org1.json"
-        )
+        walletPath = path.join(os.homedir(), "wallet1")
+
+        console.log(`Wallet path: ${walletPath}`)
+        ccpPath = path.resolve(__dirname, "..", `${env.NETWORK_CONFIG}`, "connection-org1.json")
         resolve()
         break
       case "manufacturer":
         walletPath = path.join(os.homedir(), "wallet2")
-	console.log(`Wallet path: ${walletPath}`)
-        ccpPath = path.resolve(
-        __dirname,
-        "..",
-        `${env.NETWORK_CONFIG}`,
-        "connection-org2.json"
-        )
+        console.log(`Wallet path: ${walletPath}`)
+        ccpPath = path.resolve(__dirname, "..", `${env.NETWORK_CONFIG}`, "connection-org2.json")
         resolve()
         break
       case "distributor":
         walletPath = path.join(os.homedir(), "wallet3")
-	console.log(`Wallet path: ${walletPath}`)
-        ccpPath = path.resolve(
-        __dirname,
-        "..",
-        `${env.NETWORK_CONFIG}`,
-        "connection-org3.json"
-        )
+        console.log(`Wallet path: ${walletPath}`)
+        ccpPath = path.resolve(__dirname, "..", `${env.NETWORK_CONFIG}`, "connection-org3.json")
         resolve()
         break
       case "hospital":
         walletPath = path.join(os.homedir(), "wallet4")
-	console.log(`Wallet path: ${walletPath}`)
-        ccpPath = path.resolve(
-        __dirname,
-        "..",
-        `${env.NETWORK_CONFIG}`,
-        "connection-org4.json"
-        )
+        console.log(`Wallet path: ${walletPath}`)
+        ccpPath = path.resolve(__dirname, "..", `${env.NETWORK_CONFIG}`, "connection-org4.json")
         resolve()
         break
       default:
-	walletPath = path.join(os.homedir(), "wallet4")
-	console.log(`Wallet path: ${walletPath}`)
-        ccpPath = path.resolve(
-        __dirname,
-        "..",
-        `${env.NETWORK_CONFIG}`,
-        "connection-org4.json"
-        )
+        walletPath = path.join(os.homedir(), "wallet4")
+        console.log(`Wallet path: ${walletPath}`)
+        ccpPath = path.resolve(__dirname, "..", `${env.NETWORK_CONFIG}`, "connection-org4.json")
         resolve()
     }
   })
@@ -272,11 +247,13 @@ const selectWallet = (companyName) => {
 
 // 2. 전문의약품 유통정보 등록 (도매, 병원 및 약국)
 const update = async (req, res) => {
-  //  const companyType = req.session.companyType
-  const companyType = "hospital"
+  const companyType = req.session.companyType
+  const companyCode = req.session.companyCode
+  // const companyType = "hospital"
   try {
     const tempData = await Temp.findAll({
       attributes: ["barcode", "companyCode", "targetCompanyCode", "state", "description"],
+      //where: { companyCode },
     })
     // console.log(tempData)
     let index = 0
@@ -294,6 +271,10 @@ const update = async (req, res) => {
     console.log("block : " + tempData)
     console.log(tempData[0].dataValues.barcode)
     const result = await sendBlockchain(tempData, companyType)
+    console.log(result)
+
+    await Temp.destroy({where: {}})
+
     if (result) {
       res.json({ message: true })
     } else {
@@ -334,9 +315,8 @@ const getBarcode = async (req, res) => {
     const contract = network.getContract(chainCode)
     console.log("created contract")
 
-
-    //const result = await contract.evaluateTransaction("getBarcode", `${req.body.barcode}`)
-    const result = await contract.evaluateTransaction("getBarcode", "(01)8806920000104(21)12345678")
+    //const result = await contract.evaluateTransaction("getBarcode", "(01)8806920000104(21)12345678")
+    const result = await contract.evaluateTransaction("getBarcode", `${req.body.barcode}`)
     const state = JSON.parse(result)
     console.log(result.toString())
     res.json({ state })
@@ -357,31 +337,25 @@ const barcodeList = async (req, res) => {
       console.log(`An identity for the user ${companyType} does not exist in the wallet`)
       return false
     }
-    console.log("Start : Update Medicine Info")
+    console.log("Start : get barcode list")
 
-
-
-    let resultState
-    const arr = []
-    const barcodeList = await Barcode.findAll({
+    const barcodeList = []
+    const barcodeResultList = await Barcode.findAll({
       attributes: ["barcodeName", "mediCode"],
       where: {
-        mediCode: "8806920000104",
+        mediCode: `${req.body.mediCode}`,
+        //mediCode: "8806920000104",
       },
     })
     // 대응되는 바코드 개수 (size) //forEach
-    const size = Object.keys(barcodeList).length
+    const size = Object.keys(barcodeResultList).length
     for (let i = 0; i < size; i++) {
-      console.log("barcord " + i + ":" + barcodeList[i].barcodeName)
-      arr.push(barcodeList[i].barcodeName)
-      console.log(barcodeList[i].barcodeName)
+      console.log("barcord " + i + ":" + barcodeResultList[i].barcodeName)
+      barcodeList.push(barcodeResultList[i].barcodeName)
+      console.log(barcodeResultList[i].barcodeName)
     }
     // 콜백함수 (블록체인 네트워크에 바코드별 최신 유통정보 조회)
     //showBarcodes(arr)
-    
-    const mediCode = arr // 바코드 배열
-    console.log(mediCode)
-    console.log(mediCode.toString())
 
     const gateway = new Gateway()
     await gateway.connect(ccpPath, {
@@ -395,14 +369,20 @@ const barcodeList = async (req, res) => {
     // Get the contract from the network.
     const contract = network.getContract(chainCode)
 
-    const result = await contract.evaluateTransaction("getAllBarcode", mediCode.toString())
-    console.log(result)
+    const result = await contract.evaluateTransaction("getAllBarcode", barcodeList.toString())
+    console.log(result.toString())
+    //console.log("================================================================")
     const state = JSON.parse(result)
-    resultState = state
-    res.json({ resultState })
+    const resultArr = []
+    console.log(state)
+    state.forEach((element, index) => {
+      resultArr.push(element)
+    })
+    //res.json({ resultArr })
+    res.json({ barcodeList, resultArr })
   } catch (err) {
-    console.log(err);
-    res.json({resultState:"fali"})
+    console.log(err)
+    res.json({ state: "fail" })
   }
 }
 
@@ -442,8 +422,7 @@ const showBarcodes = async (arr) => {
 // 6. 특정 전문의약품의 유통 히스토리를 조회
 // front-end에서 barcode 인자(1개) 전달
 const history = async (req, res) => {
-  //const companyType = req.session.companyType
-  const companyType = "distributor";
+  const companyType = req.session.companyType
   try {
     await selectWallet(companyType)
     wallet = new FileSystemWallet(walletPath)
@@ -468,14 +447,19 @@ const history = async (req, res) => {
     const contract = network.getContract(chainCode)
     console.log("created contract")
 
-
     const result = await contract.evaluateTransaction(
       "getHistoryForMedicine",
-      //`${req.body.barcode}`
-	"(01)8806920000104(21)12345678"
-    )
+      `${req.body.barcode}`
+      //"(01)8806920000104(21)12345678"
+    ) 
+  
     const history = JSON.parse(result)
-    res.json({ history })
+    const resultArr = []
+    console.log(history)
+    history.forEach((element) => {
+      resultArr.push(element.Value)
+    })
+    res.json({ resultArr })
   } catch (err) {
     console.log(err)
   }

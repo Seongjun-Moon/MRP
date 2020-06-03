@@ -5,9 +5,9 @@ function CompanyRegister(props) {
   let inputCompanyName,
     inputCompanyType,
     inputCompanyCode,
-    inputCompanyId,
-    inputCompanyPw,
-    inputCompanyPwCheck;
+    inputCompanyUserId,
+    inputCompanyUserPw,
+    inputCompanyUserPwCheck;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -31,27 +31,25 @@ function CompanyRegister(props) {
   const joinSubmit = async (e) => {
     e.preventDefault();
     let companyCode = inputCompanyCode.value;
-    let companyId = inputCompanyId.value;
-    let companyPw = inputCompanyPw.value;
-    let companyPwCheck = inputCompanyPwCheck.value;
-    if (companyPw === companyPwCheck) {
-      await API.createCompanyUserInfo(companyCode, companyId, companyPw).then(
-        (data) => {
-          if (data.data.message) {
-            alert("회원 등록 완료!");
-          } else {
-            alert("회원 등록 실패!!!!!");
-          }
-          inputCompanyCode.value = "";
-          inputCompanyId.value = "";
-          inputCompanyPw.value = "";
-          inputCompanyPwCheck.value = "";
+    let id = inputCompanyUserId.value;
+    let pw = inputCompanyUserPw.value;
+    let pwCheck = inputCompanyUserPwCheck.value;
+    if (pw === pwCheck) {
+      await API.addUser(id, pw, companyCode).then((data) => {
+        if (data.data.message) {
+          alert("회원 등록 완료!");
+        } else {
+          alert("회원 등록 실패!!!!!");
         }
-      );
+        inputCompanyCode.value = "";
+        inputCompanyUserId.value = "";
+        inputCompanyUserPw.value = "";
+        inputCompanyUserPwCheck.value = "";
+      });
     } else {
       alert("비밀번호가 일치하지 않습니다.");
-      inputCompanyPw.value = "";
-      inputCompanyPwCheck.value = "";
+      inputCompanyUserPw.value = "";
+      inputCompanyUserPwCheck.value = "";
     }
   };
 
@@ -106,21 +104,21 @@ function CompanyRegister(props) {
           <input
             type="email"
             required
-            ref={(ref) => (inputCompanyId = ref)}
+            ref={(ref) => (inputCompanyUserId = ref)}
             placeholder="ex) mrp@mrp.com"
           />
           비밀번호
           <input
             type="password"
             required
-            ref={(ref) => (inputCompanyPw = ref)}
+            ref={(ref) => (inputCompanyUserPw = ref)}
             placeholder="영문, 숫자 포함 8~20자"
           />
           비밀번호 재입력
           <input
             type="password"
             required
-            ref={(ref) => (inputCompanyPwCheck = ref)}
+            ref={(ref) => (inputCompanyUserPwCheck = ref)}
             placeholder="영문, 숫자 포함 8~20자"
           />
           <button type="submit" className="main-btn">

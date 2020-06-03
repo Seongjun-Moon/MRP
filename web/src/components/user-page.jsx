@@ -33,13 +33,20 @@ function UserPage(props) {
     setUserData(data.userInfo);
   };
 
-  const handleSearchSubmit = (event) => {
-    event.preventDefault();
-    alert("유저 검색!");
+  const handleSearchSubmit = () => {
+    if (userSearchInput.value.length > 0) {
+      const searchedUserData = userData.filter(
+        (user) => user.companyCode === userSearchInput.value
+      );
+      setUserData(searchedUserData);
+    } else {
+      getUserInfo();
+    }
   };
 
   return (
     <article className="user">
+      <h3>유저 목록 조회</h3>
       <form action="">
         <input
           type="text"
@@ -52,12 +59,14 @@ function UserPage(props) {
         <button
           className="main-btn search-btn"
           type="submit"
-          onClick={(event) => handleSearchSubmit(event)}
+          onClick={(event) => {
+            event.preventDefault();
+            handleSearchSubmit();
+          }}
         >
           검색
         </button>
       </form>
-      <h3>유저 목록 조회</h3>
       <div className="user-list">
         <table>
           <thead>

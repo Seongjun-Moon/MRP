@@ -106,4 +106,27 @@ const signUp = async (req, res) => {
   }
 };
 
-module.exports = { userInfo, logout, signIn, signUp };
+const myPage = async (req, res) => {
+  const id = req.body.id;
+  const password = req.body.changePw;
+
+  try {
+    const changePassword = await user.update(
+      {
+        password: password,
+      },
+      {
+        where: {
+          id: id,
+          password: password,
+        },
+      }
+    );
+    res.json({ message: true });
+  } catch (err) {
+    console.log(err);
+    res.json({ message: false });
+  }
+};
+
+module.exports = { userInfo, logout, signIn, signUp, myPage };

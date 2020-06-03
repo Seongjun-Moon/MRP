@@ -17,6 +17,8 @@ function App(props) {
         signin({
           isLoggedIn: true,
           companyType: cookies.get("userCompanyType"),
+          companyCode: cookies.get("userCompanyCode"),
+          userId: cookies.get("userId"),
         })
       );
     } else {

@@ -10,6 +10,7 @@ import MedicineRegister from "./medicine-register";
 import DistributionPage from "./distribution-page";
 import TempDistributionPage from "./temp-distribution-page";
 import CompanyRegister from "./company-register";
+import MyPage from "./mypage";
 
 function MainContainer(props) {
   return (
@@ -78,6 +79,9 @@ function MainContainer(props) {
             )}
           </>
         )}
+      </Route>
+      <Route exact path="/mypage">
+        <MyPage />
       </Route>
     </section>
   );

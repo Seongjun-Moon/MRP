@@ -26,10 +26,13 @@ function Signin(props) {
             isLoggedIn: true,
             companyType: data.data.companyType,
             companyCode: data.data.companyCode,
+            userId: id,
           })
         );
         cookies.set("loggedIn", true);
         cookies.set("userCompanyType", data.data.companyType);
+        cookies.set("userCompanyCode", data.data.companyCode);
+        cookies.set("userId", id);
       } else {
         alert("아이디 혹은 비밀번호가 일치 하지 않습니다.");
         emailInput.value = "";

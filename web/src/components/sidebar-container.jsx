@@ -97,7 +97,9 @@ function SidebarContainer(props) {
 
       <h3>설정</h3>
       <ul className="sidebar-menu_user">
-        <li>마이페이지</li>
+        <li>
+          <NavLink to="/mypage">마이페이지</NavLink>
+        </li>
       </ul>
       <button onClick={(event) => logout(event)} className="sub-btn">
         로그아웃

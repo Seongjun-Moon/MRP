@@ -4,6 +4,7 @@ const initialState = {
   isLoggedIn: false,
   companyType: null,
   companyCode: null,
+  userId: null,
 };
 
 const signin = (prevState, newState) => {

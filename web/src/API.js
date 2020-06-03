@@ -105,6 +105,10 @@ const getDistInfo = (mediCode) => {
   // return axios.post(`http://${url}/distribution/tempDistInfo`, { mediCode });
 };
 
+/* 마이 페이지 비밀번호 변경 url아직 설정 안함*/
+const changeUserInfo = (id, changePw) => {
+  return axios.post(`http://${url}/`, { id, changePw });
+};
 export default {
   createCompanyInfo,
   createCompanyUserInfo,
@@ -118,6 +122,7 @@ export default {
   getSearchedMedicineInfo,
   getTempDistInfo,
   getDistInfo,
+  changeUserInfo,
 };
 
 /*

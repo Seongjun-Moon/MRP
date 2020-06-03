@@ -109,16 +109,16 @@ const signUp = async (req, res) => {
 const myPage = async (req, res) => {
   const id = req.body.id;
   const password = req.body.changePw;
+  const hash = await bcrypt.hash(password, 12);
 
   try {
     const changePassword = await user.update(
       {
-        password: password,
+        password: hash,
       },
       {
         where: {
           id: id,
-          password: password,
         },
       }
     );
